@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research & Setups | Sushree Swateeprajnya Behera</title>
+    <title>Publications & Research | Sushree Swateeprajnya Behera</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -96,62 +96,58 @@
             color: var(--primary);
         }
 
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
         h2 {
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
+            font-size: 1.4rem;
+            margin-top: 35px;
+            margin-bottom: 20px;
         }
 
-        .photo-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-            margin-bottom: 40px;
-        }
-
-        .photo-card {
-            background: #ffffff;
+        .pub-card {
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            overflow: hidden;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
         }
 
-        .photo-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 4px;
+        .pub-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--primary);
+            margin-bottom: 6px;
         }
 
-        .photo-card p {
-            margin: 8px 0 0 0;
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        .pub-authors {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 6px;
         }
 
-        .file-link {
-            display: inline-block;
-            margin-top: 8px;
+        .pub-venue {
             font-size: 0.9rem;
             color: var(--accent);
-            text-decoration: none;
             font-weight: 600;
         }
 
-        .file-link:hover {
-            text-decoration: underline;
+        .talk-list {
+            list-style-type: none;
+            padding-left: 0;
         }
 
-        ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        li {
+        .talk-list li {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px 20px;
             margin-bottom: 12px;
+            font-size: 0.95rem;
         }
 
         footer {
@@ -167,61 +163,50 @@
 <body>
 
     <nav>
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="resume.html">Resume</a>
-            <a href="research.html">Research</a>
-            <a href="contact.html">Contact</a>
-            <a href="hire.html" class="btn-hire">Hire Me</a>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html" class="active">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="container">
-        <h1>Research Setups & Experimental Reports</h1>
-        <p>Below are highlights of optical setups, cleanroom workflows, and experimental platforms I have built, alongside technical reports available for download:</p>
+        <h1>Publications & Presentations</h1>
+        <p>A collection of peer-reviewed conference papers, preprints, and invited scientific contributions.</p>
 
-        <div class="photo-gallery">
-            <div class="photo-card">
-                <img src="setup-fiber-gluing.jpg" alt="Fiber Gluing Station" onerror="this.src='https://via.placeholder.com/300x180?text=Optical+Setup+Photo';">
-                <p><strong>Custom Fiber Gluing Station:</strong> Built for high-precision chip-to-waveguide interfacing at LIST, Luxembourg.</p>
-                <a href="reports/Fiber_Gluing_Report.pdf" class="file-link" target="_blank">📄 Download Tech Report (PDF)</a>
-            </div>
-
-            <div class="photo-card">
-                <img src="setup-aom.jpg" alt="Double-pass AOM Setup" onerror="this.src='https://via.placeholder.com/300x180?text=Laser+Setup+Photo';">
-                <p><strong>Double-Pass AOM Alignment:</strong> 397 nm laser pulse modulation setup built at Universität des Saarlandes.</p>
-                <a href="reports/AOM_Setup_Summary.pdf" class="file-link" target="_blank">📄 Download Tech Report (PDF)</a>
-            </div>
-
-            <div class="photo-card">
-                <img src="cleanroom-characterization.jpg" alt="Cleanroom Characterization" onerror="this.src='https://via.placeholder.com/300x180?text=Cleanroom+Work';">
-                <p><strong>Cleanroom Specialty Fiber Processing:</strong> ISO 4 environment characterization of 1060XP and ZBLAN fibers.</p>
-                <a href="reports/Cleanroom_Workflow.pdf" class="file-link" target="_blank">📄 Download Tech Report (PDF)</a>
-            </div>
+        <h2>Publications & Preprints</h2>
+        
+        <div class="pub-card">
+            <div class="pub-title">Observation of geometric phase in a molecular Aharonov-Bohm system using IBM Quantum Computer</div>
+            <div class="pub-authors">Gaurav Rudra Malik, Sushree Swateeprajnya Behera, Shubham Kumar, Bikash K. Behera, Prasanta K. Panigrahi</div>
+            <div class="pub-venue">Preprint: arXiv:1909.00298 [quant-ph], 2019</div>
         </div>
 
-        <h2>Publications & Presentations</h2>
-        <ul>
-            <li>
-                <strong>Observation of geometric phase in a molecular Aharonov-Bohm system using IBM Quantum Computer</strong><br>
-                Gaurav Rudra Malik, Sushree Swateeprajnya Behera, Shubham Kumar, Bikash K. Behera, Prasanta K. Panigrahi<br>
-                <em>Preprint: arXiv:1909.00298 [quant-ph], 2019</em>
-            </li>
-            <li>
-                <strong>Controlling asymptotic self-similar optical beams in a semiconductor waveguide doped with quantum dots</strong><br>
-                Sushree Swateeprajnya Behera, Nikhitha Nunavath, Vineetha Ashok, Thokala Soloman Raju<br>
-                <em>Published as conference paper at Optical Society of America (OSA), PHOTONICS 2018</em>
-            </li>
-        </ul>
+        <div class="pub-card">
+            <div class="pub-title">Controlling asymptotic self-similar optical beams in a semiconductor waveguide doped with quantum dots</div>
+            <div class="pub-authors">Sushree Swateeprajnya Behera, Nikhitha Nunavath, Vineetha Ashok, Thokala Soloman Raju</div>
+            <div class="pub-venue">Published at Optical Society of America (OSA), PHOTONICS 2018</div>
+        </div>
 
-        <h3 style="margin-top: 30px;">Invited Talks & Conferences</h3>
-        <ul>
-            <li><strong>Invited Talk:</strong> <em>Two-photon interference with divacancies in silicon carbide</em>, Quantum SiC Workshop, Stralsund, Germany (Oct 2025).</li>
-            <li><strong>Presentation:</strong> <em>Towards two-photon interference with color centers in silicon carbide</em>, Greenhorn Meeting, Saarbrücken, Germany (Sep 2025).</li>
-            <li><strong>Poster:</strong> <em>Multiplexing divacancies in silicon carbide for quantum networks</em>, DPPM PhD Day, Univ. of Luxembourg (Apr 2025).</li>
+        <h2>Invited Talks & Conferences</h2>
+        <ul class="talk-list">
+            <li>
+                <strong>Invited Talk:</strong> <em>Two-photon interference with divacancies in silicon carbide</em><br>
+                <span style="color: var(--text-muted);">Quantum SiC Workshop, Stralsund, Germany (Oct 2025)</span>
+            </li>
+            <li>
+                <strong>Presentation:</strong> <em>Towards two-photon interference with color centers in silicon carbide</em><br>
+                <span style="color: var(--text-muted);">Greenhorn Meeting, Saarbrücken, Germany (Sep 2025)</span>
+            </li>
+            <li>
+                <strong>Poster:</strong> <em>Multiplexing divacancies in silicon carbide for quantum networks</em><br>
+                <span style="color: var(--text-muted);">DPPM PhD Day, Univ. of Luxembourg (Apr 2025)</span>
+            </li>
         </ul>
     </div>
 
