@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact & Hire Me | Sushree Swateeprajnya Behera</title>
+    <title>Contact | Sushree Swateeprajnya Behera</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -92,17 +92,7 @@
             padding: 40px 20px;
         }
 
-        h1, h2 {
-            color: var(--primary);
-        }
-
-        h2 {
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
-            font-size: 1.5rem;
-            margin-top: 45px;
-            margin-bottom: 20px;
-        }
+        h1 { color: var(--primary); }
 
         .contact-grid {
             display: grid;
@@ -128,86 +118,11 @@
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
+            word-break: break-all;
         }
 
-        .hire-card {
-            background: #f0f7ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 10px;
-            padding: 30px;
-            margin-top: 20px;
-        }
-
-        .hire-intro {
-            font-size: 1.05rem;
-            color: var(--text-dark);
-            margin-bottom: 25px;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--primary);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: #ffffff;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .btn-submit {
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            align-self: flex-start;
-            transition: background 0.2s;
-        }
-
-        .btn-submit:hover {
-            background: var(--accent-hover);
-        }
-
-        /* Success Message Box */
-        .success-message {
-            display: none;
-            background-color: #dcfce7;
-            border: 1px solid #86efac;
-            color: #166534;
-            padding: 16px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-top: 15px;
+        .contact-card a:hover {
+            text-decoration: underline;
         }
 
         footer {
@@ -230,61 +145,34 @@
                 <a href="resume.html">Resume</a>
                 <a href="research.html">Research</a>
                 <a href="contact.html" class="active">Contact</a>
-                <a href="contact.html#hire-me" class="btn-hire">Hire Me</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
             </div>
         </div>
     </nav>
 
     <div class="container">
         <h1>Contact Information</h1>
-        <p>Feel free to reach out via email, social networks, or academic platforms.</p>
+        <p>Feel free to reach out via email, professional networking platforms, or academic networks.</p>
 
         <div class="contact-grid">
             <div class="contact-card">
-                <h3>📧 Email</h3>
+                <h3>📧 Primary Email</h3>
                 <p><a href="mailto:sushreeswateeprajnyabehera@gmail.com">sushreeswateeprajnyabehera@gmail.com</a></p>
             </div>
+            
+            <div class="contact-card">
+                <h3>✉️ Alternative Email</h3>
+                <p><a href="mailto:swatee0506@gmail.com">swatee0506@gmail.com</a></p>
+            </div>
+
             <div class="contact-card">
                 <h3>💼 LinkedIn</h3>
                 <p><a href="https://linkedin.com" target="_blank">Connect on LinkedIn</a></p>
             </div>
+
             <div class="contact-card">
-                <h3>🎓 Google Scholar / ORCID</h3>
-                <p><a href="https://scholar.google.com" target="_blank">View Academic Profile</a></p>
-            </div>
-        </div>
-
-        <h2 id="hire-me">Work with Me / Hire Me</h2>
-        
-        <div class="hire-card">
-            <p class="hire-intro">
-                I am actively open to <strong>Ph.D. positions</strong>, <strong>R&amp;D Quantum Hardware roles</strong>, and <strong>collaborative experimental projects</strong>. Whether you are a Principal Investigator building a laboratory, an industry team developing scalable photonic hardware, or seeking expertise in custom optical setups, cleanroom fiber processing, and atomic systems—I would love to discuss how I can contribute to your goals.
-            </p>
-
-            <form id="contact-form" class="contact-form" action="https://formsubmit.co/sushreeswateeprajnyabehera@gmail.com" method="POST">
-                <!-- Disables CAPTCHA screen for smoother experience -->
-                <input type="hidden" name="_captcha" value="false">
-                
-                <div class="form-group">
-                    <label for="name">Your Name / Organization</label>
-                    <input type="text" id="name" name="Name" placeholder="e.g. Dr. Jane Doe / Quantum Labs Inc." required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Your Email Address</label>
-                    <input type="email" id="email" name="Email" placeholder="e.g. jane.doe@institution.edu" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Message / Opportunity Details</label>
-                    <textarea id="message" name="Message" rows="5" placeholder="Share details about the role, project, or research opportunity..." required></textarea>
-                </div>
-
-                <button type="submit" id="submit-btn" class="btn-submit">🚀 Send Proposal / Message</button>
-            </form>
-
-            <div id="status-message" class="success-message">
-                Thank you for your message! I will be in touch with you within 24 hours.
+                <h3>🔬 ResearchGate</h3>
+                <p><a href="https://www.researchgate.net" target="_blank">View ResearchGate Profile</a></p>
             </div>
         </div>
     </div>
@@ -292,43 +180,6 @@
     <footer>
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
-
-    <script>
-        const form = document.getElementById('contact-form');
-        const statusMessage = document.getElementById('status-message');
-        const submitBtn = document.getElementById('submit-btn');
-
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Sending...';
-
-            const data = new FormData(form);
-            
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    form.style.display = 'none';
-                    statusMessage.style.display = 'block';
-                } else {
-                    alert('There was a temporary issue sending your message. Please try again.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = '🚀 Send Proposal / Message';
-                }
-            } catch (error) {
-                alert('Connection error. Please try again later.');
-                submitBtn.disabled = false;
-                submitBtn.innerText = '🚀 Send Proposal / Message';
-            }
-        });
-    </script>
 
 </body>
 </html>
