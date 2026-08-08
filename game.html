@@ -37,18 +37,18 @@
 
         .game-controls {
             position: fixed;
-            top: 70px;
-            left: 50%;
+            top: 65px;
+            left: 25%;
             transform: translateX(-50%);
             z-index: 1001;
             background: rgba(15, 23, 42, 0.9);
             color: #fff;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 25px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: none;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
@@ -56,10 +56,41 @@
             background: #ef4444;
             color: #fff;
             border: none;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+        }
+
+        /* Top Right GIF Container */
+        .gif-container {
+            position: fixed;
+            top: 65px;
+            right: 20px;
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .gif-container img {
+            width: 320px;
+            height: auto;
+            border-radius: 4px;
+            display: block;
+        }
+
+        .gif-label {
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            font-weight: 600;
+            padding-right: 4px;
         }
 
         #gameCanvas {
@@ -94,7 +125,8 @@
 
         body.game-active #gameCanvas { display: block; }
         body.game-active .container { display: none; }
-        body.game-active .game-controls { display: flex; }
+        body.game-active .game-controls,
+        body.game-active .gif-container { display: flex; }
     </style>
 </head>
 <body>
@@ -113,8 +145,14 @@
     </nav>
 
     <div class="game-controls" id="gameControls">
-        <span>✨ Click anywhere to emit a Gaussian photon from the star color center!</span>
+        <span>✨ Click to emit a Gaussian photon!</span>
         <button class="btn-exit" onclick="stopGame()">Exit</button>
+    </div>
+
+    <!-- Top Right GIF -->
+    <div class="gif-container" id="gifContainer">
+        <div class="gif-label">Mode Field Simulation</div>
+        <img src="coupling_right_to_left.gif" alt="Coupling Right to Left Animation">
     </div>
 
     <canvas id="gameCanvas"></canvas>
@@ -184,7 +222,6 @@
 
                     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
                     
-                    // White center, yellow middle, red periphery gradient
                     grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');  // White Core
                     grad.addColorStop(0.35, 'rgba(254, 240, 138, 0.95)'); // Yellow Inner
                     grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');    // Red Periphery
@@ -244,7 +281,7 @@
             ctx.clearRect(0, 0, width, height);
             const halfW = width / 2;
 
-            // Viewport Divider
+            // Viewport Divider Line
             ctx.strokeStyle = '#cbd5e1';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -252,48 +289,48 @@
             ctx.lineTo(halfW, height);
             ctx.stroke();
 
-            // Headings
+            // Shifted Headings Downwards
             ctx.font = '600 15px -apple-system, sans-serif';
             ctx.fillStyle = '#1e293b';
-            ctx.fillText("SIDE PROFILE VIEW (2D)", 40, 55);
-            ctx.fillText("3D TOP / ISOMETRIC VIEW", halfW + 40, 55);
+            ctx.fillText("SIDE PROFILE VIEW (2D)", 30, 110);
+            ctx.fillText("3D TOP / ISOMETRIC VIEW", halfW + 30, 110);
 
-            // Exact Image Colors
+            // Color Palette
             const colSi = '#9ebac0';       // Bottom Teal-grey
             const colSiO2 = '#e8e8e8';     // Middle Grey
             const colSiC = '#ebd3dd';      // Pink Silicon Carbide
             const colText = '#334155';
 
             // ==========================================
-            // LEFT VIEW: VECTOR RECREATION OF YOUR IMAGE
+            // LEFT VIEW: 2D SIDE PROFILE
             // ==========================================
             const marginL = 30;
             const wL = halfW - 60;
-            const baseY = height * 0.92;
+            const baseY = height * 0.94; // Shifted down slightly
 
-            const hSi = 60;
-            const hSiO2 = 60;
-            const hSiC = 120;
+            const hSi = 55;
+            const hSiO2 = 55;
+            const hSiC = 110;
 
-            // 1. Silicon (Si) Bottom Layer
+            // 1. Silicon (Si)
             ctx.fillStyle = colSi;
             ctx.fillRect(marginL, baseY - hSi, wL, hSi);
             ctx.fillStyle = colText;
             ctx.font = '18px Georgia, serif';
-            ctx.fillText("Silicon (Si)", marginL + wL * 0.42, baseY - 22);
+            ctx.fillText("Silicon (Si)", marginL + wL * 0.42, baseY - 20);
 
-            // 2. Silicon Dioxide (SiO2) Middle Layer
+            // 2. Silicon Dioxide (SiO2)
             ctx.fillStyle = colSiO2;
             ctx.fillRect(marginL, baseY - hSi - hSiO2, wL, hSiO2);
             ctx.fillStyle = colText;
-            ctx.fillText("Silicon Dioxide (SiO₂)", marginL + wL * 0.38, baseY - hSi - 22);
+            ctx.fillText("Silicon Dioxide (SiO₂)", marginL + wL * 0.38, baseY - hSi - 20);
 
-            // 3. Silicon Carbide (4H-SiC) Layer + Upper Cantilever Waveguide
+            // 3. Silicon Carbide (4H-SiC) + Cantilever
             const ySiC_bot = baseY - hSi - hSiO2;
             const ySiC_top = ySiC_bot - hSiC;
             const bendRightX = marginL + wL;
             const bendInnerX = marginL + wL * 0.86;
-            const cantileverTopY = ySiC_top - 180;
+            const cantileverTopY = ySiC_top - 160; // Positioned below headers
             const taperTipX = marginL + wL * 0.42;
 
             ctx.fillStyle = colSiC;
@@ -309,9 +346,9 @@
             ctx.fill();
 
             ctx.fillStyle = colText;
-            ctx.fillText("Silicon Carbide (4H-SiC)", marginL + wL * 0.38, ySiC_bot - 45);
+            ctx.fillText("Silicon Carbide (4H-SiC)", marginL + wL * 0.38, ySiC_bot - 42);
 
-            // 4. SiO2 Fiber (Top Tapered Optical Wedge)
+            // 4. SiO2 Fiber (Top Optical Wedge)
             const fiberTipX = bendInnerX - 20;
             const fiberStartX = marginL + 30;
             const fiberY = cantileverTopY - 50;
@@ -325,7 +362,7 @@
             ctx.closePath();
             ctx.fill();
 
-            // Box Label for SiO2 Fiber
+            // Label Box
             ctx.fillStyle = '#ffffff';
             ctx.strokeStyle = '#94a3b8';
             ctx.lineWidth = 1;
@@ -348,7 +385,6 @@
             ctx.stroke();
             ctx.restore();
 
-            // Guided Path for Photon in Left View
             const pathLeft = [
                 { x: starX_2D, y: starY_2D },
                 { x: taperTipX + 80, y: cantileverTopY + 26 },
@@ -358,10 +394,10 @@
             ];
 
             // ==========================================
-            // RIGHT VIEW: 3D ISOMETRIC SCHEMATIC
+            // RIGHT VIEW: 3D ISOMETRIC VIEW
             // ==========================================
             const ox = halfW + width * 0.22;
-            const oy = height * 0.65;
+            const oy = height * 0.70; // Shifted down to clear GIF area
 
             function iso(x, y, z) {
                 return {
@@ -372,9 +408,9 @@
 
             // Substrate Base 3D
             const b0 = iso(0, 0, 0);
-            const b1 = iso(340, 0, 0);
-            const b2 = iso(340, 220, 0);
-            const b3 = iso(0, 220, 0);
+            const b1 = iso(320, 0, 0);
+            const b2 = iso(320, 200, 0);
+            const b3 = iso(0, 200, 0);
 
             ctx.fillStyle = '#cbd5e1';
             ctx.beginPath();
@@ -382,25 +418,25 @@
             ctx.lineTo(b2.x, b2.y); ctx.lineTo(b3.x, b3.y);
             ctx.closePath(); ctx.fill();
 
-            // 4H-SiC Pink Tapered Waveguide 3D
-            const w0 = iso(340, 110, 22);
-            const wKnee = iso(170, 110, 22);
-            const wTip = iso(60, 110, 22);
+            // 4H-SiC Pink Waveguide 3D
+            const w0 = iso(320, 100, 22);
+            const wKnee = iso(160, 100, 22);
+            const wTip = iso(50, 100, 22);
 
             ctx.fillStyle = colSiC;
             ctx.beginPath();
-            ctx.moveTo(w0.x, w0.y - 28);
-            ctx.lineTo(w0.x, w0.y + 28);
-            ctx.lineTo(wKnee.x, wKnee.y + 20);
+            ctx.moveTo(w0.x, w0.y - 26);
+            ctx.lineTo(w0.x, w0.y + 26);
+            ctx.lineTo(wKnee.x, wKnee.y + 18);
             ctx.lineTo(wTip.x, wTip.y + 2);
-            ctx.lineTo(wKnee.x, wKnee.y - 20);
+            ctx.lineTo(wKnee.x, wKnee.y - 18);
             ctx.closePath();
             ctx.fill();
             ctx.strokeStyle = '#db2777';
             ctx.stroke();
 
-            // 3D Star Color Center
-            const star3D = iso(280, 110, 24);
+            // 3D Star
+            const star3D = iso(260, 100, 24);
             ctx.save();
             drawStar(star3D.x, star3D.y, 8, 10, 5);
             ctx.fillStyle = '#ffffff';
@@ -410,14 +446,14 @@
             ctx.stroke();
             ctx.restore();
 
-            // SiO2 Tapered Fiber Overlay 3D
-            const f0 = iso(20, 110, 36);
-            const fTip = iso(260, 110, 36);
+            // SiO2 Fiber 3D
+            const f0 = iso(20, 100, 36);
+            const fTip = iso(240, 100, 36);
 
             ctx.fillStyle = 'rgba(241, 245, 249, 0.88)';
             ctx.beginPath();
-            ctx.moveTo(f0.x, f0.y - 32);
-            ctx.lineTo(f0.x, f0.y + 32);
+            ctx.moveTo(f0.x, f0.y - 30);
+            ctx.lineTo(f0.x, f0.y + 30);
             ctx.lineTo(fTip.x, fTip.y + 3);
             ctx.lineTo(fTip.x, fTip.y - 3);
             ctx.closePath();
@@ -425,17 +461,17 @@
             ctx.strokeStyle = '#94a3b8';
             ctx.stroke();
 
-            // Labels for 3D View
-            ctx.font = '600 14px -apple-system, sans-serif';
+            // Labels
+            ctx.font = '600 13px -apple-system, sans-serif';
             ctx.fillStyle = '#0f172a';
-            ctx.fillText("SiO₂ Fiber Taper", f0.x - 40, f0.y - 45);
-            ctx.fillText("4H-SiC Waveguide", w0.x - 30, w0.y + 45);
+            ctx.fillText("SiO₂ Fiber Taper", f0.x - 40, f0.y - 38);
+            ctx.fillText("4H-SiC Waveguide", w0.x - 30, w0.y + 40);
 
             const pathRight = [
                 { x: star3D.x, y: star3D.y },
                 { x: wKnee.x, y: wKnee.y },
                 { x: (wKnee.x + fTip.x) / 2, y: (wKnee.y + fTip.y) / 2 },
-                { x: f0.x + 90, y: f0.y },
+                { x: f0.x + 80, y: f0.y },
                 { x: f0.x, y: f0.y }
             ];
 
