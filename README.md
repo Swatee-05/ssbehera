@@ -186,7 +186,7 @@
         <h1>Sushree Swateeprajnya Behera</h1>
         <div class="subtitle">Experimental Quantum Hardware Researcher</div>
         <p style="margin-top: 10px; color: var(--text-muted);">
-            Specializing in solid-state quantum photonics, color centers in SiC, atomic systems, and precision optical measurement platforms.
+            Specializing in solid-state quantum photonics, color centers in silicon carbide (4H-SiC), atomic systems (174-Yb, 85-enriched Rb), and precision optical measurement platforms.
         </p>
         <div class="contact-bar">
             <a href="mailto:sushreeswateeprajnyabehera@gmail.com">sushreeswateeprajnyabehera@gmail.com</a>
