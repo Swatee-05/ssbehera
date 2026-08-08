@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Sushree Swateeprajnya Behera</title>
+    <title>Contact & Hire Me | Sushree Swateeprajnya Behera</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -100,7 +100,7 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
             font-size: 1.5rem;
-            margin-top: 35px;
+            margin-top: 45px;
             margin-bottom: 20px;
         }
 
@@ -130,8 +130,72 @@
             font-weight: 500;
         }
 
-        .contact-card a:hover {
-            text-decoration: underline;
+        /* Hire Me Card & Form Styling */
+        .hire-card {
+            background: #f0f7ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .hire-intro {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: #ffffff;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--accent-hover);
         }
 
         footer {
@@ -154,24 +218,57 @@
                 <a href="resume.html">Resume</a>
                 <a href="research.html">Research</a>
                 <a href="contact.html" class="active">Contact</a>
-                <a href="contact.html" class="btn-hire">Hire Me</a>
+                <a href="contact.html#hire-me" class="btn-hire">Hire Me</a>
             </div>
         </div>
     </nav>
 
     <div class="container">
+        <!-- Direct Contact Info -->
         <h1>Contact Information</h1>
         <p>Feel free to reach out via email, social networks, or academic platforms.</p>
 
         <div class="contact-grid">
             <div class="contact-card">
                 <h3>📧 Email</h3>
-                <p><a href="mailto:sushreeswateeprajnyabehera@gmail.com">sushreeswateeprajnyabehera@gmail.com</a></p>
+                <p><a href="mailto:swatee0506@gmail.com">swatee0506@gmail.com</a></p>
             </div>
             <div class="contact-card">
                 <h3>💼 LinkedIn</h3>
                 <p><a href="https://linkedin.com" target="_blank">Connect on LinkedIn</a></p>
             </div>
+            <div class="contact-card">
+                <h3>🎓 Google Scholar / ORCID</h3>
+                <p><a href="https://scholar.google.com" target="_blank">View Academic Profile</a></p>
+            </div>
+        </div>
+
+        <!-- Dedicated Hire Me Section -->
+        <h2 id="hire-me">Work with Me / Hire Me</h2>
+        
+        <div class="hire-card">
+            <p class="hire-intro">
+                I am actively open to <strong>Ph.D. positions</strong>, <strong>R&amp;D Quantum Hardware roles</strong>, and <strong>collaborative experimental projects</strong>. Whether you are a Principal Investigator building a laboratory, an industry team developing scalable photonic hardware, or seeking expertise in custom optical setups, cleanroom fiber processing, and atomic systems—I would love to discuss how I can contribute to your goals.
+            </p>
+
+            <form class="contact-form" action="https://formspree.io/f/swatee0506@gmail.com" method="POST">
+                <div class="form-group">
+                    <label for="name">Your Name / Organization</label>
+                    <input type="text" id="name" name="name" placeholder="e.g. Dr. Jane Doe / Quantum Labs Inc." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Your Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="e.g. jane.doe@institution.edu" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message / Opportunity Details</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Share details about the role, project, or research opportunity..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">🚀 Send Proposal / Message</button>
+            </form>
         </div>
     </div>
 
