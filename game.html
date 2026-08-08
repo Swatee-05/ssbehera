@@ -12,7 +12,7 @@
             --text-dark: #1e293b;
             --text-muted: #475569;
             --bg-body: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.92);
+            --bg-card: rgba(255, 255, 255, 0.95);
             --border-color: #cbd5e1;
         }
 
@@ -37,7 +37,8 @@
             width: 100vw;
             height: 100vh;
             z-index: 0;
-            pointer-events: none;
+            cursor: pointer;
+            display: none;
         }
 
         nav {
@@ -109,13 +110,13 @@
         }
 
         header.hero {
-            padding: 25px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 35px 25px;
+            border: 1px solid var(--border-color);
             margin-bottom: 30px;
             background: var(--bg-card);
             border-radius: 12px;
-            backdrop-filter: blur(8px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            text-align: center;
         }
 
         h1 {
@@ -132,16 +133,58 @@
             font-weight: 600;
         }
 
-        .interactive-tip {
+        .btn-play {
             display: inline-block;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            color: var(--accent);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            margin-top: 25px;
+            padding: 12px 28px;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-top: 15px;
+            color: #ffffff;
+            background-color: #2563eb;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s;
+        }
+
+        .btn-play:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .game-controls {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            display: none;
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-exit {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-exit:hover {
+            background: #dc2626;
         }
 
         footer {
@@ -153,7 +196,20 @@
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.9);
+            background: #ffffff;
+        }
+
+        body.game-active #gameCanvas {
+            display: block;
+        }
+
+        body.game-active .container,
+        body.game-active footer {
+            display: none !important;
+        }
+
+        body.game-active .game-controls {
+            display: flex;
         }
     </style>
 </head>
@@ -165,27 +221,33 @@
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
             <div class="nav-links">
-                <a href="game.html" class="active">Home</a>
+                <a href="index.html">Home</a>
                 <a href="resume.html">Resume</a>
                 <a href="research.html">Research</a>
+                <a href="game.html" class="active">Simulation</a>
                 <a href="contact.html">Contact</a>
                 <a href="hire.html" class="btn-hire">Hire Me</a>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="game-controls" id="gameControls">
+        <span>✨ Click anywhere to fire a Gaussian single-photon beam from the fiber!</span>
+        <button class="btn-exit" onclick="stopGame()">Exit Game</button>
+    </div>
+
+    <div class="container" id="mainContainer">
         <header class="hero">
             <h1>Interactive Quantum Photonics Chip</h1>
             <div class="subtitle">4H-SiC Waveguide & Color Center Photon Emission</div>
             <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
                 Visualizing single-photon generation inside integrated 4H-SiC waveguides coupled to external fiber optics.
             </p>
-            <div class="interactive-tip">✨ Click anywhere to trigger single-photon emission from the color center spot!</div>
+            <button class="btn-play" onclick="startGame()">🎮 Play Simulation</button>
         </header>
     </div>
 
-    <footer>
+    <footer id="mainFooter">
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
@@ -195,6 +257,8 @@
 
         let width, height;
         let photons = [];
+        let isGameActive = false;
+        let animationFrameId;
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -203,41 +267,71 @@
         window.addEventListener('resize', resize);
         resize();
 
-        class PhotonPulse {
+        function startGame() {
+            isGameActive = true;
+            document.body.classList.add('game-active');
+            photons = [new GaussianPhotonBeam()];
+            animate();
+        }
+
+        function stopGame() {
+            isGameActive = false;
+            document.body.classList.remove('game-active');
+            photons = [];
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            ctx.clearRect(0, 0, width, height);
+        }
+
+        class GaussianPhotonBeam {
             constructor() {
                 this.progress = 0;
-                this.speed = 0.008;
+                this.speed = 0.015;
             }
 
             update() {
                 this.progress += this.speed;
             }
 
-            draw(pathPoints) {
+            draw(fiberFacet, fiberDirection) {
                 if (this.progress > 1) return;
-                const idx = Math.floor(this.progress * (pathPoints.length - 1));
-                const pt = pathPoints[idx];
 
-                if (pt) {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
-                    ctx.fillStyle = '#fef08a';
-                    ctx.shadowColor = '#eab308';
-                    ctx.shadowBlur = 18;
-                    ctx.fill();
-                    ctx.restore();
-                }
+                const distance = this.progress * 280;
+                const radius = 6 + this.progress * 28;
+
+                const currentX = fiberFacet.x + fiberDirection.x * distance;
+                const currentY = fiberFacet.y + fiberDirection.y * distance;
+
+                ctx.save();
+                
+                const grad = ctx.createRadialGradient(
+                    currentX, currentY, 0,
+                    currentX, currentY, radius
+                );
+                grad.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
+                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.85)');
+                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.65)');
+                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');
+
+                ctx.beginPath();
+                ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.shadowColor = '#ef4444';
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                
+                ctx.restore();
             }
         }
 
         function drawIsometricChip() {
             ctx.clearRect(0, 0, width, height);
 
-            const originX = width * 0.15;
-            const originY = height * 0.65;
-            const lengthX = Math.min(width * 0.65, 750);
-            const lengthY = 320;
+            const originX = width * 0.18;
+            const originY = height * 0.62;
+            const lengthX = Math.min(width * 0.62, 720);
+            const lengthY = 300;
             const isoAngleX = 0.35;
             const isoAngleY = -0.55;
 
@@ -248,38 +342,38 @@
                 };
             }
 
-            // Silicon Base
-            const p0 = to3D(0, 0, -40);
-            const p1 = to3D(lengthX, 0, -40);
-            const p3 = to3D(0, lengthY, -40);
-            const p0_top = to3D(0, 0, 0);
-            const p1_top = to3D(lengthX, 0, 0);
-            const p3_top = to3D(0, lengthY, 0);
+            // 1. Silicon Substrate Layer (Faint Forest Green)
+            const si_thickness = 30;
+            const p0_si = to3D(0, 0, -si_thickness - 12);
+            const p1_si = to3D(lengthX, 0, -si_thickness - 12);
+            const p3_si = to3D(0, lengthY, -si_thickness - 12);
+            const p0_si_top = to3D(0, 0, -12);
+            const p1_si_top = to3D(lengthX, 0, -12);
+            const p3_si_top = to3D(0, lengthY, -12);
 
             ctx.beginPath();
-            ctx.moveTo(p0.x, p0.y);
-            ctx.lineTo(p1.x, p1.y);
-            ctx.lineTo(p1_top.x, p1_top.y);
-            ctx.lineTo(p0_top.x, p0_top.y);
+            ctx.moveTo(p0_si.x, p0_si.y);
+            ctx.lineTo(p1_si.x, p1_si.y);
+            ctx.lineTo(p1_si_top.x, p1_si_top.y);
+            ctx.lineTo(p0_si_top.x, p0_si_top.y);
             ctx.closePath();
-            ctx.fillStyle = '#22c55e';
+            ctx.fillStyle = 'rgba(34, 110, 60, 0.45)';
             ctx.fill();
 
             ctx.beginPath();
-            ctx.moveTo(p0.x, p0.y);
-            ctx.lineTo(p3.x, p3.y);
-            ctx.lineTo(p3_top.x, p3_top.y);
-            ctx.lineTo(p0_top.x, p0_top.y);
+            ctx.moveTo(p0_si.x, p0_si.y);
+            ctx.lineTo(p3_si.x, p3_si.y);
+            ctx.lineTo(p3_si_top.x, p3_si_top.y);
+            ctx.lineTo(p0_si_top.x, p0_si_top.y);
             ctx.closePath();
-            ctx.fillStyle = '#15803d';
+            ctx.fillStyle = 'rgba(20, 80, 40, 0.45)';
             ctx.fill();
 
-            // SiO2 Layer
-            const silicaHeight = 6;
-            const s0 = to3D(0, 0, silicaHeight);
-            const s1 = to3D(lengthX, 0, silicaHeight);
-            const s2 = to3D(lengthX, lengthY, silicaHeight);
-            const s3 = to3D(0, lengthY, silicaHeight);
+            // 2. SiO2 Layer (Faint Grey)
+            const s0 = to3D(0, 0, -12);
+            const s1 = to3D(lengthX, 0, -12);
+            const s2 = to3D(lengthX, lengthY, -12);
+            const s3 = to3D(0, lengthY, -12);
 
             ctx.beginPath();
             ctx.moveTo(s0.x, s0.y);
@@ -287,36 +381,39 @@
             ctx.lineTo(s2.x, s2.y);
             ctx.lineTo(s3.x, s3.y);
             ctx.closePath();
-            ctx.fillStyle = '#e0f2fe';
+            ctx.fillStyle = 'rgba(226, 232, 240, 0.7)';
             ctx.fill();
 
-            // Right Coupling Edge
-            const edge0 = to3D(lengthX, 0, silicaHeight);
-            const edge1 = to3D(lengthX + 15, 0, silicaHeight);
-            const edge2 = to3D(lengthX + 15, lengthY, silicaHeight);
-            const edge3 = to3D(lengthX, lengthY, silicaHeight);
+            // 3. Silicon Carbide Top Layer (Light Pink)
+            const c0 = to3D(0, 0, 0);
+            const c1 = to3D(lengthX, 0, 0);
+            const c2 = to3D(lengthX, lengthY, 0);
+            const c3 = to3D(0, lengthY, 0);
 
             ctx.beginPath();
-            ctx.moveTo(edge0.x, edge0.y);
-            ctx.lineTo(edge1.x, edge1.y);
-            ctx.lineTo(edge2.x, edge2.y);
-            ctx.lineTo(edge3.x, edge3.y);
+            ctx.moveTo(c0.x, c0.y);
+            ctx.lineTo(c1.x, c1.y);
+            ctx.lineTo(c2.x, c2.y);
+            ctx.lineTo(c3.x, c3.y);
             ctx.closePath();
-            ctx.fillStyle = '#94a3b8';
+            ctx.fillStyle = 'rgba(252, 231, 243, 0.88)';
             ctx.fill();
 
-            // Integrated Waveguide Circuit
-            ctx.strokeStyle = '#22c55e';
-            ctx.lineWidth = 4;
+            ctx.strokeStyle = '#fbcfe8';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 4. Waveguide Circuit
+            ctx.strokeStyle = '#16a34a';
+            ctx.lineWidth = 3.5;
             ctx.lineCap = 'round';
 
             const pathPoints = [];
-
             for (let i = 0; i <= 100; i++) {
                 const t = i / 100;
-                const wx = t * (lengthX - 50);
-                const wy = lengthY * 0.5 + Math.sin(t * Math.PI * 4) * 25 + Math.cos(t * Math.PI * 2) * 15;
-                const pt = to3D(wx, wy, silicaHeight + 2);
+                const wx = t * (lengthX - 30);
+                const wy = lengthY * 0.5 + Math.sin(t * Math.PI * 4) * 22 + Math.cos(t * Math.PI * 2) * 12;
+                const pt = to3D(wx, wy, 2);
                 pathPoints.push(pt);
             }
 
@@ -328,69 +425,83 @@
             ctx.stroke();
 
             // Ring Resonator
-            const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, silicaHeight + 2);
+            const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, 2);
             ctx.beginPath();
-            ctx.ellipse(ringCenter.x, ringCenter.y, 16, 9, 0, 0, Math.PI * 2);
+            ctx.ellipse(ringCenter.x, ringCenter.y, 15, 8, 0, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Fiber Coupling Laser
+            // Parallel Inputs
+            [0.2, 0.35, 0.65, 0.8].forEach(offset => {
+                ctx.beginPath();
+                const startPt = to3D(0, lengthY * offset, 2);
+                const midPt = to3D(lengthX * 0.25, lengthY * offset + Math.sin(offset) * 12, 2);
+                ctx.moveTo(startPt.x, startPt.y);
+                ctx.lineTo(midPt.x, midPt.y);
+                ctx.stroke();
+            });
+
+            // 5. Optical Fiber (Transparent Light Blue)
             const outputPt = pathPoints[pathPoints.length - 1];
-            const fiberFar = { x: outputPt.x + 220, y: outputPt.y - 60 };
+            const fiberFar = { x: outputPt.x + 200, y: outputPt.y - 50 };
 
             ctx.beginPath();
             ctx.moveTo(outputPt.x, outputPt.y);
-            ctx.lineTo(fiberFar.x - 10, fiberFar.y - 25);
-            ctx.lineTo(fiberFar.x + 10, fiberFar.y + 15);
+            ctx.lineTo(fiberFar.x - 15, fiberFar.y - 20);
+            ctx.lineTo(fiberFar.x + 15, fiberFar.y + 12);
             ctx.closePath();
-            ctx.fillStyle = '#ef4444';
+
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
             ctx.fill();
+            ctx.strokeStyle = 'rgba(14, 165, 233, 0.7)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
 
-            pathPoints.push({ x: outputPt.x + 100, y: outputPt.y - 27 });
-            pathPoints.push({ x: outputPt.x + 220, y: outputPt.y - 60 });
-
-            // Color Center
+            // 6. Color Center Spot
             const colorCenter = pathPoints[Math.floor(pathPoints.length * 0.78)];
             if (colorCenter) {
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(colorCenter.x, colorCenter.y, 7, 0, Math.PI * 2);
-                ctx.fillStyle = '#ef4444';
+                ctx.arc(colorCenter.x, colorCenter.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#dc2626';
                 ctx.shadowColor = '#f87171';
-                ctx.shadowBlur = 15;
+                ctx.shadowBlur = 12;
                 ctx.fill();
                 ctx.restore();
             }
 
-            return pathPoints;
+            const dirX = (fiberFar.x - outputPt.x);
+            const dirY = (fiberFar.y - outputPt.y);
+            const len = Math.hypot(dirX, dirY);
+
+            return {
+                facet: outputPt,
+                dir: { x: dirX / len, y: dirY / len }
+            };
         }
 
-        let chipPath = drawIsometricChip();
-
-        setInterval(() => {
-            photons.push(new PhotonPulse());
-        }, 2200);
-
-        window.addEventListener('click', () => {
-            photons.push(new PhotonPulse());
+        window.addEventListener('click', (e) => {
+            if (isGameActive && e.target.id === 'gameCanvas') {
+                photons.push(new GaussianPhotonBeam());
+            }
         });
 
         function animate() {
-            chipPath = drawIsometricChip();
+            if (!isGameActive) return;
+
+            const chipData = drawIsometricChip();
 
             for (let i = photons.length - 1; i >= 0; i--) {
                 const p = photons[i];
                 p.update();
-                p.draw(chipPath);
+                p.draw(chipData.facet, chipData.dir);
 
                 if (p.progress >= 1) {
                     photons.splice(i, 1);
                 }
             }
 
-            requestAnimationFrame(animate);
+            animationFrameId = requestAnimationFrame(animate);
         }
-
-        animate();
     </script>
 </body>
 </html>
