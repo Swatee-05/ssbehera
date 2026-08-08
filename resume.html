@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume | Sushree Swateeprajnya Behera</title>
+    <style>
+        :root { --primary: #0f172a; --accent: #2563eb; --text: #1e293b; --bg: #f8fafc; --border: #cbd5e1; }
+        body { font-family: -apple-system, sans-serif; line-height: 1.6; color: var(--text); background: var(--bg); margin: 0; }
+        nav { background: #fff; border-bottom: 2px solid var(--border); padding: 15px 20px; position: sticky; top: 0; }
+        .nav-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-weight: bold; color: var(--primary); text-decoration: none; font-size: 1.1rem; }
+        .nav-links a { color: var(--text); text-decoration: none; margin-left: 20px; font-weight: 500; }
+        .nav-links a.active { color: var(--accent); font-weight: bold; }
+        .btn-hire { background: var(--accent); color: #fff !important; padding: 6px 12px; border-radius: 5px; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: var(--primary); }
+        .btn-cv { display: inline-block; background: var(--primary); color: #fff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-bottom: 25px; }
+        .exp-item { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .exp-header { display: flex; justify-content: space-between; font-weight: bold; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html">About Me</a>
+                <a href="resume.html" class="active">Resume</a>
+                <a href="research.html">Research & Reports</a>
+                <a href="contact.html">Contact</a>
+                <a href="contact.html#hire" class="btn-hire">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Curriculum Vitae</h1>
+        <a href="CV.pdf" class="btn-cv" target="_blank">📥 Download Official CV (PDF)</a>
+
+        <h2>Research Positions</h2>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <span>Quantum Sensing Researcher</span>
+                <span>March 2026 – July 2026</span>
+            </div>
+            <p><em>QuBeats & TIFR Hyderabad, India</em></p>
+            <ul>
+                <li>Designed and built a GUI for compact optically pumped magnetometers (OPM).</li>
+                <li>Performed DAQ and signal analysis for NMOR experiments using Moku:Go platform.</li>
+            </ul>
+        </div>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <span>Researcher – Quantum Materials Team</span>
+                <span>Nov 2024 – Dec 2025</span>
+            </div>
+            <p><em>LIST & Université du Luxembourg</em></p>
+            <ul>
+                <li>Investigated two-photon interference using color centers in 4H-SiC.</li>
+                <li>Designed and built an optical fiber gluing station for waveguide–fiber interfacing.</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
