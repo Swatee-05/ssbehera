@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research & Setups | Sushree Swateeprajnya Behera</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text-dark: #1e293b;
+            --text-muted: #475569;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--border-color);
+            z-index: 1000;
+            padding: 12px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn-hire {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: background 0.2s;
+        }
+
+        .btn-hire:hover {
+            background-color: var(--accent-hover) !important;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            margin-bottom: 40px;
+        }
+
+        .photo-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .photo-card p {
+            margin: 8px 0 0 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .file-link {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .file-link:hover {
+            text-decoration: underline;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 25px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html">About Me</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html" class="active">Research & Setup</a>
+                <a href="contact.html">Contact</a>
+                <a href="contact.html#hire-me" class="btn-hire">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Research Setups & Experimental Reports</h1>
+        <p>Below are highlights of optical setups, cleanroom workflows, and experimental platforms I have built, alongside technical reports available for download:</p>
+
+        <div class="photo-gallery">
+            <div class="photo-card">
+                <img src="setup-fiber-gluing.jpg" alt="Fiber Gluing Station" onerror="this.src='https://via.placeholder.com/300x180?text=Optical+Setup+Photo';">
+                <p><strong>Custom Fiber Gluing Station:</strong> Built for high-precision chip-to-waveguide interfacing at LIST, Luxembourg.</p>
+                <a href="reports/Fiber_Gluing_Report.pdf" class="file-link" target="_blank">📄 Download Tech Report (PDF)</a>
+            </div>
+
+            <div class="photo-card">
+                <img src="setup-aom.jpg" alt="Double-pass AOM Setup" onerror="this.src='https://via.placeholder.com/300x180?text=Laser+Setup+Photo';">
+                <p><strong>Double-Pass AOM Alignment:</strong> 397 nm laser pulse modulation setup built at Universität des Saarlandes.</p>
+                <a href="reports/AOM_Setup_Summary.pdf" class="file-link" target="_blank">📄 Download Tech Report (PDF)</a>
+            </div>
+
+            <div class="photo-card">
+                <img src="cleanroom-characterization.jpg" alt="Cleanroom Characterization" onerror="this.src='https://via.placeholder.com/300x180?text=Cleanroom+Work';">
+                <p><strong>Cleanroom Specialty Fiber Processing:</strong> ISO 4 environment characterization of 1060XP and ZBLAN fibers.</p>
+                <a href="reports/Cleanroom_Workflow.pdf" class="file-link" target="_blank">📄 Download Tech Report (PDF)</a>
+            </div>
+        </div>
+
+        <h2>Publications & Presentations</h2>
+        <ul>
+            <li>
+                <strong>Observation of geometric phase in a molecular Aharonov-Bohm system using IBM Quantum Computer</strong><br>
+                Gaurav Rudra Malik, Sushree Swateeprajnya Behera, Shubham Kumar, Bikash K. Behera, Prasanta K. Panigrahi<br>
+                <em>Preprint: arXiv:1909.00298 [quant-ph], 2019</em>
+            </li>
+            <li>
+                <strong>Controlling asymptotic self-similar optical beams in a semiconductor waveguide doped with quantum dots</strong><br>
+                Sushree Swateeprajnya Behera, Nikhitha Nunavath, Vineetha Ashok, Thokala Soloman Raju<br>
+                <em>Published as conference paper at Optical Society of America (OSA), PHOTONICS 2018</em>
+            </li>
+        </ul>
+
+        <h3 style="margin-top: 30px;">Invited Talks & Conferences</h3>
+        <ul>
+            <li><strong>Invited Talk:</strong> <em>Two-photon interference with divacancies in silicon carbide</em>, Quantum SiC Workshop, Stralsund, Germany (Oct 2025).</li>
+            <li><strong>Presentation:</strong> <em>Towards two-photon interference with color centers in silicon carbide</em>, Greenhorn Meeting, Saarbrücken, Germany (Sep 2025).</li>
+            <li><strong>Poster:</strong> <em>Multiplexing divacancies in silicon carbide for quantum networks</em>, DPPM PhD Day, Univ. of Luxembourg (Apr 2025).</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
+    </footer>
+
+</body>
+</html>
