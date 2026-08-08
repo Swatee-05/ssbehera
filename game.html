@@ -230,16 +230,16 @@
     </nav>
 
     <div class="game-controls" id="gameControls">
-        <span>✨ Click anywhere to trigger single-photon emission from the color center!</span>
+        <span>✨ Click anywhere to fire a single photon from the color center inside the waveguide!</span>
         <button class="btn-exit" onclick="stopGame()">Exit Game</button>
     </div>
 
     <div class="container" id="mainContainer">
         <header class="hero">
             <h1>Interactive Evanescent Optical Coupling</h1>
-            <div class="subtitle">4H-SiC Tapered Waveguide & Tapered Fiber Coupling</div>
+            <div class="subtitle">Suspended 4H-SiC Tapered Waveguide & Optical Fiber</div>
             <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
-                Visualizing single-photon generation inside an integrated 4H-SiC tapered waveguide (1 µm → 0 µm) and evanescent coupling into a tapered optical fiber.
+                Visualizing single-photon generation inside a 3D-thick 4H-SiC hanging tapered waveguide and evanescent coupling into a tapered optical fiber.
             </p>
             <button class="btn-play" onclick="startGame()">🎮 Play Simulation</button>
         </header>
@@ -283,11 +283,10 @@
             ctx.clearRect(0, 0, width, height);
         }
 
-        // Single photon propagating along waveguide -> evanescent region -> tapered fiber
         class EvanescentPhoton {
             constructor() {
-                this.progress = 0; // 0 to 1
-                this.speed = 0.012;
+                this.progress = 0;
+                this.speed = 0.011;
             }
 
             update() {
@@ -299,20 +298,19 @@
 
                 let currentX, currentY;
                 
-                // First half: Travel inside 4H-SiC Waveguide to taper region
-                if (this.progress <= 0.5) {
-                    const localT = this.progress / 0.5;
+                // 1. Propagation inside 3D Waveguide to the hanging taper tip
+                if (this.progress <= 0.52) {
+                    const localT = this.progress / 0.52;
                     currentX = emitterPt.x + (taperTipPt.x - emitterPt.x) * localT;
                     currentY = emitterPt.y + (taperTipPt.y - emitterPt.y) * localT;
                 } 
-                // Second half: Evanescent coupling into tapered optical fiber
+                // 2. Evanescent Transfer into Tapered Fiber
                 else {
-                    const localT = (this.progress - 0.5) / 0.5;
-                    currentX = taperTipPt.x + (fiberEndPt.x - taperTipPt.x) * localT;
-                    currentY = taperTipPt.y + (fiberEndPt.y - taperTipPt.y) * localT;
+                    const localT = (this.progress - 0.52) / 0.48;
+                    currentX = taperTipPt.x + (fiberEndPt.x - taperTipTipPt.x) * localT;
+                    currentY = taperTipPt.y + (fiberEndPt.y - taperTipTipPt.y) * localT;
                 }
 
-                // Gaussian intensity radial profile
                 const radius = 7 + Math.sin(this.progress * Math.PI) * 4;
 
                 ctx.save();
@@ -321,10 +319,10 @@
                     currentX, currentY, 0,
                     currentX, currentY, radius
                 );
-                grad.addColorStop(0, 'rgba(255, 255, 180, 1)');   // Gaussian Yellow Core
-                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.9)'); // Deep Yellow
-                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');   // Red Periphery
-                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');      // Outer Fade
+                grad.addColorStop(0, 'rgba(255, 255, 190, 1)');   // Gaussian Core
+                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.9)'); // Yellow
+                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.75)');  // Red Edge
+                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');      // Outer Periphery
 
                 ctx.beginPath();
                 ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
@@ -340,10 +338,10 @@
         function drawIsometricSetup() {
             ctx.clearRect(0, 0, width, height);
 
-            const originX = width * 0.16;
-            const originY = height * 0.65;
-            const lengthX = Math.min(width * 0.65, 760);
-            const lengthY = 320;
+            const originX = width * 0.22;
+            const originY = height * 0.62;
+            const lengthX = Math.min(width * 0.60, 720);
+            const lengthY = 300;
             const isoAngleX = 0.35;
             const isoAngleY = -0.55;
 
@@ -354,117 +352,176 @@
                 };
             }
 
-            // Helper to draw clean callout lines and labels
-            function drawLabel(targetPt, text, offset3D, alignRight = false) {
-                const labelPos = to3D(offset3D.x, offset3D.y, offset3D.z);
-                
+            // Cross-Section Leader Callout Helper
+            function drawSideLabel(targetPt, text, labelPt) {
                 ctx.save();
-                ctx.strokeStyle = 'rgba(15, 23, 42, 0.5)';
-                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(15, 23, 42, 0.6)';
+                ctx.lineWidth = 1.2;
                 ctx.setLineDash([3, 3]);
                 
                 ctx.beginPath();
                 ctx.moveTo(targetPt.x, targetPt.y);
-                ctx.lineTo(labelPos.x, labelPos.y);
+                ctx.lineTo(labelPt.x, labelPt.y);
                 ctx.stroke();
 
                 ctx.setLineDash([]);
                 ctx.beginPath();
-                ctx.arc(targetPt.x, targetPt.y, 3, 0, Math.PI * 2);
+                ctx.arc(targetPt.x, targetPt.y, 3.5, 0, Math.PI * 2);
                 ctx.fillStyle = '#0f172a';
                 ctx.fill();
 
                 ctx.font = '600 13px -apple-system, sans-serif';
                 ctx.fillStyle = '#0f172a';
-                ctx.textAlign = alignRight ? 'right' : 'left';
-                ctx.fillText(text, labelPos.x + (alignRight ? -8 : 8), labelPos.y + 4);
+                ctx.textAlign = 'right';
+                ctx.fillText(text, labelPt.x - 10, labelPt.y + 4);
                 ctx.restore();
             }
 
-            // 1. Silicon Substrate Layer (Faint Forest Green)
-            const si_thickness = 32;
-            const p0_si = to3D(0, 0, -si_thickness - 12);
-            const p1_si = to3D(lengthX, 0, -si_thickness - 12);
-            const p3_si = to3D(0, lengthY, -si_thickness - 12);
-            const p0_si_top = to3D(0, 0, -12);
-            const p1_si_top = to3D(lengthX, 0, -12);
-            const p3_si_top = to3D(0, lengthY, -12);
+            // Layer Heights (Thicker Cross Section)
+            const h_si = 45;   // Thick Silicon Substrate
+            const h_sio2 = 25; // SiO2 Layer Thickness
+            const h_sic = 16;  // 4H-SiC Platform Thickness
 
+            const z0 = 0;
+            const z_sio2_bottom = -h_sio2;
+            const z_si_bottom = -h_sio2 - h_si;
+
+            // Undercut geometry so waveguide hangs suspended over fiber
+            const trenchStartX = lengthX * 0.38;
+
+            // 1. SILICON SUBSTRATE (Faint Forest Green)
+            const p0_si = to3D(0, 0, z_si_bottom);
+            const p1_si = to3D(lengthX, 0, z_si_bottom);
+            const p0_si_top = to3D(0, 0, z_sio2_bottom);
+            const p1_si_top = to3D(lengthX, 0, z_sio2_bottom);
+
+            // Front Cross-Section Face
             ctx.beginPath();
             ctx.moveTo(p0_si.x, p0_si.y);
             ctx.lineTo(p1_si.x, p1_si.y);
             ctx.lineTo(p1_si_top.x, p1_si_top.y);
             ctx.lineTo(p0_si_top.x, p0_si_top.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(34, 110, 60, 0.4)';
+            ctx.fillStyle = 'rgba(34, 110, 60, 0.75)';
             ctx.fill();
-
-            ctx.beginPath();
-            ctx.moveTo(p0_si.x, p0_si.y);
-            ctx.lineTo(p3_si.x, p3_si.y);
-            ctx.lineTo(p3_si_top.x, p3_si_top.y);
-            ctx.lineTo(p0_si_top.x, p0_si_top.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(20, 80, 40, 0.4)';
-            ctx.fill();
-
-            // 2. SiO2 Layer (Faint Grey)
-            const s0 = to3D(0, 0, -12);
-            const s1 = to3D(lengthX, 0, -12);
-            const s2 = to3D(lengthX, lengthY, -12);
-            const s3 = to3D(0, lengthY, -12);
-
-            ctx.beginPath();
-            ctx.moveTo(s0.x, s0.y);
-            ctx.lineTo(s1.x, s1.y);
-            ctx.lineTo(s2.x, s2.y);
-            ctx.lineTo(s3.x, s3.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(226, 232, 240, 0.85)';
-            ctx.fill();
-
-            // 3. 4H-SiC Thin-Film Platform (Faint Pink)
-            const c0 = to3D(0, 0, 0);
-            const c1 = to3D(lengthX, 0, 0);
-            const c2 = to3D(lengthX, lengthY, 0);
-            const c3 = to3D(0, lengthY, 0);
-
-            ctx.beginPath();
-            ctx.moveTo(c0.x, c0.y);
-            ctx.lineTo(c1.x, c1.y);
-            ctx.lineTo(c2.x, c2.y);
-            ctx.lineTo(c3.x, c3.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(252, 231, 243, 0.85)';
-            ctx.fill();
-            ctx.strokeStyle = '#fbcfe8';
+            ctx.strokeStyle = '#15803d';
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // 4. Tapered 4H-SiC Waveguide (1 µm -> 0 µm taper, Light Faint Pink)
-            const wgY = lengthY * 0.5;
-            const startX = lengthX * 0.08;
-            const taperEndX = lengthX * 0.65;
-
-            const wgStartTop = to3D(startX, wgY - 14, 4);
-            const wgStartBottom = to3D(startX, wgY + 14, 4);
-            const wgTaperTip = to3D(taperEndX, wgY, 4);
+            // 2. SiO2 LAYER (Faint Grey) - Etched away under hanging taper
+            const p0_sio2 = to3D(0, 0, z_sio2_bottom);
+            const p1_sio2 = to3D(trenchStartX, 0, z_sio2_bottom);
+            const p0_sio2_top = to3D(0, 0, z0);
+            const p1_sio2_top = to3D(trenchStartX, 0, z0);
 
             ctx.beginPath();
-            ctx.moveTo(wgStartTop.x, wgStartTop.y);
-            ctx.lineTo(wgStartBottom.x, wgStartBottom.y);
-            ctx.lineTo(wgTaperTip.x, wgTaperTip.y);
+            ctx.moveTo(p0_sio2.x, p0_sio2.y);
+            ctx.lineTo(p1_sio2.x, p1_sio2.y);
+            ctx.lineTo(p1_sio2_top.x, p1_sio2_top.y);
+            ctx.lineTo(p0_sio2_top.x, p0_sio2_top.y);
             ctx.closePath();
-            
-            ctx.fillStyle = 'rgba(244, 114, 182, 0.5)'; // Light faint pink waveguide
+            ctx.fillStyle = 'rgba(203, 213, 225, 0.85)';
             ctx.fill();
-            ctx.strokeStyle = '#db2777';
-            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#94a3b8';
             ctx.stroke();
 
-            // 5. Color Center Quantum Emitter Inside Waveguide
-            const emitterX = startX + (taperEndX - startX) * 0.25;
-            const emitterPt = to3D(emitterX, wgY, 4);
+            // SiO2 Top Face
+            const sio2_c0 = to3D(0, 0, z0);
+            const sio2_c1 = to3D(trenchStartX, 0, z0);
+            const sio2_c2 = to3D(trenchStartX, lengthY, z0);
+            const sio2_c3 = to3D(0, lengthY, z0);
+
+            ctx.beginPath();
+            ctx.moveTo(sio2_c0.x, sio2_c0.y);
+            ctx.lineTo(sio2_c1.x, sio2_c1.y);
+            ctx.lineTo(sio2_c2.x, sio2_c2.y);
+            ctx.lineTo(sio2_c3.x, sio2_c3.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(226, 232, 240, 0.9)';
+            ctx.fill();
+
+            // 3. 4H-SiC PLATFORM (Faint Light Pink)
+            const sic_c0 = to3D(0, 0, z0);
+            const sic_c1 = to3D(trenchStartX, 0, z0);
+            const sic_c2 = to3D(trenchStartX, lengthY, z0);
+            const sic_c3 = to3D(0, lengthY, z0);
+
+            const sic_top_c0 = to3D(0, 0, h_sic);
+            const sic_top_c1 = to3D(trenchStartX, 0, h_sic);
+
+            // Front Side Face
+            ctx.beginPath();
+            ctx.moveTo(sic_c0.x, sic_c0.y);
+            ctx.lineTo(sic_c1.x, sic_c1.y);
+            ctx.lineTo(sic_top_c1.x, sic_top_c1.y);
+            ctx.lineTo(sic_top_c0.x, sic_top_c0.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(244, 114, 182, 0.55)';
+            ctx.fill();
+
+            // Top Face
+            ctx.beginPath();
+            ctx.moveTo(sic_c0.x, sic_c0.y);
+            ctx.lineTo(sic_c1.x, sic_c1.y);
+            ctx.lineTo(sic_c2.x, sic_c2.y);
+            ctx.lineTo(sic_c3.x, sic_c3.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(252, 231, 243, 0.88)';
+            ctx.fill();
+            ctx.strokeStyle = '#fbcfe8';
+            ctx.stroke();
+
+            // 4. 3D TAPERED WAVEGUIDE WITH HEIGHT (1 µm -> 0 µm Hanging Taper)
+            const wgY = lengthY * 0.5;
+            const wgStartX = lengthX * 0.05;
+            const taperEndX = lengthX * 0.72;
+            const wgHeight = 18;
+
+            // Supported Bottom Points (0 -> trenchStartX)
+            const b_start_left = to3D(wgStartX, wgY - 12, 0);
+            const b_start_right = to3D(wgStartX, wgY + 12, 0);
+            const b_trench_left = to3D(trenchStartX, wgY - 7, 0);
+            const b_trench_right = to3D(trenchStartX, wgY + 7, 0);
+            const b_taper_tip = to3D(taperEndX, wgY, 0);
+
+            // Top Points (+wgHeight elevation)
+            const t_start_left = to3D(wgStartX, wgY - 12, wgHeight);
+            const t_start_right = to3D(wgStartX, wgY + 12, wgHeight);
+            const t_trench_left = to3D(trenchStartX, wgY - 7, wgHeight);
+            const t_trench_right = to3D(trenchStartX, wgY + 7, wgHeight);
+            const t_taper_tip = to3D(taperEndX, wgY, wgHeight);
+
+            // Waveguide Side Profile (3D Height Wall)
+            ctx.beginPath();
+            ctx.moveTo(b_start_right.x, b_start_right.y);
+            ctx.lineTo(b_trench_right.x, b_trench_right.y);
+            ctx.lineTo(b_taper_tip.x, b_taper_tip.y);
+            ctx.lineTo(t_taper_tip.x, t_taper_tip.y);
+            ctx.lineTo(t_trench_right.x, t_trench_right.y);
+            ctx.lineTo(t_start_right.x, t_start_right.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(219, 39, 119, 0.6)';
+            ctx.fill();
+            ctx.strokeStyle = '#be185d';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Waveguide Top Surface
+            ctx.beginPath();
+            ctx.moveTo(t_start_left.x, t_start_left.y);
+            ctx.lineTo(t_start_right.x, t_start_right.y);
+            ctx.lineTo(t_trench_right.x, t_trench_right.y);
+            ctx.lineTo(t_taper_tip.x, t_taper_tip.y);
+            ctx.lineTo(t_trench_left.x, t_trench_left.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(244, 114, 182, 0.85)';
+            ctx.fill();
+            ctx.strokeStyle = '#db2777';
+            ctx.stroke();
+
+            // 5. COLOR CENTER EMITTER INSIDE WAVEGUIDE
+            const emitterX = wgStartX + (taperEndX - wgStartX) * 0.22;
+            const emitterPt = to3D(emitterX, wgY, wgHeight * 0.5);
 
             ctx.save();
             ctx.beginPath();
@@ -475,39 +532,41 @@
             ctx.fill();
             ctx.restore();
 
-            // 6. Tapered Optical Fiber (Faint Grey, Evanescent Coupling Overlap)
-            const overlapX = taperEndX - 100;
-            const fiberEndX = lengthX + 120;
+            // 6. TAPERED OPTICAL FIBER (Faint Grey, Evanescent Coupling Under Hanging Taper)
+            const fiberStartX = trenchStartX - 20;
+            const fiberEndX = lengthX + 110;
 
-            const fiberTip = to3D(overlapX, wgY + 6, 6);
-            const fiberTopEnd = to3D(fiberEndX, wgY - 20, 6);
-            const fiberBottomEnd = to3D(fiberEndX, wgY + 32, 6);
+            const f_tip = to3D(fiberStartX, wgY + 4, wgHeight * 0.2);
+            const f_end_top = to3D(fiberEndX, wgY - 22, wgHeight * 0.2);
+            const f_end_bottom = to3D(fiberEndX, wgY + 30, wgHeight * 0.2);
 
             ctx.beginPath();
-            ctx.moveTo(fiberTip.x, fiberTip.y);
-            ctx.lineTo(fiberTopEnd.x, fiberTopEnd.y);
-            ctx.lineTo(fiberBottomEnd.x, fiberBottomEnd.y);
+            ctx.moveTo(f_tip.x, f_tip.y);
+            ctx.lineTo(f_end_top.x, f_end_top.y);
+            ctx.lineTo(f_end_bottom.x, f_end_bottom.y);
             ctx.closePath();
 
-            ctx.fillStyle = 'rgba(203, 213, 225, 0.65)'; // Faint grey optical fiber
+            ctx.fillStyle = 'rgba(203, 213, 225, 0.65)';
             ctx.fill();
             ctx.strokeStyle = '#94a3b8';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            const fiberFarPt = to3D(fiberEndX, wgY + 6, 6);
+            // 7. SIDE CROSS-SECTION LABELS & CALLOUTS
+            const labelXOffset = -140;
+            drawSideLabel(to3D(0, 0, h_sic * 0.5), "4H-SiC Layer", { x: originX + labelXOffset, y: originY - 10 });
+            drawSideLabel(to3D(0, 0, z_sio2_bottom * 0.5), "SiO₂ Oxide Layer", { x: originX + labelXOffset, y: originY + 22 });
+            drawSideLabel(to3D(0, 0, z_si_bottom + h_si * 0.5), "Silicon Substrate", { x: originX + labelXOffset, y: originY + 54 });
 
-            // 7. Render Layer Names & Component Callouts
-            drawLabel(to3D(startX + 60, wgY - 8, 4), "4H-SiC Tapered Waveguide (1 µm → 0 µm)", { x: startX + 40, y: wgY - 90, z: 20 });
-            drawLabel(emitterPt, "Color Center Quantum Emitter", { x: emitterX - 30, y: wgY + 110, z: 10 });
-            drawLabel(fiberTip, "Tapered Optical Fiber (Evanescent Coupling)", { x: overlapX + 80, y: wgY - 100, z: 20 });
-            drawLabel(to3D(lengthX * 0.15, lengthY * 0.82, 0), "SiO₂ Layer", { x: lengthX * 0.05, y: lengthY * 0.95, z: -5 });
-            drawLabel(to3D(lengthX * 0.15, lengthY * 0.82, -20), "Silicon Substrate", { x: lengthX * 0.05, y: lengthY * 0.98, z: -35 });
+            // Top Feature Labels
+            drawSideLabel(t_start_right, "3D Tapered Waveguide (1 µm → 0 µm)", { x: t_start_right.x - 80, y: t_start_right.y - 65 });
+            drawSideLabel(emitterPt, "Color Center Quantum Emitter", { x: emitterPt.x - 60, y: emitterPt.y + 80 });
+            drawSideLabel(t_taper_tip, "Hanging Taper Tip (Evanescent Coupling)", { x: t_taper_tip.x + 90, y: t_taper_tip.y - 75 });
 
             return {
                 emitter: emitterPt,
-                taperTip: wgTaperTip,
-                fiberEnd: fiberFarPt
+                taperTip: t_taper_tip,
+                fiberEnd: to3D(fiberEndX, wgY + 4, wgHeight * 0.2)
             };
         }
 
