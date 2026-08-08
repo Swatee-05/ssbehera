@@ -12,7 +12,7 @@
             --text-dark: #1e293b;
             --text-muted: #475569;
             --bg-body: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-card: rgba(255, 255, 255, 0.98);
             --border-color: #cbd5e1;
         }
 
@@ -30,6 +30,7 @@
             overflow-x: hidden;
         }
 
+        /* Canvas is completely hidden on initial page load */
         #gameCanvas {
             position: fixed;
             top: 0;
@@ -106,13 +107,12 @@
             z-index: 1;
             max-width: 1000px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
 
         header.hero {
-            padding: 35px 25px;
+            padding: 40px 30px;
             border: 1px solid var(--border-color);
-            margin-bottom: 30px;
             background: var(--bg-card);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
@@ -136,7 +136,7 @@
         .btn-play {
             display: inline-block;
             margin-top: 25px;
-            padding: 12px 28px;
+            padding: 12px 30px;
             font-size: 1.1rem;
             font-weight: 600;
             color: #ffffff;
@@ -153,6 +153,7 @@
             transform: translateY(-2px);
         }
 
+        /* Top control bar during simulation */
         .game-controls {
             position: fixed;
             top: 80px;
@@ -160,10 +161,10 @@
             transform: translateX(-50%);
             z-index: 1001;
             display: none;
-            background: rgba(15, 23, 42, 0.88);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(8px);
             color: #ffffff;
-            padding: 8px 18px;
+            padding: 8px 20px;
             border-radius: 30px;
             font-size: 0.9rem;
             font-weight: 500;
@@ -176,7 +177,7 @@
             background: #ef4444;
             color: white;
             border: none;
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 15px;
             font-size: 0.8rem;
             font-weight: 600;
@@ -199,6 +200,7 @@
             background: #ffffff;
         }
 
+        /* Active simulation mode state */
         body.game-active #gameCanvas {
             display: block;
         }
@@ -218,20 +220,20 @@
     <canvas id="gameCanvas"></canvas>
 
     <nav>
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
-        <div class="nav-links">
-            <a href="game.html" class="active">Home</a>
-            <a href="resume.html">Resume</a>
-            <a href="research.html">Research</a>
-            <a href="contact.html">Contact</a>
-            <a href="hire.html" class="btn-hire">Hire Me</a>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="game.html" class="active">Home</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="game-controls" id="gameControls">
-        <span>✨ Click anywhere to fire a Gaussian single-photon beam from the fiber!</span>
+        <span>✨ Click anywhere to trigger a Gaussian photon pulse from the fiber!</span>
         <button class="btn-exit" onclick="stopGame()">Exit Game</button>
     </div>
 
@@ -257,7 +259,7 @@
         let width, height;
         let photons = [];
         let isGameActive = false;
-        let animationFrameId;
+        let animationFrameId = null;
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -279,10 +281,12 @@
             photons = [];
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
             }
             ctx.clearRect(0, 0, width, height);
         }
 
+        // Gaussian Photon Beam Physics
         class GaussianPhotonBeam {
             constructor() {
                 this.progress = 0;
@@ -304,14 +308,15 @@
 
                 ctx.save();
                 
+                // Radial Gaussian gradient: Yellow core fading to Red at periphery
                 const grad = ctx.createRadialGradient(
                     currentX, currentY, 0,
                     currentX, currentY, radius
                 );
-                grad.addColorStop(0, 'rgba(254, 240, 138, 0.95)');
-                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.85)');
-                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.65)');
-                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');
+                grad.addColorStop(0, 'rgba(254, 240, 138, 0.95)');  // Yellow center
+                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.85)'); // Yellow-gold
+                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.65)');  // Red transition
+                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');       // Red edge fade out
 
                 ctx.beginPath();
                 ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
@@ -341,7 +346,7 @@
                 };
             }
 
-            // 1. Silicon Substrate Layer (Faint Forest Green)
+            // 1. Bottom Substrate: Silicon Layer (Faint Forest Green)
             const si_thickness = 30;
             const p0_si = to3D(0, 0, -si_thickness - 12);
             const p1_si = to3D(lengthX, 0, -si_thickness - 12);
@@ -368,7 +373,7 @@
             ctx.fillStyle = 'rgba(20, 80, 40, 0.45)';
             ctx.fill();
 
-            // 2. SiO2 Layer (Faint Grey)
+            // 2. Base Layer: SiO2 (Faint Grey)
             const s0 = to3D(0, 0, -12);
             const s1 = to3D(lengthX, 0, -12);
             const s2 = to3D(lengthX, lengthY, -12);
@@ -380,10 +385,10 @@
             ctx.lineTo(s2.x, s2.y);
             ctx.lineTo(s3.x, s3.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(226, 232, 240, 0.7)';
+            ctx.fillStyle = 'rgba(226, 232, 240, 0.75)';
             ctx.fill();
 
-            // 3. Silicon Carbide Top Layer (Light Pink)
+            // 3. Top Layer: Silicon Carbide (Light Pink)
             const c0 = to3D(0, 0, 0);
             const c1 = to3D(lengthX, 0, 0);
             const c2 = to3D(lengthX, lengthY, 0);
@@ -395,14 +400,14 @@
             ctx.lineTo(c2.x, c2.y);
             ctx.lineTo(c3.x, c3.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(252, 231, 243, 0.88)';
+            ctx.fillStyle = 'rgba(252, 231, 243, 0.9)';
             ctx.fill();
 
             ctx.strokeStyle = '#fbcfe8';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // 4. Waveguide Circuit
+            // 4. Integrated Silicon Carbide Waveguide Circuit
             ctx.strokeStyle = '#16a34a';
             ctx.lineWidth = 3.5;
             ctx.lineCap = 'round';
@@ -423,23 +428,13 @@
             });
             ctx.stroke();
 
-            // Ring Resonator
+            // Microring Resonator
             const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, 2);
             ctx.beginPath();
             ctx.ellipse(ringCenter.x, ringCenter.y, 15, 8, 0, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Parallel Inputs
-            [0.2, 0.35, 0.65, 0.8].forEach(offset => {
-                ctx.beginPath();
-                const startPt = to3D(0, lengthY * offset, 2);
-                const midPt = to3D(lengthX * 0.25, lengthY * offset + Math.sin(offset) * 12, 2);
-                ctx.moveTo(startPt.x, startPt.y);
-                ctx.lineTo(midPt.x, midPt.y);
-                ctx.stroke();
-            });
-
-            // 5. Optical Fiber (Transparent Light Blue)
+            // 5. Light Blue Transparent Optical Fiber
             const outputPt = pathPoints[pathPoints.length - 1];
             const fiberFar = { x: outputPt.x + 200, y: outputPt.y - 50 };
 
@@ -455,7 +450,7 @@
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // 6. Color Center Spot
+            // 6. Color Center Quantum Emitter
             const colorCenter = pathPoints[Math.floor(pathPoints.length * 0.78)];
             if (colorCenter) {
                 ctx.save();
