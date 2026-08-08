@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sushree Swateeprajnya Behera | Quantum Hardware Researcher</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text-dark: #1e293b;
+            --text-muted: #475569;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--border-color);
+            z-index: 1000;
+            padding: 12px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn-hire {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: background 0.2s;
+        }
+
+        .btn-hire:hover {
+            background-color: var(--accent-hover) !important;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header.hero {
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 2.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .btn-cv {
+            display: inline-block;
+            background: var(--primary);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-cv:hover {
+            background: #334155;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 25px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html" class="active">About Me</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research & Setup</a>
+                <a href="contact.html">Contact</a>
+                <a href="contact.html#hire-me" class="btn-hire">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="hero">
+            <h1>Sushree Swateeprajnya Behera</h1>
+            <div class="subtitle">Experimental Quantum Hardware Researcher</div>
+            <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
+                Hello and welcome! 👋 I am an experimental quantum physicist specializing in solid-state quantum photonics, color centers in 4H-SiC, atomic systems, and precision optical measurement platforms. I bridge high-level theoretical physics requirements with robust, cleanroom-fabricated quantum hardware.
+            </p>
+            <a href="CV.pdf" class="btn-cv" target="_blank">📥 Download Full Curriculum Vitae (PDF)</a>
+        </header>
+
+        <div class="card">
+            <h2 style="margin-top: 0; color: var(--primary);">Research Focus</h2>
+            <p>My work centers around developing scalable experimental hardware for quantum technologies. Explore the dedicated sections above to view my full curriculum vitae, custom optical setup implementations, cleanroom fabrication workflows, and peer-reviewed publications.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
+    </footer>
+
+</body>
+</html>
