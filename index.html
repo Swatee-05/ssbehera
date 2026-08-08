@@ -30,17 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Fullscreen Canvas Background */
-        #gameCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-        }
-
         nav {
             position: sticky;
             top: 0;
@@ -143,18 +132,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
-        .interactive-tip {
-            display: inline-block;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            color: var(--accent);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 15px;
-        }
-
         footer {
             position: relative;
             z-index: 1;
@@ -170,21 +147,18 @@
 </head>
 <body>
 
-    <!-- Isometric Chip Canvas Background -->
-    <canvas id="gameCanvas"></canvas>
-
     <nav>
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
-        <div class="nav-links">
-            <a href="game.html">Home</a>
-            <a href="resume.html">Resume</a>
-            <a href="research.html">Research</a>
-            <a href="contact.html">Contact</a>
-            <a href="hire.html" class="btn-hire">Hire Me</a>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="game.html">Home</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="container">
         <header class="hero">
@@ -193,7 +167,6 @@
             <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
                 Hello and welcome! 👋 I am an experimental quantum physicist specializing in solid-state quantum photonics, color centers in 4H-SiC, atomic systems, and precision optical measurement platforms.
             </p>
-            <div class="interactive-tip">✨ Click anywhere on the page to fire a photon pulse from the SiC color center!</div>
         </header>
 
         <div class="card">
@@ -206,231 +179,5 @@
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let width, height;
-        let photons = [];
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        // Single photon pulse class moving along waveguide
-        class PhotonPulse {
-            constructor() {
-                this.progress = 0; // 0 to 1
-                this.speed = 0.008;
-            }
-
-            update() {
-                this.progress += this.speed;
-            }
-
-            draw(pathPoints) {
-                if (this.progress > 1) return;
-                const idx = Math.floor(this.progress * (pathPoints.length - 1));
-                const pt = pathPoints[idx];
-
-                if (pt) {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
-                    ctx.fillStyle = '#fef08a';
-                    ctx.shadowColor = '#eab308';
-                    ctx.shadowBlur = 18;
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-        }
-
-        function drawIsometricChip() {
-            ctx.clearRect(0, 0, width, height);
-
-            // Anchor point for isometric view near bottom right / center
-            const originX = width * 0.15;
-            const originY = height * 0.65;
-            const lengthX = Math.min(width * 0.65, 750);
-            const lengthY = 320;
-            const isoAngleX = 0.35; // tilt
-            const isoAngleY = -0.55;
-
-            // Transform coordinates to 3D Isometric Projection
-            function to3D(x, y, z = 0) {
-                return {
-                    x: originX + x * Math.cos(isoAngleX) + y * Math.cos(isoAngleY),
-                    y: originY + x * Math.sin(isoAngleX) + y * Math.sin(isoAngleY) - z
-                };
-            }
-
-            // 1. Silicon Base (Green Layer)
-            const p0 = to3D(0, 0, -40);
-            const p1 = to3D(lengthX, 0, -40);
-            const p2 = to3D(lengthX, lengthY, -40);
-            const p3 = to3D(0, lengthY, -40);
-
-            const p0_top = to3D(0, 0, 0);
-            const p1_top = to3D(lengthX, 0, 0);
-            const p2_top = to3D(lengthX, lengthY, 0);
-            const p3_top = to3D(0, lengthY, 0);
-
-            // Green Base Front Side
-            ctx.beginPath();
-            ctx.moveTo(p0.x, p0.y);
-            ctx.lineTo(p1.x, p1.y);
-            ctx.lineTo(p1_top.x, p1_top.y);
-            ctx.lineTo(p0_top.x, p0_top.y);
-            ctx.closePath();
-            ctx.fillStyle = '#22c55e';
-            ctx.fill();
-
-            // Green Base Left Side
-            ctx.beginPath();
-            ctx.moveTo(p0.x, p0.y);
-            ctx.lineTo(p3.x, p3.y);
-            ctx.lineTo(p3_top.x, p3_top.y);
-            ctx.lineTo(p0_top.x, p0_top.y);
-            ctx.closePath();
-            ctx.fillStyle = '#15803d';
-            ctx.fill();
-
-            // 2. SiO2 Layer (Thin Sky Blue)
-            const silicaHeight = 6;
-            const s0 = to3D(0, 0, silicaHeight);
-            const s1 = to3D(lengthX, 0, silicaHeight);
-            const s2 = to3D(lengthX, lengthY, silicaHeight);
-            const s3 = to3D(0, lengthY, silicaHeight);
-
-            // Silica Top Face
-            ctx.beginPath();
-            ctx.moveTo(s0.x, s0.y);
-            ctx.lineTo(s1.x, s1.y);
-            ctx.lineTo(s2.x, s2.y);
-            ctx.lineTo(s3.x, s3.y);
-            ctx.closePath();
-            ctx.fillStyle = '#e0f2fe';
-            ctx.fill();
-
-            // 3. Right Coupling Edge (Gray Block)
-            const edge0 = to3D(lengthX, 0, silicaHeight);
-            const edge1 = to3D(lengthX + 15, 0, silicaHeight);
-            const edge2 = to3D(lengthX + 15, lengthY, silicaHeight);
-            const edge3 = to3D(lengthX, lengthY, silicaHeight);
-
-            ctx.beginPath();
-            ctx.moveTo(edge0.x, edge0.y);
-            ctx.lineTo(edge1.x, edge1.y);
-            ctx.lineTo(edge2.x, edge2.y);
-            ctx.lineTo(edge3.x, edge3.y);
-            ctx.closePath();
-            ctx.fillStyle = '#94a3b8';
-            ctx.fill();
-
-            // 4. Photonic Integrated Circuit (Neon Green Waveguides)
-            ctx.strokeStyle = '#22c55e';
-            ctx.lineWidth = 4;
-            ctx.lineCap = 'round';
-
-            const pathPoints = [];
-
-            // Draw curved waveguides
-            for (let i = 0; i <= 100; i++) {
-                const t = i / 100;
-                const wx = t * (lengthX - 50);
-                const wy = lengthY * 0.5 + Math.sin(t * Math.PI * 4) * 25 + Math.cos(t * Math.PI * 2) * 15;
-                const pt = to3D(wx, wy, silicaHeight + 2);
-                pathPoints.push(pt);
-            }
-
-            ctx.beginPath();
-            pathPoints.forEach((pt, idx) => {
-                if (idx === 0) ctx.moveTo(pt.x, pt.y);
-                else ctx.lineTo(pt.x, pt.y);
-            });
-            ctx.stroke();
-
-            // Microring Resonator
-            const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, silicaHeight + 2);
-            ctx.beginPath();
-            ctx.ellipse(ringCenter.x, ringCenter.y, 16, 9, 0, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // Additional parallel inputs
-            [0.2, 0.35, 0.65, 0.8].forEach(offset => {
-                ctx.beginPath();
-                const startPt = to3D(0, lengthY * offset, silicaHeight + 2);
-                const midPt = to3D(lengthX * 0.25, lengthY * offset + Math.sin(offset) * 15, silicaHeight + 2);
-                ctx.moveTo(startPt.x, startPt.y);
-                ctx.lineTo(midPt.x, midPt.y);
-                ctx.stroke();
-            });
-
-            // 5. Red Fiber Cone Extending Off Right
-            const outputPt = pathPoints[pathPoints.length - 1];
-            const fiberFar = { x: outputPt.x + 220, y: outputPt.y - 60 };
-
-            ctx.beginPath();
-            ctx.moveTo(outputPt.x, outputPt.y);
-            ctx.lineTo(fiberFar.x - 10, fiberFar.y - 25);
-            ctx.lineTo(fiberFar.x + 10, fiberFar.y + 15);
-            ctx.closePath();
-            ctx.fillStyle = '#ef4444';
-            ctx.fill();
-
-            // Add fiber beam line
-            pathPoints.push({ x: outputPt.x + 100, y: outputPt.y - 27 });
-            pathPoints.push({ x: outputPt.x + 220, y: outputPt.y - 60 });
-
-            // 6. SiC Color Center Emitter Spot
-            const colorCenter = pathPoints[Math.floor(pathPoints.length * 0.78)];
-            if (colorCenter) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(colorCenter.x, colorCenter.y, 7, 0, Math.PI * 2);
-                ctx.fillStyle = '#ef4444';
-                ctx.shadowColor = '#f87171';
-                ctx.shadowBlur = 15;
-                ctx.fill();
-                ctx.restore();
-            }
-
-            return pathPoints;
-        }
-
-        let chipPath = drawIsometricChip();
-
-        // Emit periodic photons
-        setInterval(() => {
-            photons.push(new PhotonPulse());
-        }, 2200);
-
-        // Click anywhere to fire photon pulse
-        window.addEventListener('click', () => {
-            photons.push(new PhotonPulse());
-        });
-
-        function animate() {
-            chipPath = drawIsometricChip();
-
-            for (let i = photons.length - 1; i >= 0; i--) {
-                const p = photons[i];
-                p.update();
-                p.draw(chipPath);
-
-                if (p.progress >= 1) {
-                    photons.splice(i, 1);
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-    </script>
 </body>
 </html>
