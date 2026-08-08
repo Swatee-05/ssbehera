@@ -30,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* Canvas is completely hidden on initial page load */
         #gameCanvas {
             position: fixed;
             top: 0;
@@ -153,7 +152,6 @@
             transform: translateY(-2px);
         }
 
-        /* Top control bar during simulation */
         .game-controls {
             position: fixed;
             top: 80px;
@@ -161,10 +159,10 @@
             transform: translateX(-50%);
             z-index: 1001;
             display: none;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(8px);
             color: #ffffff;
-            padding: 8px 20px;
+            padding: 10px 22px;
             border-radius: 30px;
             font-size: 0.9rem;
             font-weight: 500;
@@ -177,7 +175,7 @@
             background: #ef4444;
             color: white;
             border: none;
-            padding: 4px 14px;
+            padding: 5px 14px;
             border-radius: 15px;
             font-size: 0.8rem;
             font-weight: 600;
@@ -200,7 +198,6 @@
             background: #ffffff;
         }
 
-        /* Active simulation mode state */
         body.game-active #gameCanvas {
             display: block;
         }
@@ -233,16 +230,16 @@
     </nav>
 
     <div class="game-controls" id="gameControls">
-        <span>✨ Click anywhere to trigger a Gaussian photon pulse from the fiber!</span>
+        <span>✨ Click anywhere to trigger single-photon emission from the color center!</span>
         <button class="btn-exit" onclick="stopGame()">Exit Game</button>
     </div>
 
     <div class="container" id="mainContainer">
         <header class="hero">
-            <h1>Interactive Quantum Photonics Chip</h1>
-            <div class="subtitle">4H-SiC Waveguide & Color Center Photon Emission</div>
+            <h1>Interactive Evanescent Optical Coupling</h1>
+            <div class="subtitle">4H-SiC Tapered Waveguide & Tapered Fiber Coupling</div>
             <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
-                Visualizing single-photon generation inside integrated 4H-SiC waveguides coupled to external fiber optics.
+                Visualizing single-photon generation inside an integrated 4H-SiC tapered waveguide (1 µm → 0 µm) and evanescent coupling into a tapered optical fiber.
             </p>
             <button class="btn-play" onclick="startGame()">🎮 Play Simulation</button>
         </header>
@@ -271,7 +268,7 @@
         function startGame() {
             isGameActive = true;
             document.body.classList.add('game-active');
-            photons = [new GaussianPhotonBeam()];
+            photons = [new EvanescentPhoton()];
             animate();
         }
 
@@ -286,56 +283,67 @@
             ctx.clearRect(0, 0, width, height);
         }
 
-        // Gaussian Photon Beam Physics
-        class GaussianPhotonBeam {
+        // Single photon propagating along waveguide -> evanescent region -> tapered fiber
+        class EvanescentPhoton {
             constructor() {
-                this.progress = 0;
-                this.speed = 0.015;
+                this.progress = 0; // 0 to 1
+                this.speed = 0.012;
             }
 
             update() {
                 this.progress += this.speed;
             }
 
-            draw(fiberFacet, fiberDirection) {
+            draw(emitterPt, taperTipPt, fiberEndPt) {
                 if (this.progress > 1) return;
 
-                const distance = this.progress * 280;
-                const radius = 6 + this.progress * 28;
+                let currentX, currentY;
+                
+                // First half: Travel inside 4H-SiC Waveguide to taper region
+                if (this.progress <= 0.5) {
+                    const localT = this.progress / 0.5;
+                    currentX = emitterPt.x + (taperTipPt.x - emitterPt.x) * localT;
+                    currentY = emitterPt.y + (taperTipPt.y - emitterPt.y) * localT;
+                } 
+                // Second half: Evanescent coupling into tapered optical fiber
+                else {
+                    const localT = (this.progress - 0.5) / 0.5;
+                    currentX = taperTipPt.x + (fiberEndPt.x - taperTipPt.x) * localT;
+                    currentY = taperTipPt.y + (fiberEndPt.y - taperTipPt.y) * localT;
+                }
 
-                const currentX = fiberFacet.x + fiberDirection.x * distance;
-                const currentY = fiberFacet.y + fiberDirection.y * distance;
+                // Gaussian intensity radial profile
+                const radius = 7 + Math.sin(this.progress * Math.PI) * 4;
 
                 ctx.save();
                 
-                // Radial Gaussian gradient: Yellow core fading to Red at periphery
                 const grad = ctx.createRadialGradient(
                     currentX, currentY, 0,
                     currentX, currentY, radius
                 );
-                grad.addColorStop(0, 'rgba(254, 240, 138, 0.95)');  // Yellow center
-                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.85)'); // Yellow-gold
-                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.65)');  // Red transition
-                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');       // Red edge fade out
+                grad.addColorStop(0, 'rgba(255, 255, 180, 1)');   // Gaussian Yellow Core
+                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.9)'); // Deep Yellow
+                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');   // Red Periphery
+                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');      // Outer Fade
 
                 ctx.beginPath();
                 ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
                 ctx.fillStyle = grad;
-                ctx.shadowColor = '#ef4444';
-                ctx.shadowBlur = 12;
+                ctx.shadowColor = '#f59e0b';
+                ctx.shadowBlur = 15;
                 ctx.fill();
                 
                 ctx.restore();
             }
         }
 
-        function drawIsometricChip() {
+        function drawIsometricSetup() {
             ctx.clearRect(0, 0, width, height);
 
-            const originX = width * 0.18;
-            const originY = height * 0.62;
-            const lengthX = Math.min(width * 0.62, 720);
-            const lengthY = 300;
+            const originX = width * 0.16;
+            const originY = height * 0.65;
+            const lengthX = Math.min(width * 0.65, 760);
+            const lengthY = 320;
             const isoAngleX = 0.35;
             const isoAngleY = -0.55;
 
@@ -346,8 +354,35 @@
                 };
             }
 
-            // 1. Bottom Substrate: Silicon Layer (Faint Forest Green)
-            const si_thickness = 30;
+            // Helper to draw clean callout lines and labels
+            function drawLabel(targetPt, text, offset3D, alignRight = false) {
+                const labelPos = to3D(offset3D.x, offset3D.y, offset3D.z);
+                
+                ctx.save();
+                ctx.strokeStyle = 'rgba(15, 23, 42, 0.5)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+                
+                ctx.beginPath();
+                ctx.moveTo(targetPt.x, targetPt.y);
+                ctx.lineTo(labelPos.x, labelPos.y);
+                ctx.stroke();
+
+                ctx.setLineDash([]);
+                ctx.beginPath();
+                ctx.arc(targetPt.x, targetPt.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#0f172a';
+                ctx.fill();
+
+                ctx.font = '600 13px -apple-system, sans-serif';
+                ctx.fillStyle = '#0f172a';
+                ctx.textAlign = alignRight ? 'right' : 'left';
+                ctx.fillText(text, labelPos.x + (alignRight ? -8 : 8), labelPos.y + 4);
+                ctx.restore();
+            }
+
+            // 1. Silicon Substrate Layer (Faint Forest Green)
+            const si_thickness = 32;
             const p0_si = to3D(0, 0, -si_thickness - 12);
             const p1_si = to3D(lengthX, 0, -si_thickness - 12);
             const p3_si = to3D(0, lengthY, -si_thickness - 12);
@@ -361,7 +396,7 @@
             ctx.lineTo(p1_si_top.x, p1_si_top.y);
             ctx.lineTo(p0_si_top.x, p0_si_top.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(34, 110, 60, 0.45)';
+            ctx.fillStyle = 'rgba(34, 110, 60, 0.4)';
             ctx.fill();
 
             ctx.beginPath();
@@ -370,10 +405,10 @@
             ctx.lineTo(p3_si_top.x, p3_si_top.y);
             ctx.lineTo(p0_si_top.x, p0_si_top.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(20, 80, 40, 0.45)';
+            ctx.fillStyle = 'rgba(20, 80, 40, 0.4)';
             ctx.fill();
 
-            // 2. Base Layer: SiO2 (Faint Grey)
+            // 2. SiO2 Layer (Faint Grey)
             const s0 = to3D(0, 0, -12);
             const s1 = to3D(lengthX, 0, -12);
             const s2 = to3D(lengthX, lengthY, -12);
@@ -385,10 +420,10 @@
             ctx.lineTo(s2.x, s2.y);
             ctx.lineTo(s3.x, s3.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(226, 232, 240, 0.75)';
+            ctx.fillStyle = 'rgba(226, 232, 240, 0.85)';
             ctx.fill();
 
-            // 3. Top Layer: Silicon Carbide (Light Pink)
+            // 3. 4H-SiC Thin-Film Platform (Faint Pink)
             const c0 = to3D(0, 0, 0);
             const c1 = to3D(lengthX, 0, 0);
             const c2 = to3D(lengthX, lengthY, 0);
@@ -400,94 +435,97 @@
             ctx.lineTo(c2.x, c2.y);
             ctx.lineTo(c3.x, c3.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(252, 231, 243, 0.9)';
+            ctx.fillStyle = 'rgba(252, 231, 243, 0.85)';
             ctx.fill();
-
             ctx.strokeStyle = '#fbcfe8';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // 4. Tapered 4H-SiC Waveguide (1 µm -> 0 µm taper, Light Faint Pink)
+            const wgY = lengthY * 0.5;
+            const startX = lengthX * 0.08;
+            const taperEndX = lengthX * 0.65;
+
+            const wgStartTop = to3D(startX, wgY - 14, 4);
+            const wgStartBottom = to3D(startX, wgY + 14, 4);
+            const wgTaperTip = to3D(taperEndX, wgY, 4);
+
+            ctx.beginPath();
+            ctx.moveTo(wgStartTop.x, wgStartTop.y);
+            ctx.lineTo(wgStartBottom.x, wgStartBottom.y);
+            ctx.lineTo(wgTaperTip.x, wgTaperTip.y);
+            ctx.closePath();
+            
+            ctx.fillStyle = 'rgba(244, 114, 182, 0.5)'; // Light faint pink waveguide
+            ctx.fill();
+            ctx.strokeStyle = '#db2777';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // 4. Integrated Silicon Carbide Waveguide Circuit
-            ctx.strokeStyle = '#16a34a';
-            ctx.lineWidth = 3.5;
-            ctx.lineCap = 'round';
+            // 5. Color Center Quantum Emitter Inside Waveguide
+            const emitterX = startX + (taperEndX - startX) * 0.25;
+            const emitterPt = to3D(emitterX, wgY, 4);
 
-            const pathPoints = [];
-            for (let i = 0; i <= 100; i++) {
-                const t = i / 100;
-                const wx = t * (lengthX - 30);
-                const wy = lengthY * 0.5 + Math.sin(t * Math.PI * 4) * 22 + Math.cos(t * Math.PI * 2) * 12;
-                const pt = to3D(wx, wy, 2);
-                pathPoints.push(pt);
-            }
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(emitterPt.x, emitterPt.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#dc2626';
+            ctx.shadowColor = '#ef4444';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.restore();
+
+            // 6. Tapered Optical Fiber (Faint Grey, Evanescent Coupling Overlap)
+            const overlapX = taperEndX - 100;
+            const fiberEndX = lengthX + 120;
+
+            const fiberTip = to3D(overlapX, wgY + 6, 6);
+            const fiberTopEnd = to3D(fiberEndX, wgY - 20, 6);
+            const fiberBottomEnd = to3D(fiberEndX, wgY + 32, 6);
 
             ctx.beginPath();
-            pathPoints.forEach((pt, idx) => {
-                if (idx === 0) ctx.moveTo(pt.x, pt.y);
-                else ctx.lineTo(pt.x, pt.y);
-            });
-            ctx.stroke();
-
-            // Microring Resonator
-            const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, 2);
-            ctx.beginPath();
-            ctx.ellipse(ringCenter.x, ringCenter.y, 15, 8, 0, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // 5. Light Blue Transparent Optical Fiber
-            const outputPt = pathPoints[pathPoints.length - 1];
-            const fiberFar = { x: outputPt.x + 200, y: outputPt.y - 50 };
-
-            ctx.beginPath();
-            ctx.moveTo(outputPt.x, outputPt.y);
-            ctx.lineTo(fiberFar.x - 15, fiberFar.y - 20);
-            ctx.lineTo(fiberFar.x + 15, fiberFar.y + 12);
+            ctx.moveTo(fiberTip.x, fiberTip.y);
+            ctx.lineTo(fiberTopEnd.x, fiberTopEnd.y);
+            ctx.lineTo(fiberBottomEnd.x, fiberBottomEnd.y);
             ctx.closePath();
 
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
+            ctx.fillStyle = 'rgba(203, 213, 225, 0.65)'; // Faint grey optical fiber
             ctx.fill();
-            ctx.strokeStyle = 'rgba(14, 165, 233, 0.7)';
+            ctx.strokeStyle = '#94a3b8';
             ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // 6. Color Center Quantum Emitter
-            const colorCenter = pathPoints[Math.floor(pathPoints.length * 0.78)];
-            if (colorCenter) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(colorCenter.x, colorCenter.y, 6, 0, Math.PI * 2);
-                ctx.fillStyle = '#dc2626';
-                ctx.shadowColor = '#f87171';
-                ctx.shadowBlur = 12;
-                ctx.fill();
-                ctx.restore();
-            }
+            const fiberFarPt = to3D(fiberEndX, wgY + 6, 6);
 
-            const dirX = (fiberFar.x - outputPt.x);
-            const dirY = (fiberFar.y - outputPt.y);
-            const len = Math.hypot(dirX, dirY);
+            // 7. Render Layer Names & Component Callouts
+            drawLabel(to3D(startX + 60, wgY - 8, 4), "4H-SiC Tapered Waveguide (1 µm → 0 µm)", { x: startX + 40, y: wgY - 90, z: 20 });
+            drawLabel(emitterPt, "Color Center Quantum Emitter", { x: emitterX - 30, y: wgY + 110, z: 10 });
+            drawLabel(fiberTip, "Tapered Optical Fiber (Evanescent Coupling)", { x: overlapX + 80, y: wgY - 100, z: 20 });
+            drawLabel(to3D(lengthX * 0.15, lengthY * 0.82, 0), "SiO₂ Layer", { x: lengthX * 0.05, y: lengthY * 0.95, z: -5 });
+            drawLabel(to3D(lengthX * 0.15, lengthY * 0.82, -20), "Silicon Substrate", { x: lengthX * 0.05, y: lengthY * 0.98, z: -35 });
 
             return {
-                facet: outputPt,
-                dir: { x: dirX / len, y: dirY / len }
+                emitter: emitterPt,
+                taperTip: wgTaperTip,
+                fiberEnd: fiberFarPt
             };
         }
 
         window.addEventListener('click', (e) => {
             if (isGameActive && e.target.id === 'gameCanvas') {
-                photons.push(new GaussianPhotonBeam());
+                photons.push(new EvanescentPhoton());
             }
         });
 
         function animate() {
             if (!isGameActive) return;
 
-            const chipData = drawIsometricChip();
+            const pts = drawIsometricSetup();
 
             for (let i = photons.length - 1; i >= 0; i--) {
                 const p = photons[i];
                 p.update();
-                p.draw(chipData.facet, chipData.dir);
+                p.draw(pts.emitter, pts.taperTip, pts.fiberEnd);
 
                 if (p.progress >= 1) {
                     photons.splice(i, 1);
