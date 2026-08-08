@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Chip Simulation | Sushree Swateeprajnya Behera</title>
+    <title>Sushree Swateeprajnya Behera | Quantum Hardware Researcher</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -27,17 +27,6 @@
             padding: 0;
             position: relative;
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        #gameCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            cursor: pointer;
         }
 
         nav {
@@ -101,23 +90,18 @@
         }
 
         .container {
-            position: relative;
-            z-index: 1;
             max-width: 1000px;
             margin: 0 auto;
             padding: 40px 20px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         header.hero {
-            padding: 25px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 30px 25px;
+            border: 1px solid var(--border-color);
             margin-bottom: 30px;
             background: var(--bg-card);
             border-radius: 12px;
-            backdrop-filter: blur(8px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            text-align: center;
         }
 
         h1 {
@@ -134,374 +118,60 @@
             font-weight: 600;
         }
 
-        .btn-play {
-            display: inline-block;
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
             margin-top: 20px;
-            padding: 10px 24px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #ffffff;
-            background-color: #2563eb;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            transition: all 0.2s;
-        }
-
-        .btn-play:hover {
-            background-color: #1d4ed8;
-            transform: translateY(-2px);
-        }
-
-        /* Controls visible during full-screen game mode */
-        .game-controls {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            display: none;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            color: #ffffff;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            align-items: center;
-            gap: 15px;
-        }
-
-        .btn-exit {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-exit:hover {
-            background: #dc2626;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
         footer {
-            position: relative;
-            z-index: 1;
             margin-top: 60px;
             padding: 25px 0;
             border-top: 1px solid var(--border-color);
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.9);
-            transition: opacity 0.3s ease;
-        }
-
-        /* Mode class when active game is running */
-        body.game-active .container,
-        body.game-active footer {
-            display: none;
-        }
-
-        body.game-active .game-controls {
-            display: flex;
+            background: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <canvas id="gameCanvas"></canvas>
-
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
             <div class="nav-links">
-                <a href="game.html" class="active">Home</a>
+                <a href="index.html" class="active">Home</a>
                 <a href="resume.html">Resume</a>
                 <a href="research.html">Research</a>
+                <a href="game.html">Simulation</a>
                 <a href="contact.html">Contact</a>
                 <a href="hire.html" class="btn-hire">Hire Me</a>
             </div>
         </div>
     </nav>
 
-    <div class="game-controls" id="gameControls">
-        <span>✨ Click anywhere to emit a Gaussian single-photon beam from the waveguide to the fiber!</span>
-        <button class="btn-exit" onclick="stopGame()">Exit Game</button>
-    </div>
-
-    <div class="container" id="mainContainer">
+    <div class="container">
         <header class="hero">
-            <h1>Interactive Quantum Photonics Chip</h1>
-            <div class="subtitle">4H-SiC Waveguide & Color Center Photon Emission</div>
+            <h1>Sushree Swateeprajnya Behera</h1>
+            <div class="subtitle">Experimental Quantum Hardware Researcher</div>
             <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
-                Visualizing single-photon generation inside integrated 4H-SiC waveguides coupled to external fiber optics.
+                Hello and welcome! 👋 I am an experimental quantum physicist specializing in solid-state quantum photonics, color centers in 4H-SiC, atomic systems, and precision optical measurement platforms.
             </p>
-            <button class="btn-play" onclick="startGame()">🎮 Play Simulation</button>
         </header>
+
+        <div class="card">
+            <h2 style="margin-top: 0; color: var(--primary);">Research Focus</h2>
+            <p>My work centers around developing scalable experimental hardware for quantum technologies. Explore the dedicated sections above to view my full curriculum vitae, custom optical setup implementations, cleanroom fabrication workflows, and peer-reviewed publications.</p>
+        </div>
     </div>
 
-    <footer id="mainFooter">
+    <footer>
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let width, height;
-        let photons = [];
-        let isGameActive = false;
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        function startGame() {
-            isGameActive = true;
-            document.body.classList.add('game-active');
-            photons.push(new GaussianPhotonBeam());
-        }
-
-        function stopGame() {
-            isGameActive = false;
-            document.body.classList.remove('game-active');
-            photons = [];
-        }
-
-        // Gaussian Photon Beam class emitted from fiber edge
-        class GaussianPhotonBeam {
-            constructor() {
-                this.progress = 0; // 0 to 1
-                this.speed = 0.015;
-            }
-
-            update() {
-                this.progress += this.speed;
-            }
-
-            draw(fiberFacet, fiberDirection) {
-                if (this.progress > 1) return;
-
-                const distance = this.progress * 280;
-                const radius = 6 + this.progress * 28; // Beam waist expansion
-
-                const currentX = fiberFacet.x + fiberDirection.x * distance;
-                const currentY = fiberFacet.y + fiberDirection.y * distance;
-
-                ctx.save();
-                
-                // Radial Gradient: Yellow Center -> Red Periphery -> Transparent Edge
-                const grad = ctx.createRadialGradient(
-                    currentX, currentY, 0,
-                    currentX, currentY, radius
-                );
-                grad.addColorStop(0, 'rgba(254, 240, 138, 0.95)');  // Bright Yellow center
-                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.85)'); // Yellow-gold
-                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.65)');  // Red transition
-                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');       // Outer Red fade out
-
-                ctx.beginPath();
-                ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
-                ctx.fillStyle = grad;
-                ctx.shadowColor = '#ef4444';
-                ctx.shadowBlur = 12;
-                ctx.fill();
-                
-                ctx.restore();
-            }
-        }
-
-        function drawIsometricChip() {
-            ctx.clearRect(0, 0, width, height);
-
-            const originX = width * 0.18;
-            const originY = height * 0.62;
-            const lengthX = Math.min(width * 0.62, 720);
-            const lengthY = 300;
-            const isoAngleX = 0.35;
-            const isoAngleY = -0.55;
-
-            function to3D(x, y, z = 0) {
-                return {
-                    x: originX + x * Math.cos(isoAngleX) + y * Math.cos(isoAngleY),
-                    y: originY + x * Math.sin(isoAngleX) + y * Math.sin(isoAngleY) - z
-                };
-            }
-
-            // 1. Bottom Substrate: Silicon Layer (Faint Forest Green)
-            const si_thickness = 30;
-            const p0_si = to3D(0, 0, -si_thickness - 12);
-            const p1_si = to3D(lengthX, 0, -si_thickness - 12);
-            const p3_si = to3D(0, lengthY, -si_thickness - 12);
-            const p0_si_top = to3D(0, 0, -12);
-            const p1_si_top = to3D(lengthX, 0, -12);
-            const p3_si_top = to3D(0, lengthY, -12);
-
-            ctx.beginPath();
-            ctx.moveTo(p0_si.x, p0_si.y);
-            ctx.lineTo(p1_si.x, p1_si.y);
-            ctx.lineTo(p1_si_top.x, p1_si_top.y);
-            ctx.lineTo(p0_si_top.x, p0_si_top.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(34, 110, 60, 0.45)'; // Faint Forest Green front
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.moveTo(p0_si.x, p0_si.y);
-            ctx.lineTo(p3_si.x, p3_si.y);
-            ctx.lineTo(p3_si_top.x, p3_si_top.y);
-            ctx.lineTo(p0_si_top.x, p0_si_top.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(20, 80, 40, 0.45)'; // Faint Forest Green side
-            ctx.fill();
-
-            // 2. Middle Layer: SiO2 Layer (Faint Grey)
-            const s0 = to3D(0, 0, -12);
-            const s1 = to3D(lengthX, 0, -12);
-            const s2 = to3D(lengthX, lengthY, -12);
-            const s3 = to3D(0, lengthY, -12);
-
-            ctx.beginPath();
-            ctx.moveTo(s0.x, s0.y);
-            ctx.lineTo(s1.x, s1.y);
-            ctx.lineTo(s2.x, s2.y);
-            ctx.lineTo(s3.x, s3.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(226, 232, 240, 0.7)'; // Faint Grey
-            ctx.fill();
-
-            // 3. Top Layer: Silicon Carbide (Light Pink Chip)
-            const c0 = to3D(0, 0, 0);
-            const c1 = to3D(lengthX, 0, 0);
-            const c2 = to3D(lengthX, lengthY, 0);
-            const c3 = to3D(0, lengthY, 0);
-
-            ctx.beginPath();
-            ctx.moveTo(c0.x, c0.y);
-            ctx.lineTo(c1.x, c1.y);
-            ctx.lineTo(c2.x, c2.y);
-            ctx.lineTo(c3.x, c3.y);
-            ctx.closePath();
-            ctx.fillStyle = 'rgba(252, 231, 243, 0.88)'; // Light Pink SiC Chip
-            ctx.fill();
-
-            ctx.strokeStyle = '#fbcfe8';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-
-            // 4. Waveguide Circuit (Neon Green)
-            ctx.strokeStyle = '#16a34a';
-            ctx.lineWidth = 3.5;
-            ctx.lineCap = 'round';
-
-            const pathPoints = [];
-            for (let i = 0; i <= 100; i++) {
-                const t = i / 100;
-                const wx = t * (lengthX - 30);
-                const wy = lengthY * 0.5 + Math.sin(t * Math.PI * 4) * 22 + Math.cos(t * Math.PI * 2) * 12;
-                const pt = to3D(wx, wy, 2);
-                pathPoints.push(pt);
-            }
-
-            ctx.beginPath();
-            pathPoints.forEach((pt, idx) => {
-                if (idx === 0) ctx.moveTo(pt.x, pt.y);
-                else ctx.lineTo(pt.x, pt.y);
-            });
-            ctx.stroke();
-
-            // Microring Resonator
-            const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, 2);
-            ctx.beginPath();
-            ctx.ellipse(ringCenter.x, ringCenter.y, 15, 8, 0, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // Parallel Input Waveguides
-            [0.2, 0.35, 0.65, 0.8].forEach(offset => {
-                ctx.beginPath();
-                const startPt = to3D(0, lengthY * offset, 2);
-                const midPt = to3D(lengthX * 0.25, lengthY * offset + Math.sin(offset) * 12, 2);
-                ctx.moveTo(startPt.x, startPt.y);
-                ctx.lineTo(midPt.x, midPt.y);
-                ctx.stroke();
-            });
-
-            // 5. Optical Fiber (Light Blue & Transparent)
-            const outputPt = pathPoints[pathPoints.length - 1];
-            const fiberFar = { x: outputPt.x + 200, y: outputPt.y - 50 };
-
-            ctx.beginPath();
-            ctx.moveTo(outputPt.x, outputPt.y);
-            ctx.lineTo(fiberFar.x - 15, fiberFar.y - 20);
-            ctx.lineTo(fiberFar.x + 15, fiberFar.y + 12);
-            ctx.closePath();
-
-            // Transparent light blue fill
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.35)';
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(14, 165, 233, 0.7)';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-
-            // 6. Color Center Spot (Emitter)
-            const colorCenter = pathPoints[Math.floor(pathPoints.length * 0.78)];
-            if (colorCenter) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(colorCenter.x, colorCenter.y, 6, 0, Math.PI * 2);
-                ctx.fillStyle = '#dc2626';
-                ctx.shadowColor = '#f87171';
-                ctx.shadowBlur = 12;
-                ctx.fill();
-                ctx.restore();
-            }
-
-            // Return coupling position and beam trajectory direction
-            const dirX = (fiberFar.x - outputPt.x);
-            const dirY = (fiberFar.y - outputPt.y);
-            const len = Math.hypot(dirX, dirY);
-
-            return {
-                facet: outputPt,
-                dir: { x: dirX / len, y: dirY / len }
-            };
-        }
-
-        let chipData = drawIsometricChip();
-
-        // Canvas Click Listener -> Fire single photon beam when game is active
-        window.addEventListener('click', (e) => {
-            if (isGameActive && e.target.id === 'gameCanvas') {
-                photons.push(new GaussianPhotonBeam());
-            }
-        });
-
-        function animate() {
-            chipData = drawIsometricChip();
-
-            for (let i = photons.length - 1; i >= 0; i--) {
-                const p = photons[i];
-                p.update();
-                p.draw(chipData.facet, chipData.dir);
-
-                if (p.progress >= 1) {
-                    photons.splice(i, 1);
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-    </script>
 </body>
 </html>
