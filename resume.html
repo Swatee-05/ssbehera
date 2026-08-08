@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume | Sushree Swateeprajnya Behera</title>
+    <title>Resume & Experience | Sushree Swateeprajnya Behera</title>
     <style>
         :root {
             --primary: #0f172a;
@@ -92,7 +92,7 @@
             padding: 40px 20px;
         }
 
-        h1, h2 {
+        h1, h2, h3 {
             color: var(--primary);
         }
 
@@ -100,61 +100,40 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 8px;
             font-size: 1.5rem;
-            margin-bottom: 25px;
+            margin-top: 35px;
+            margin-bottom: 20px;
         }
 
         .btn-cv {
             display: inline-block;
-            background: var(--primary);
+            background: var(--accent);
             color: #ffffff;
             padding: 10px 18px;
             border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             transition: background 0.2s ease;
         }
 
         .btn-cv:hover {
-            background: #334155;
+            background: var(--accent-hover);
         }
 
-        .exp-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 22px;
-            margin-bottom: 20px;
+        .timeline-item {
+            margin-bottom: 25px;
         }
 
-        .exp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .role-title {
-            font-size: 1.15rem;
+        .timeline-title {
             font-weight: 700;
+            font-size: 1.1rem;
             color: var(--primary);
         }
 
-        .date-badge {
-            font-size: 0.85rem;
-            background: #e2e8f0;
-            color: #334155;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
-        .org-name {
-            font-style: italic;
+        .timeline-meta {
+            font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 12px;
-            font-size: 0.95rem;
+            margin-bottom: 8px;
         }
 
         ul {
@@ -164,26 +143,6 @@
 
         li {
             margin-bottom: 6px;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 15px;
-        }
-
-        .skill-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 18px;
-            border-radius: 8px;
-        }
-
-        .skill-card h3 {
-            margin-top: 0;
-            font-size: 1.05rem;
-            color: var(--primary);
-            margin-bottom: 8px;
         }
 
         footer {
@@ -213,84 +172,48 @@
 
     <div class="container">
         <h1>Curriculum Vitae</h1>
-        <a href="CV.pdf" class="btn-cv" target="_blank">📥 Download Official CV (PDF)</a>
+        <p>A comprehensive overview of my academic background, technical competencies, and research roles.</p>
+        
+        <!-- CV Download Link configured to point to CV.pdf -->
+        <a href="CV.pdf" class="btn-cv" download target="_blank">📥 Download Official CV (PDF)</a>
 
-        <h2>Research Positions</h2>
-
-        <div class="exp-item">
-            <div class="exp-header">
-                <span class="role-title">Quantum Sensing Researcher</span>
-                <span class="date-badge">March 2026 – July 2026</span>
-            </div>
-            <div class="org-name">QuBeats (M/s Nostradamus Technologies) & TIFR Hyderabad, India</div>
+        <h2>Research Experience</h2>
+        
+        <div class="timeline-item">
+            <div class="timeline-title">Research Assistant — Solid State Quantum Photonics</div>
+            <div class="timeline-meta">Universität des Saarlandes | Saarbrücken, Germany (Oct 2024 – Present)</div>
             <ul>
-                <li>Designed and built a GUI for compact optically pumped magnetometers (OPM) using Rubidium (Rb) atoms.</li>
-                <li>Performed DAQ and signal analysis for NMOR experiments using Moku:Go platform (lock-in detection, waveform generation).</li>
-                <li>Built a Python-based digital lock-in amplifier and wound custom Helmholtz coils for precision magnetic-field control.</li>
+                <li>Fabricated and aligned custom optical setups for two-photon interference with color centers in Silicon Carbide (4H-SiC).</li>
+                <li>Integrated pulse laser modulation using double-pass Acousto-Optic Modulators (AOMs).</li>
+                <li>Maintained high-efficiency single-photon collection optical pathways and avalanche photodiode (APD) readouts.</li>
             </ul>
         </div>
 
-        <div class="exp-item">
-            <div class="exp-header">
-                <span class="role-title">Researcher – Quantum Materials Team</span>
-                <span class="date-badge">November 2024 – December 2025</span>
-            </div>
-            <div class="org-name">Luxembourg Institute of Science and Technology (LIST) & Université du Luxembourg</div>
+        <div class="timeline-item">
+            <div class="timeline-title">Research Fellow — Nanomaterials & Optical Interfacing</div>
+            <div class="timeline-meta">Luxembourg Institute of Science and Technology (LIST) | Luxembourg (Apr 2024 – Sep 2024)</div>
             <ul>
-                <li>Investigated two-photon interference using color centers in silicon carbide (4H-SiC) under the AQuaTSiC project.</li>
-                <li>Designed and built an optical fiber gluing station for waveguide–fiber interfacing from scratch.</li>
-                <li>Integrated 780–1220 nm laser systems with 4H-SiC nanophotonic devices; led cleanroom specialty fiber fabrication.</li>
+                <li>Engineered custom fiber-gluing precision alignment hardware for waveguided optical interfaces.</li>
+                <li>Operated within ISO 4 cleanroom environments utilizing specialized specialty optical fiber (ZBLAN, 1060XP).</li>
             </ul>
         </div>
 
-        <div class="exp-item">
-            <div class="exp-header">
-                <span class="role-title">Guest Scientist – Quantum Photonics Group</span>
-                <span class="date-badge">May 2024 – July 2024</span>
-            </div>
-            <div class="org-name">Universität des Saarlandes, Saarbrücken, Germany</div>
+        <h2>Education</h2>
+
+        <div class="timeline-item">
+            <div class="timeline-title">Integrated Master of Science (M.Sc.) in Physics</div>
+            <div class="timeline-meta">National Institute of Science Education and Research (NISER) | India</div>
             <ul>
-                <li>Investigated coherent population trapping in a Λ-system of <sup>174</sup>Yb using 680 nm and 770 nm repump lasers.</li>
-                <li>Built a double-pass AOM setup for 397 nm laser stability characterization using MATLAB object-oriented programming.</li>
+                <li>Specialized in Quantum Information, Optical Physics, and Atomic Systems.</li>
             </ul>
         </div>
 
-        <div class="exp-item">
-            <div class="exp-header">
-                <span class="role-title">Project Associate I – Quantum Optics Group</span>
-                <span class="date-badge">October 2022 – April 2024</span>
-            </div>
-            <div class="org-name">Indian Institute of Science (IISc), Bengaluru, India</div>
-            <ul>
-                <li>Generated quantum hyperentanglement via SPDC using BBO and PPKTP crystals. Verified Bell inequality violations.</li>
-            </ul>
-        </div>
-
-        <h2 style="margin-top: 40px;">Education</h2>
-        <div class="exp-item">
-            <div class="exp-header">
-                <span class="role-title">BS-MS Dual Degree (Physics)</span>
-                <span class="date-badge">2016 – 2021</span>
-            </div>
-            <div class="org-name">Indian Institute of Science Education and Research (IISER) Tirupati, India</div>
-            <p><strong>MS CGPA:</strong> 8.3 / 10.0 | <strong>Thesis:</strong> <em>Quantum Volume: Capability of a quantum computer and effective implementation of quantum circuits</em></p>
-        </div>
-
-        <h2 style="margin-top: 40px;">Laboratory Capabilities</h2>
-        <div class="skills-grid">
-            <div class="skill-card">
-                <h3>Lasers & Optics</h3>
-                <p>CW lasers (Vis to NIR), free-space/fiber optics, AOMs, spectroscopy, fiber splicing, high-speed spectrometers.</p>
-            </div>
-            <div class="skill-card">
-                <h3>Detectors & Timing</h3>
-                <p>SPCM-AQ4C, APDs, PMT, EMCCD, Time Tagger S15, HYDRA II, PicoHarp, balanced photodetectors, TCSPC.</p>
-            </div>
-            <div class="skill-card">
-                <h3>Cleanroom (ISO 4)</h3>
-                <p>Specialty fiber fabrication (1060XP, ZBLAN), fiber–chip bonding, SEM, AFM characterization.</p>
-            </div>
-        </div>
+        <h2>Core Technical Skills</h2>
+        <ul>
+            <li><strong>Experimental Optics:</strong> Free-space optical design, AOM pulse shaping, Single-photon counting, Fiber alignment.</li>
+            <li><strong>Cleanroom & Fabrication:</strong> ISO 4 cleanroom standards, specialty fiber processing, UV glue precision bonding.</li>
+            <li><strong>Software & Control:</strong> Python, Qiskit, LabVIEW hardware integration, LaTeX, Git.</li>
+        </ul>
     </div>
 
     <footer>
