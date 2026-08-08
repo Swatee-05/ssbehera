@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Chip Simulation | Sushree Swateeprajnya Behera</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --text-dark: #1e293b;
+            --text-muted: #475569;
+            --bg-body: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #gameCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid var(--border-color);
+            z-index: 1000;
+            padding: 12px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn-hire {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: background 0.2s;
+        }
+
+        .btn-hire:hover {
+            background-color: var(--accent-hover) !important;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header.hero {
+            padding: 25px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 2.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .interactive-tip {
+            display: inline-block;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        footer {
+            position: relative;
+            z-index: 1;
+            margin-top: 60px;
+            padding: 25px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="game.html" class="active">Home</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="hero">
+            <h1>Interactive Quantum Photonics Chip</h1>
+            <div class="subtitle">4H-SiC Waveguide & Color Center Photon Emission</div>
+            <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
+                Visualizing single-photon generation inside integrated 4H-SiC waveguides coupled to external fiber optics.
+            </p>
+            <div class="interactive-tip">✨ Click anywhere to trigger single-photon emission from the color center spot!</div>
+        </header>
+    </div>
+
+    <footer>
+        <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let photons = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class PhotonPulse {
+            constructor() {
+                this.progress = 0;
+                this.speed = 0.008;
+            }
+
+            update() {
+                this.progress += this.speed;
+            }
+
+            draw(pathPoints) {
+                if (this.progress > 1) return;
+                const idx = Math.floor(this.progress * (pathPoints.length - 1));
+                const pt = pathPoints[idx];
+
+                if (pt) {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+                    ctx.fillStyle = '#fef08a';
+                    ctx.shadowColor = '#eab308';
+                    ctx.shadowBlur = 18;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+        }
+
+        function drawIsometricChip() {
+            ctx.clearRect(0, 0, width, height);
+
+            const originX = width * 0.15;
+            const originY = height * 0.65;
+            const lengthX = Math.min(width * 0.65, 750);
+            const lengthY = 320;
+            const isoAngleX = 0.35;
+            const isoAngleY = -0.55;
+
+            function to3D(x, y, z = 0) {
+                return {
+                    x: originX + x * Math.cos(isoAngleX) + y * Math.cos(isoAngleY),
+                    y: originY + x * Math.sin(isoAngleX) + y * Math.sin(isoAngleY) - z
+                };
+            }
+
+            // Silicon Base
+            const p0 = to3D(0, 0, -40);
+            const p1 = to3D(lengthX, 0, -40);
+            const p3 = to3D(0, lengthY, -40);
+            const p0_top = to3D(0, 0, 0);
+            const p1_top = to3D(lengthX, 0, 0);
+            const p3_top = to3D(0, lengthY, 0);
+
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.lineTo(p1_top.x, p1_top.y);
+            ctx.lineTo(p0_top.x, p0_top.y);
+            ctx.closePath();
+            ctx.fillStyle = '#22c55e';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.lineTo(p3_top.x, p3_top.y);
+            ctx.lineTo(p0_top.x, p0_top.y);
+            ctx.closePath();
+            ctx.fillStyle = '#15803d';
+            ctx.fill();
+
+            // SiO2 Layer
+            const silicaHeight = 6;
+            const s0 = to3D(0, 0, silicaHeight);
+            const s1 = to3D(lengthX, 0, silicaHeight);
+            const s2 = to3D(lengthX, lengthY, silicaHeight);
+            const s3 = to3D(0, lengthY, silicaHeight);
+
+            ctx.beginPath();
+            ctx.moveTo(s0.x, s0.y);
+            ctx.lineTo(s1.x, s1.y);
+            ctx.lineTo(s2.x, s2.y);
+            ctx.lineTo(s3.x, s3.y);
+            ctx.closePath();
+            ctx.fillStyle = '#e0f2fe';
+            ctx.fill();
+
+            // Right Coupling Edge
+            const edge0 = to3D(lengthX, 0, silicaHeight);
+            const edge1 = to3D(lengthX + 15, 0, silicaHeight);
+            const edge2 = to3D(lengthX + 15, lengthY, silicaHeight);
+            const edge3 = to3D(lengthX, lengthY, silicaHeight);
+
+            ctx.beginPath();
+            ctx.moveTo(edge0.x, edge0.y);
+            ctx.lineTo(edge1.x, edge1.y);
+            ctx.lineTo(edge2.x, edge2.y);
+            ctx.lineTo(edge3.x, edge3.y);
+            ctx.closePath();
+            ctx.fillStyle = '#94a3b8';
+            ctx.fill();
+
+            // Integrated Waveguide Circuit
+            ctx.strokeStyle = '#22c55e';
+            ctx.lineWidth = 4;
+            ctx.lineCap = 'round';
+
+            const pathPoints = [];
+
+            for (let i = 0; i <= 100; i++) {
+                const t = i / 100;
+                const wx = t * (lengthX - 50);
+                const wy = lengthY * 0.5 + Math.sin(t * Math.PI * 4) * 25 + Math.cos(t * Math.PI * 2) * 15;
+                const pt = to3D(wx, wy, silicaHeight + 2);
+                pathPoints.push(pt);
+            }
+
+            ctx.beginPath();
+            pathPoints.forEach((pt, idx) => {
+                if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+            });
+            ctx.stroke();
+
+            // Ring Resonator
+            const ringCenter = to3D(lengthX * 0.72, lengthY * 0.35, silicaHeight + 2);
+            ctx.beginPath();
+            ctx.ellipse(ringCenter.x, ringCenter.y, 16, 9, 0, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Fiber Coupling Laser
+            const outputPt = pathPoints[pathPoints.length - 1];
+            const fiberFar = { x: outputPt.x + 220, y: outputPt.y - 60 };
+
+            ctx.beginPath();
+            ctx.moveTo(outputPt.x, outputPt.y);
+            ctx.lineTo(fiberFar.x - 10, fiberFar.y - 25);
+            ctx.lineTo(fiberFar.x + 10, fiberFar.y + 15);
+            ctx.closePath();
+            ctx.fillStyle = '#ef4444';
+            ctx.fill();
+
+            pathPoints.push({ x: outputPt.x + 100, y: outputPt.y - 27 });
+            pathPoints.push({ x: outputPt.x + 220, y: outputPt.y - 60 });
+
+            // Color Center
+            const colorCenter = pathPoints[Math.floor(pathPoints.length * 0.78)];
+            if (colorCenter) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(colorCenter.x, colorCenter.y, 7, 0, Math.PI * 2);
+                ctx.fillStyle = '#ef4444';
+                ctx.shadowColor = '#f87171';
+                ctx.shadowBlur = 15;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            return pathPoints;
+        }
+
+        let chipPath = drawIsometricChip();
+
+        setInterval(() => {
+            photons.push(new PhotonPulse());
+        }, 2200);
+
+        window.addEventListener('click', () => {
+            photons.push(new PhotonPulse());
+        });
+
+        function animate() {
+            chipPath = drawIsometricChip();
+
+            for (let i = photons.length - 1; i >= 0; i--) {
+                const p = photons[i];
+                p.update();
+                p.draw(chipPath);
+
+                if (p.progress >= 1) {
+                    photons.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
