@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evanescent Coupling Simulation</title>
+    <title>Evanescent Waveguide Coupling</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -62,20 +62,80 @@
             font-weight: 600;
         }
 
-        #gameCanvas {
+        #simulationView {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0;
             display: none;
+            z-index: 0;
             cursor: pointer;
+        }
+
+        /* Dual View Split */
+        .viewport-half {
+            position: absolute;
+            top: 0;
+            height: 100vh;
+            width: 50vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #leftViewport {
+            left: 0;
+            border-right: 2px solid #e2e8f0;
+            padding: 20px;
+            background: #ffffff;
+        }
+
+        #rightViewport {
+            right: 0;
+            background: #ffffff;
+        }
+
+        .view-title {
+            position: absolute;
+            top: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: 0.5px;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 650px;
+            display: inline-block;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #leftOverlayCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #rightCanvas {
+            width: 100%;
+            height: 100%;
         }
 
         .container {
             max-width: 800px;
-            margin: 80px auto;
+            margin: 100px auto;
             padding: 20px;
             text-align: center;
         }
@@ -92,7 +152,7 @@
             cursor: pointer;
         }
 
-        body.game-active #gameCanvas { display: block; }
+        body.game-active #simulationView { display: block; }
         body.game-active .container { display: none; }
         body.game-active .game-controls { display: flex; }
     </style>
@@ -117,35 +177,65 @@
         <button class="btn-exit" onclick="stopGame()">Exit</button>
     </div>
 
-    <canvas id="gameCanvas"></canvas>
+    <!-- Dual Viewport Container -->
+    <div id="simulationView">
+        <!-- LEFT: ORIGINAL UNCHANGED IMAGE WITH OVERLAY -->
+        <div class="viewport-half" id="leftViewport">
+            <div class="view-title">SIDE PROFILE VIEW (EXACT SCHEMATIC)</div>
+            <div class="image-wrapper" id="imgWrapper">
+                <!-- Replace 'chip-side-view.png' with your actual image file name -->
+                <img src="chip-side-view.png" id="chipImg" alt="Chip Side View Schematic">
+                <canvas id="leftOverlayCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- RIGHT: 3D TOP VIEW CANVAS -->
+        <div class="viewport-half" id="rightViewport">
+            <div class="view-title">3D TOP / ISOMETRIC VIEW</div>
+            <canvas id="rightCanvas"></canvas>
+        </div>
+    </div>
 
     <div class="container">
-        <h1>Quantum Photonic Chip Simulation</h1>
+        <h1>Evanescent Light Coupling Simulation</h1>
         <p style="margin-top: 10px; color: #64748b;">
-            Interactive dual-view simulation showing evanescent coupling from a star-shaped color center in a 4H-SiC waveguide into a tapered optical fiber.
+            Gaussian single-photon pulse generated from a star color center, guided along the 4H-SiC cantilever waveguide, and evanescently coupled into the SiO₂ fiber.
         </p>
         <button class="btn-play" onclick="startGame()">🎮 Launch Simulation</button>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const leftOverlay = document.getElementById('leftOverlayCanvas');
+        const leftCtx = leftOverlay.getContext('2d');
 
-        let width, height;
+        const rightCanvas = document.getElementById('rightCanvas');
+        const rightCtx = rightCanvas.getContext('2d');
+
+        const chipImg = document.getElementById('chipImg');
+        const imgWrapper = document.getElementById('imgWrapper');
+
         let photons = [];
         let isGameActive = false;
         let animId = null;
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+        function syncCanvasSizes() {
+            if (!isGameActive) return;
+
+            // Sync left overlay to image size
+            leftOverlay.width = imgWrapper.clientWidth;
+            leftOverlay.height = imgWrapper.clientHeight;
+
+            // Sync right 3D canvas to viewport half
+            rightCanvas.width = rightCanvas.parentElement.clientWidth;
+            rightCanvas.height = rightCanvas.parentElement.clientHeight;
         }
-        window.addEventListener('resize', resize);
-        resize();
+
+        window.addEventListener('resize', syncCanvasSizes);
 
         function startGame() {
             isGameActive = true;
             document.body.classList.add('game-active');
+            syncCanvasSizes();
             photons = [new GaussianPhoton()];
             animate();
         }
@@ -155,41 +245,46 @@
             document.body.classList.remove('game-active');
             photons = [];
             if (animId) cancelAnimationFrame(animId);
-            ctx.clearRect(0, 0, width, height);
+            leftCtx.clearRect(0, 0, leftOverlay.width, leftOverlay.height);
+            rightCtx.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
         }
 
         class GaussianPhoton {
             constructor() {
                 this.progress = 0;
-                this.speed = 0.006;
+                this.speed = 0.005;
             }
 
             update() {
                 this.progress += this.speed;
             }
 
-            drawPulse(x, y, scale = 1, angle = 0) {
+            // Custom Gaussian pulse profile: White center -> Yellow middle -> Red periphery
+            drawGaussianPulse(ctx, x, y, scale = 1, angle = 0) {
                 ctx.save();
                 ctx.translate(x, y);
                 ctx.rotate(angle);
 
-                // Gaussian intensity wavepacket render
-                for (let i = 5; i >= 1; i--) {
-                    const rx = (24 * (i / 5)) * scale;
-                    const ry = (10 * (i / 5)) * scale;
-                    const alpha = Math.exp(-0.5 * Math.pow(i / 5, 2)) * 0.9;
+                const rings = 6;
+                for (let i = rings; i >= 1; i--) {
+                    const rx = (26 * (i / rings)) * scale;
+                    const ry = (11 * (i / rings)) * scale;
+                    const norm = i / rings;
 
                     ctx.beginPath();
                     ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-                    
+
                     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-                    grad.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
-                    grad.addColorStop(0.5, `rgba(236, 72, 153, ${alpha * 0.8})`);
-                    grad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+                    
+                    // White center, yellow middle, red periphery gradient
+                    grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');  // White Core
+                    grad.addColorStop(0.3, 'rgba(254, 240, 138, 0.95)'); // Yellow Inner
+                    grad.addColorStop(0.65, 'rgba(239, 68, 68, 0.7)');   // Red Periphery
+                    grad.addColorStop(1.0, 'rgba(220, 38, 38, 0.0)');   // Transparent Fade
 
                     ctx.fillStyle = grad;
-                    ctx.shadowColor = '#ec4899';
-                    ctx.shadowBlur = 10 * scale;
+                    ctx.shadowColor = '#ef4444';
+                    ctx.shadowBlur = 12 * scale;
                     ctx.fill();
                 }
                 ctx.restore();
@@ -198,11 +293,13 @@
             draw(pathLeft, pathRight) {
                 if (this.progress > 1) return;
 
+                // Left Image Overlay Position
                 const pL = getPathPoint(pathLeft, this.progress);
-                this.drawPulse(pL.x, pL.y, 0.95, pL.angle);
+                this.drawGaussianPulse(leftCtx, pL.x, pL.y, 0.85, pL.angle);
 
+                // Right 3D Position
                 const pR = getPathPoint(pathRight, this.progress);
-                this.drawPulse(pR.x, pR.y, 1.1, pR.angle);
+                this.drawGaussianPulse(rightCtx, pR.x, pR.y, 1.1, pR.angle);
             }
         }
 
@@ -221,7 +318,7 @@
             };
         }
 
-        function drawStar(cx, cy, spikes, outerRadius, innerRadius) {
+        function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
             let rot = Math.PI / 2 * 3;
             let step = Math.PI / spikes;
 
@@ -238,126 +335,29 @@
         }
 
         function renderScene() {
-            ctx.clearRect(0, 0, width, height);
-            const halfW = width / 2;
+            leftCtx.clearRect(0, 0, leftOverlay.width, leftOverlay.height);
+            rightCtx.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
 
-            // Split line
-            ctx.strokeStyle = '#e2e8f0';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(halfW, 0);
-            ctx.lineTo(halfW, height);
-            ctx.stroke();
+            const wL = leftOverlay.width;
+            const hL = leftOverlay.height;
 
-            // Headings
-            ctx.font = '600 16px -apple-system, sans-serif';
-            ctx.fillStyle = '#1e293b';
-            ctx.fillText("SIDE PROFILE VIEW (2D)", 30, 45);
-            ctx.fillText("3D TOP / ISOMETRIC VIEW", halfW + 30, 45);
-
-            // Exact Image Colors
-            const colSi = '#9ebac0';       // Bottom Teal-grey
-            const colSiO2 = '#e8e8e8';     // Middle Grey
-            const colSiC = '#ebd3dd';      // Pink Silicon Carbide
-            const colText = '#334155';
-
-            // ==========================================
-            // LEFT VIEW (2D CROSS-SECTION MATCHING IMAGE)
-            // ==========================================
-            const margin = 40;
-            const wL = halfW - 80;
-            const baseY = height * 0.9;
-
-            const hSi = 55;
-            const hSiO2 = 55;
-            const hSiC = 110;
-
-            // 1. Silicon (Si) Layer
-            ctx.fillStyle = colSi;
-            ctx.fillRect(margin, baseY - hSi, wL, hSi);
-            ctx.fillStyle = colText;
-            ctx.font = '18px -apple-system, sans-serif';
-            ctx.fillText("Silicon (Si)", margin + wL * 0.42, baseY - 20);
-
-            // 2. Silicon Dioxide (SiO2) Layer
-            ctx.fillStyle = colSiO2;
-            ctx.fillRect(margin, baseY - hSi - hSiO2, wL, hSiO2);
-            ctx.fillStyle = colText;
-            ctx.fillText("Silicon Dioxide (SiO₂)", margin + wL * 0.38, baseY - hSi - 20);
-
-            // 3. Silicon Carbide (4H-SiC) Layer + Upper Tapered Cantilever
-            const ySiC_bot = baseY - hSi - hSiO2;
-            const ySiC_top = ySiC_bot - hSiC;
-
-            const bendX = margin + wL * 0.86;
-            const bendTopY = ySiC_top - 160;
-            const taperTipX = margin + wL * 0.42;
-
-            ctx.fillStyle = colSiC;
-            ctx.beginPath();
-            ctx.moveTo(margin, ySiC_bot);
-            ctx.lineTo(margin + wL, ySiC_bot);
-            ctx.lineTo(margin + wL, bendTopY);
-            ctx.lineTo(bendX, bendTopY);
-            ctx.lineTo(taperTipX, bendTopY + 30);
-            ctx.lineTo(bendX, ySiC_top);
-            ctx.lineTo(margin, ySiC_top);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.fillStyle = colText;
-            ctx.fillText("Silicon Carbide (4H-SiC)", margin + wL * 0.38, ySiC_bot - 45);
-
-            // 4. SiO2 Fiber (Top Tapered Wedge)
-            const fiberTipX = bendX - 10;
-            const fiberStartX = margin + 30;
-            const fiberY = bendTopY - 45;
-
-            ctx.fillStyle = '#f1f5f9';
-            ctx.beginPath();
-            ctx.moveTo(fiberStartX, fiberY - 40);
-            ctx.quadraticCurveTo(fiberStartX - 15, fiberY - 10, fiberStartX, fiberY + 20);
-            ctx.lineTo(fiberTipX, fiberY + 30);
-            ctx.lineTo(fiberStartX + 350, fiberY - 25);
-            ctx.closePath();
-            ctx.fill();
-
-            // Label Box for SiO2 Fiber
-            ctx.fillStyle = '#ffffff';
-            ctx.strokeStyle = '#94a3b8';
-            ctx.lineWidth = 1;
-            ctx.fillRect(fiberStartX + 30, fiberY - 30, 210, 38);
-            ctx.strokeRect(fiberStartX + 30, fiberY - 30, 210, 38);
-            ctx.fillStyle = '#1e293b';
-            ctx.font = '17px -apple-system, sans-serif';
-            ctx.fillText("Silicon Dioxide (SiO₂)", fiberStartX + 42, fiberY - 5);
-
-            // 5. Star Color Center Emitter
-            const starX_2D = bendX - 35;
-            const starY_2D = bendTopY + 12;
-
-            ctx.save();
-            drawStar(starX_2D, starY_2D, 8, 10, 5);
-            ctx.fillStyle = '#ffffff';
-            ctx.strokeStyle = '#475569';
-            ctx.lineWidth = 1.5;
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-
+            // Normalized path mapped directly onto the geometry of your original picture
             const pathLeft = [
-                { x: starX_2D, y: starY_2D },
-                { x: taperTipX + 80, y: bendTopY + 22 },
-                { x: taperTipX + 10, y: bendTopY + 28 },
-                { x: fiberStartX + 200, y: fiberY + 10 },
-                { x: fiberStartX + 50, y: fiberY - 5 }
+                { x: wL * 0.825, y: hL * 0.355 }, // Star Color Center
+                { x: wL * 0.580, y: hL * 0.335 }, // Travelling along 4H-SiC cantilever
+                { x: wL * 0.440, y: hL * 0.315 }, // Evanescent Coupling region (Overlapping zone)
+                { x: wL * 0.300, y: hL * 0.260 }, // Transferred inside SiO2 Fiber
+                { x: wL * 0.120, y: hL * 0.200 }  // Exit through Fiber
             ];
 
-            // ==========================================
-            // RIGHT VIEW (3D ISOMETRIC TOP PROFILE)
-            // ==========================================
-            const ox = halfW + 120;
-            const oy = height * 0.65;
+            // ------------------------------------------
+            // RIGHT VIEW (3D ISOMETRIC SCHEMATIC)
+            // ------------------------------------------
+            const rw = rightCanvas.width;
+            const rh = rightCanvas.height;
+
+            const ox = rw * 0.48;
+            const oy = rh * 0.62;
 
             function iso(x, y, z) {
                 return {
@@ -368,71 +368,70 @@
 
             // Substrate Base 3D
             const b0 = iso(0, 0, 0);
-            const b1 = iso(360, 0, 0);
-            const b2 = iso(360, 220, 0);
+            const b1 = iso(340, 0, 0);
+            const b2 = iso(340, 220, 0);
             const b3 = iso(0, 220, 0);
 
-            ctx.fillStyle = '#cbd5e1';
-            ctx.beginPath();
-            ctx.moveTo(b0.x, b0.y); ctx.lineTo(b1.x, b1.y);
-            ctx.lineTo(b2.x, b2.y); ctx.lineTo(b3.x, b3.y);
-            ctx.closePath();
-            ctx.fill();
+            rightCtx.fillStyle = '#cbd5e1';
+            rightCtx.beginPath();
+            rightCtx.moveTo(b0.x, b0.y); rightCtx.lineTo(b1.x, b1.y);
+            rightCtx.lineTo(b2.x, b2.y); rightCtx.lineTo(b3.x, b3.y);
+            rightCtx.closePath(); rightCtx.fill();
 
-            // 4H-SiC Tapered Waveguide 3D
-            const w0 = iso(360, 110, 20);
-            const wKnee = iso(180, 110, 20);
-            const wTip = iso(60, 110, 20);
+            // 4H-SiC Pink Tapered Waveguide
+            const w0 = iso(340, 110, 22);
+            const wKnee = iso(170, 110, 22);
+            const wTip = iso(60, 110, 22);
 
-            ctx.fillStyle = colSiC;
-            ctx.beginPath();
-            ctx.moveTo(w0.x, w0.y - 30);
-            ctx.lineTo(w0.x, w0.y + 30);
-            ctx.lineTo(wKnee.x, wKnee.y + 22);
-            ctx.lineTo(wTip.x, wTip.y + 3);
-            ctx.lineTo(wKnee.x, wKnee.y - 22);
-            ctx.closePath();
-            ctx.fill();
-            ctx.strokeStyle = '#db2777';
-            ctx.stroke();
+            rightCtx.fillStyle = '#ebd3dd';
+            rightCtx.beginPath();
+            rightCtx.moveTo(w0.x, w0.y - 28);
+            rightCtx.lineTo(w0.x, w0.y + 28);
+            rightCtx.lineTo(wKnee.x, wKnee.y + 20);
+            rightCtx.lineTo(wTip.x, wTip.y + 2);
+            rightCtx.lineTo(wKnee.x, wKnee.y - 20);
+            rightCtx.closePath();
+            rightCtx.fill();
+            rightCtx.strokeStyle = '#db2777';
+            rightCtx.stroke();
 
-            // Star Color Center in 3D
-            const star3D = iso(300, 110, 22);
-            ctx.save();
-            drawStar(star3D.x, star3D.y, 8, 10, 5);
-            ctx.fillStyle = '#ffffff';
-            ctx.strokeStyle = '#be185d';
-            ctx.lineWidth = 1.5;
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
+            // 3D Star Color Center
+            const star3D = iso(280, 110, 24);
+            rightCtx.save();
+            drawStar(rightCtx, star3D.x, star3D.y, 8, 10, 5);
+            rightCtx.fillStyle = '#ffffff';
+            rightCtx.strokeStyle = '#be185d';
+            rightCtx.lineWidth = 1.5;
+            rightCtx.fill();
+            rightCtx.stroke();
+            rightCtx.restore();
 
             // SiO2 Tapered Fiber Overlay 3D
-            const f0 = iso(20, 110, 35);
-            const fTip = iso(280, 110, 35);
+            const f0 = iso(20, 110, 36);
+            const fTip = iso(260, 110, 36);
 
-            ctx.fillStyle = 'rgba(241, 245, 249, 0.85)';
-            ctx.beginPath();
-            ctx.moveTo(f0.x, f0.y - 35);
-            ctx.lineTo(f0.x, f0.y + 35);
-            ctx.lineTo(fTip.x, fTip.y + 3);
-            ctx.lineTo(fTip.x, fTip.y - 3);
-            ctx.closePath();
-            ctx.fill();
-            ctx.strokeStyle = '#94a3b8';
-            ctx.stroke();
+            rightCtx.fillStyle = 'rgba(241, 245, 249, 0.88)';
+            rightCtx.beginPath();
+            rightCtx.moveTo(f0.x, f0.y - 32);
+            rightCtx.lineTo(f0.x, f0.y + 32);
+            rightCtx.lineTo(fTip.x, fTip.y + 3);
+            rightCtx.lineTo(fTip.x, fTip.y - 3);
+            rightCtx.closePath();
+            rightCtx.fill();
+            rightCtx.strokeStyle = '#94a3b8';
+            rightCtx.stroke();
 
-            // Labels for 3D View
-            ctx.font = '600 14px -apple-system, sans-serif';
-            ctx.fillStyle = '#0f172a';
-            ctx.fillText("SiO₂ Fiber Taper", f0.x - 40, f0.y - 45);
-            ctx.fillText("4H-SiC Waveguide", w0.x - 30, w0.y + 45);
+            // Labels
+            rightCtx.font = '600 14px -apple-system, sans-serif';
+            rightCtx.fillStyle = '#0f172a';
+            rightCtx.fillText("SiO₂ Fiber Taper", f0.x - 40, f0.y - 45);
+            rightCtx.fillText("4H-SiC Waveguide", w0.x - 30, w0.y + 45);
 
             const pathRight = [
                 { x: star3D.x, y: star3D.y },
                 { x: wKnee.x, y: wKnee.y },
                 { x: (wKnee.x + fTip.x) / 2, y: (wKnee.y + fTip.y) / 2 },
-                { x: f0.x + 100, y: f0.y },
+                { x: f0.x + 90, y: f0.y },
                 { x: f0.x, y: f0.y }
             ];
 
@@ -440,7 +439,7 @@
         }
 
         window.addEventListener('click', (e) => {
-            if (isGameActive && e.target.id === 'gameCanvas') {
+            if (isGameActive && (e.target.id === 'simulationView' || e.target.closest('#simulationView'))) {
                 photons.push(new GaussianPhoton());
             }
         });
