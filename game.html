@@ -230,16 +230,16 @@
     </nav>
 
     <div class="game-controls" id="gameControls">
-        <span>✨ Click anywhere to emit a single photon from the color center!</span>
+        <span>✨ Click anywhere on the canvas to emit a photon down the tapered waveguide!</span>
         <button class="btn-exit" onclick="stopGame()">Exit Game</button>
     </div>
 
     <div class="container" id="mainContainer">
         <header class="hero">
-            <h1>Interactive Evanescent Optical Coupling</h1>
-            <div class="subtitle">4H-SiC Triangular Waveguide & Tapered Fiber</div>
+            <h1>Suspended Tapered Waveguide Simulation</h1>
+            <div class="subtitle">Nanofabricated Undercut & Cantilevered Mode Spot Converter</div>
             <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
-                Visualizing single-photon generation inside a 4H-SiC triangular cross-section waveguide and evanescent coupling into a tapered optical fiber.
+                Interactive 3D visualization of a tapered optical waveguide suspended over an etched substrate trench.
             </p>
             <button class="btn-play" onclick="startGame()">🎮 Play Simulation</button>
         </header>
@@ -268,7 +268,7 @@
         function startGame() {
             isGameActive = true;
             document.body.classList.add('game-active');
-            photons = [new EvanescentPhoton()];
+            photons = [new TaperPhoton()];
             animate();
         }
 
@@ -283,51 +283,35 @@
             ctx.clearRect(0, 0, width, height);
         }
 
-        class EvanescentPhoton {
+        class TaperPhoton {
             constructor() {
                 this.progress = 0;
-                this.speed = 0.01;
+                this.speed = 0.008;
             }
 
             update() {
                 this.progress += this.speed;
             }
 
-            draw(emitterPt, taperTipPt, fiberEndPt) {
+            draw(startPt, tipPt) {
                 if (this.progress > 1) return;
 
-                let currentX, currentY;
-                
-                if (this.progress <= 0.52) {
-                    const localT = this.progress / 0.52;
-                    currentX = emitterPt.x + (taperTipPt.x - emitterPt.x) * localT;
-                    currentY = emitterPt.y + (taperTipPt.y - emitterPt.y) * localT;
-                } else {
-                    const localT = (this.progress - 0.52) / 0.48;
-                    currentX = taperTipPt.x + (fiberEndPt.x - taperTipPt.x) * localT;
-                    currentY = taperTipPt.y + (fiberEndPt.y - taperTipTipPt.y) * localT;
-                }
-
-                const radius = 9 + Math.sin(this.progress * Math.PI) * 5;
+                const currX = startPt.x + (tipPt.x - startPt.x) * this.progress;
+                const currY = startPt.y + (tipPt.y - startPt.y) * this.progress;
+                const radius = 7 + Math.sin(this.progress * Math.PI) * 4;
 
                 ctx.save();
-                
-                const grad = ctx.createRadialGradient(
-                    currentX, currentY, 0,
-                    currentX, currentY, radius
-                );
-                grad.addColorStop(0, 'rgba(255, 255, 200, 1)');
-                grad.addColorStop(0.35, 'rgba(250, 204, 21, 0.95)');
-                grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.8)');
-                grad.addColorStop(1, 'rgba(220, 38, 38, 0)');
+                const grad = ctx.createRadialGradient(currX, currY, 0, currX, currY, radius);
+                grad.addColorStop(0, '#ffffff');
+                grad.addColorStop(0.4, '#38bdf8');
+                grad.addColorStop(1, 'rgba(14, 165, 233, 0)');
 
                 ctx.beginPath();
-                ctx.arc(currentX, currentY, radius, 0, Math.PI * 2);
+                ctx.arc(currX, currY, radius, 0, Math.PI * 2);
                 ctx.fillStyle = grad;
-                ctx.shadowColor = '#f59e0b';
-                ctx.shadowBlur = 18;
+                ctx.shadowColor = '#38bdf8';
+                ctx.shadowBlur = 15;
                 ctx.fill();
-                
                 ctx.restore();
             }
         }
@@ -335,251 +319,188 @@
         function drawIsometricSetup() {
             ctx.clearRect(0, 0, width, height);
 
-            // Centered layout matching hand-drawn isometric perspective
-            const originX = width * 0.28;
-            const originY = height * 0.52;
-            const chipWidth = Math.min(width * 0.42, 540);
-            const chipDepth = 320;
-            const isoAngleX = 0.42;
-            const isoAngleY = -0.55;
+            // Clean background gradient
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+            bgGrad.addColorStop(0, '#ffffff');
+            bgGrad.addColorStop(1, '#f8fafc');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, width, height);
 
-            function to3D(x, y, z = 0) {
+            // 3D Isometric projection math
+            const originX = width * 0.30;
+            const originY = height * 0.58;
+            const scale = Math.min(width, height) * 0.0019;
+
+            const angleX = 0.52;
+            const angleY = -0.42;
+
+            function project(x, y, z) {
                 return {
-                    x: originX + x * Math.cos(isoAngleX) + y * Math.cos(isoAngleY),
-                    y: originY + x * Math.sin(isoAngleX) + y * Math.sin(isoAngleY) - z
+                    x: originX + (x * Math.cos(angleX) + y * Math.cos(angleY)) * scale,
+                    y: originY + (x * Math.sin(angleX) + y * Math.sin(angleY) - z) * scale
                 };
             }
 
-            // Layer Thicknesses
-            const h_si = 45;   // Silicon Substrate Thickness
-            const h_sio2 = 30; // SiO2 Thickness
+            // --- 1. YELLOW SUBSTRATE BLOCK WITH UNDERCUT TRENCH ---
+            const W = 320; // Width (left to right)
+            const D = 280; // Depth (front to back)
+            const H = 180; // Substrate height
+            const tW = 65; // Trench width
+            const tH = 85; // Trench depth
+            const tY0 = 110; // Trench Y start on right face
+            const tY1 = tY0 + tW;
 
-            // 1. SILICON SUBSTRATE (Si) - Faint Forest Green
-            const si_b0 = to3D(0, 0, -h_si - h_sio2);
-            const si_b1 = to3D(chipWidth, 0, -h_si - h_sio2);
-            const si_t0 = to3D(0, 0, -h_sio2);
-            const si_t1 = to3D(chipWidth, 0, -h_sio2);
+            // Palette matching the reference render
+            const colTop = '#fef08a';      // Light yellow top
+            const colFront = '#fde047';    // Mid yellow left-front
+            const colRight = '#eab308';    // Shadowed yellow right-front
+            const colTrenchInner = '#ca8a04'; // Deep trench shadow
 
+            // Substrate Top Face (Split around trench)
+            const p0 = project(0, 0, H);
+            const p1 = project(W, 0, H);
+            const p2 = project(W, D, H);
+            const p3 = project(0, D, H);
+
+            ctx.fillStyle = colTop;
             ctx.beginPath();
-            ctx.moveTo(si_b0.x, si_b0.y);
-            ctx.lineTo(si_b1.x, si_b1.y);
-            ctx.lineTo(si_t1.x, si_t1.y);
-            ctx.lineTo(si_t0.x, si_t0.y);
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p3.x, p3.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(34, 110, 60, 0.75)';
             ctx.fill();
-            ctx.strokeStyle = '#1e3a29';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
 
-            // 2. SiO2 LAYER - Faint Grey
-            const sio2_b0 = to3D(0, 0, -h_sio2);
-            const sio2_b1 = to3D(chipWidth, 0, -h_sio2);
-            const sio2_t0 = to3D(0, 0, 0);
-            const sio2_t1 = to3D(chipWidth, 0, 0);
+            // Substrate Left-Front Face
+            const p0_b = project(0, 0, 0);
+            const p3_b = project(0, D, 0);
 
+            ctx.fillStyle = colFront;
             ctx.beginPath();
-            ctx.moveTo(sio2_b0.x, sio2_b0.y);
-            ctx.lineTo(sio2_b1.x, sio2_b1.y);
-            ctx.lineTo(sio2_t1.x, sio2_t1.y);
-            ctx.lineTo(sio2_t0.x, sio2_t0.y);
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p3.x, p3.y);
+            ctx.lineTo(p3_b.x, p3_b.y);
+            ctx.lineTo(p0_b.x, p0_b.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(203, 213, 225, 0.85)';
             ctx.fill();
-            ctx.strokeStyle = '#475569';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
 
-            // 3. TOP CHIP SURFACE (Slate Grey)
-            const top_0 = to3D(0, 0, 0);
-            const top_1 = to3D(chipWidth, 0, 0);
-            const top_2 = to3D(chipWidth, chipDepth, 0);
-            const top_3 = to3D(0, chipDepth, 0);
+            // Substrate Right Face (with Trench cutout)
+            const p1_b = project(W, 0, 0);
+            const p2_b = project(W, D, 0);
 
+            const pt_top0 = project(W, tY0, H);
+            const pt_top1 = project(W, tY1, H);
+            const pt_bot0 = project(W, tY0, H - tH);
+            const pt_bot1 = project(W, tY1, H - tH);
+
+            ctx.fillStyle = colRight;
             ctx.beginPath();
-            ctx.moveTo(top_0.x, top_0.y);
-            ctx.lineTo(top_1.x, top_1.y);
-            ctx.lineTo(top_2.x, top_2.y);
-            ctx.lineTo(top_3.x, top_3.y);
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(pt_top0.x, pt_top0.y);
+            ctx.lineTo(pt_bot0.x, pt_bot0.y);
+            ctx.lineTo(pt_bot1.x, pt_bot1.y);
+            ctx.lineTo(pt_top1.x, pt_top1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineTo(p2_b.x, p2_b.y);
+            ctx.lineTo(p1_b.x, p1_b.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(226, 232, 240, 0.9)';
             ctx.fill();
-            ctx.strokeStyle = '#334155';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
 
-            // 4. TRAPEZOIDAL / TRIANGULAR 4H-SiC WAVEGUIDE (Faint Pink)
-            const wgY = chipDepth * 0.45;
-            const wgStartX = chipWidth * 0.35;
-            const taperEndX = chipWidth + 140;
+            // Trench Inner Walls
+            const pt_in_bot0 = project(W - 90, tY0, H - tH);
+            const pt_in_bot1 = project(W - 90, tY1, H - tH);
+            const pt_in_top0 = project(W - 90, tY0, H);
 
-            // Front 3D Hexagonal/Trapezoidal Cross Section Points (from drawing)
-            const cs_center = to3D(wgStartX, wgY, 20);
-            const cs_top_l = to3D(wgStartX, wgY - 35, 40);
-            const cs_top_r = to3D(wgStartX, wgY + 35, 40);
-            const cs_mid_l = to3D(wgStartX, wgY - 45, 20);
-            const cs_mid_r = to3D(wgStartX, wgY + 45, 20);
-            const cs_bot = to3D(wgStartX, wgY, 0);
-
-            const taper_tip = to3D(taperEndX, wgY + 15, 0);
-
-            // Taper Side Wall (Bottom-to-tip)
+            ctx.fillStyle = colTrenchInner;
             ctx.beginPath();
-            ctx.moveTo(cs_mid_r.x, cs_mid_r.y);
-            ctx.lineTo(cs_bot.x, cs_bot.y);
-            ctx.lineTo(taper_tip.x, taper_tip.y);
+            ctx.moveTo(pt_top0.x, pt_top0.y);
+            ctx.lineTo(pt_in_top0.x, pt_in_top0.y);
+            ctx.lineTo(pt_in_bot0.x, pt_in_bot0.y);
+            ctx.lineTo(pt_bot0.x, pt_bot0.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(225, 29, 72, 0.7)';
             ctx.fill();
-            ctx.strokeStyle = '#be123c';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
 
-            // Taper Top Surface
+            ctx.fillStyle = '#a16207';
             ctx.beginPath();
-            ctx.moveTo(cs_top_l.x, cs_top_l.y);
-            ctx.lineTo(cs_top_r.x, cs_top_r.y);
-            ctx.lineTo(taper_tip.x, taper_tip.y);
+            ctx.moveTo(pt_bot0.x, pt_bot0.y);
+            ctx.lineTo(pt_in_bot0.x, pt_in_bot0.y);
+            ctx.lineTo(pt_in_bot1.x, pt_in_bot1.y);
+            ctx.lineTo(pt_bot1.x, pt_bot1.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(244, 114, 182, 0.85)';
             ctx.fill();
-            ctx.strokeStyle = '#e11d48';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
 
-            // Draw Front Cross Section Face Geometry (from drawing)
+            // --- 2. BLUE TAPERED WAVEGUIDE ---
+            const wgThickness = 18;
+            const wgY_center = (tY0 + tY1) / 2;
+            const wgWidthStart = 75;
+            const wgWidthKnee = 60;
+            const wgWidthTip = 2;
+
+            const x_start = 20;
+            const x_knee = 170;
+            const x_tip = W + 220;
+
+            // Geometry points for Waveguide Top Face
+            const wg_t_s1 = project(x_start, wgY_center - wgWidthStart/2, H + wgThickness);
+            const wg_t_s2 = project(x_start, wgY_center + wgWidthStart/2, H + wgThickness);
+            const wg_t_k1 = project(x_knee, wgY_center - wgWidthKnee/2, H + wgThickness);
+            const wg_t_k2 = project(x_knee, wgY_center + wgWidthKnee/2, H + wgThickness);
+            const wg_t_tip = project(x_tip, wgY_center, H + wgThickness);
+
+            // Geometry points for Waveguide Bottom Face
+            const wg_b_s1 = project(x_start, wgY_center - wgWidthStart/2, H);
+            const wg_b_s2 = project(x_start, wgY_center + wgWidthStart/2, H);
+            const wg_b_k1 = project(x_knee, wgY_center - wgWidthKnee/2, H);
+            const wg_b_k2 = project(x_knee, wgY_center + wgWidthKnee/2, H);
+            const wg_b_tip = project(x_tip, wgY_center, H);
+
+            // Colors matching image render
+            const wgTopColor = 'rgba(186, 230, 253, 0.95)';
+            const wgSideColor = 'rgba(56, 189, 248, 0.85)';
+            const wgFrontColor = 'rgba(2, 132, 199, 0.9)';
+
+            // Front End Cap (x_start face)
+            ctx.fillStyle = wgFrontColor;
             ctx.beginPath();
-            ctx.moveTo(cs_top_l.x, cs_top_l.y);
-            ctx.lineTo(cs_top_r.x, cs_top_r.y);
-            ctx.lineTo(cs_mid_r.x, cs_mid_r.y);
-            ctx.lineTo(cs_bot.x, cs_bot.y);
-            ctx.lineTo(cs_mid_l.x, cs_mid_l.y);
+            ctx.moveTo(wg_t_s1.x, wg_t_s1.y);
+            ctx.lineTo(wg_t_s2.x, wg_t_s2.y);
+            ctx.lineTo(wg_b_s2.x, wg_b_s2.y);
+            ctx.lineTo(wg_b_s1.x, wg_b_s1.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(251, 113, 133, 0.9)';
             ctx.fill();
-            ctx.strokeStyle = '#be123c';
-            ctx.lineWidth = 2;
-            ctx.stroke();
 
-            // Internal Cross Section Webbing Lines (Matching Drawing Wireframe)
+            // Near Side Wall (facing viewer)
+            ctx.fillStyle = wgSideColor;
             ctx.beginPath();
-            ctx.moveTo(cs_top_l.x, cs_top_l.y);
-            ctx.lineTo(cs_mid_r.x, cs_mid_r.y);
-            ctx.moveTo(cs_top_r.x, cs_top_r.y);
-            ctx.lineTo(cs_mid_l.x, cs_mid_l.y);
-            ctx.moveTo(cs_top_l.x, cs_top_l.y);
-            ctx.lineTo(cs_bot.x, cs_bot.y);
-            ctx.moveTo(cs_top_r.x, cs_top_r.y);
-            ctx.lineTo(cs_bot.x, cs_bot.y);
-            ctx.strokeStyle = '#be123c';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // 5. COLOR CENTER EMITTER (Inside Waveguide Cross-Section)
-            const emitterPt = to3D(wgStartX + 40, wgY, 20);
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(emitterPt.x, emitterPt.y, 7, 0, Math.PI * 2);
-            ctx.fillStyle = '#dc2626';
-            ctx.shadowColor = '#ef4444';
-            ctx.shadowBlur = 12;
-            ctx.fill();
-            ctx.restore();
-
-            // 6. TAPERED OPTICAL FIBER
-            const fiberStartX = chipWidth * 0.7;
-            const fiberEndX = taperEndX + 180;
-            const fiberTip = to3D(fiberStartX, wgY + 15, -10);
-            const fiberEnd1 = to3D(fiberEndX, wgY - 10, -10);
-            const fiberEnd2 = to3D(fiberEndX, wgY + 40, -10);
-
-            ctx.beginPath();
-            ctx.moveTo(fiberTip.x, fiberTip.y);
-            ctx.lineTo(fiberEnd1.x, fiberEnd1.y);
-            ctx.lineTo(fiberEnd2.x, fiberEnd2.y);
+            ctx.moveTo(wg_t_s2.x, wg_t_s2.y);
+            ctx.lineTo(wg_t_k2.x, wg_t_k2.y);
+            ctx.lineTo(wg_t_tip.x, wg_t_tip.y);
+            ctx.lineTo(wg_b_tip.x, wg_b_tip.y);
+            ctx.lineTo(wg_b_k2.x, wg_b_k2.y);
+            ctx.lineTo(wg_b_s2.x, wg_b_s2.y);
             ctx.closePath();
-            ctx.fillStyle = 'rgba(203, 213, 225, 0.75)';
             ctx.fill();
-            ctx.strokeStyle = '#334155';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
 
-            // 7. LABELS MATCHING HAND-DRAWN SKETCH EXACTLY
-            ctx.font = '600 15px -apple-system, sans-serif';
-            ctx.fillStyle = '#1e293b';
-
-            // Silicon chip Si
-            const si_label = to3D(chipWidth * 0.2, 0, -h_sio2 - h_si * 0.5);
-            ctx.fillText("Silicon chip  Si", si_label.x - 120, si_label.y + 5);
-
-            // SiO2
-            const sio2_label = to3D(chipWidth * 0.35, 0, -h_sio2 * 0.5);
-            ctx.fillText("SiO₂", sio2_label.x - 60, sio2_label.y + 4);
-
-            // 4H-SiC Leader
-            ctx.save();
-            ctx.strokeStyle = '#1e293b';
-            ctx.lineWidth = 1.2;
+            // Top Face
+            ctx.fillStyle = wgTopColor;
             ctx.beginPath();
-            ctx.moveTo(cs_top_l.x + 10, cs_top_l.y - 10);
-            ctx.lineTo(cs_top_l.x - 30, cs_top_l.y - 50);
-            ctx.stroke();
-            ctx.fillText("4H-SiC", cs_top_l.x - 85, cs_top_l.y - 55);
-            ctx.restore();
-
-            // Waveguide Cross Section Inset Callout (Red Triangle)
-            ctx.save();
-            ctx.strokeStyle = '#be123c';
-            ctx.fillStyle = '#be123c';
-            ctx.lineWidth = 1.5;
-
-            // Curved arrow to inset
-            const insetX = cs_top_r.x + 90;
-            const insetY = cs_top_r.y + 20;
-
-            ctx.beginPath();
-            ctx.arc(cs_top_r.x + 35, cs_top_r.y + 10, 30, Math.PI * 1.1, Math.PI * 1.8);
-            ctx.stroke();
-
-            ctx.font = '600 14px -apple-system, sans-serif';
-            ctx.fillText("Cross section of waveguide", insetX - 30, insetY);
-
-            // Downward Red Triangle (\nabla)
-            ctx.beginPath();
-            ctx.moveTo(insetX + 130, insetY - 10);
-            ctx.lineTo(insetX + 160, insetY - 10);
-            ctx.lineTo(insetX + 145, insetY + 15);
+            ctx.moveTo(wg_t_s1.x, wg_t_s1.y);
+            ctx.lineTo(wg_t_s2.x, wg_t_s2.y);
+            ctx.lineTo(wg_t_k2.x, wg_t_k2.y);
+            ctx.lineTo(wg_t_tip.x, wg_t_tip.y);
+            ctx.lineTo(wg_t_k1.x, wg_t_k1.y);
             ctx.closePath();
-            ctx.stroke();
-            ctx.restore();
-
-            // Optical Fiber Inset Callout (Circle)
-            ctx.save();
-            const fiberLabelPt = to3D(fiberEndX - 100, wgY + 15, -10);
-            ctx.font = '600 14px -apple-system, sans-serif';
-            ctx.fillStyle = '#1e293b';
-            ctx.fillText("Cross section of", fiberLabelPt.x - 140, fiberLabelPt.y + 40);
-            ctx.fillText("optical fiber", fiberLabelPt.x - 140, fiberLabelPt.y + 60);
-
-            // Circle icon
-            ctx.beginPath();
-            ctx.arc(fiberLabelPt.x - 40, fiberLabelPt.y + 90, 18, 0, Math.PI * 2);
-            ctx.strokeStyle = '#1e293b';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            ctx.restore();
+            ctx.fill();
 
             return {
-                emitter: emitterPt,
-                taperTip: taper_tip,
-                fiberEnd: to3D(fiberEndX + 50, wgY + 15, -10)
+                start: project(x_start + 15, wgY_center, H + wgThickness/2),
+                tip: project(x_tip, wgY_center, H + wgThickness/2)
             };
         }
 
         window.addEventListener('click', (e) => {
             if (isGameActive && e.target.id === 'gameCanvas') {
-                photons.push(new EvanescentPhoton());
+                photons.push(new TaperPhoton());
             }
         });
 
@@ -591,7 +512,7 @@
             for (let i = photons.length - 1; i >= 0; i--) {
                 const p = photons[i];
                 p.update();
-                p.draw(pts.emitter, pts.taperTip, pts.fiberEnd);
+                p.draw(pts.start, pts.tip);
 
                 if (p.progress >= 1) {
                     photons.splice(i, 1);
