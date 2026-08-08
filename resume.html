@@ -121,19 +121,27 @@
         }
 
         .timeline-item {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .timeline-title {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--primary);
         }
 
         .timeline-meta {
-            font-size: 0.9rem;
+            font-size: 0.92rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-submeta {
+            font-size: 0.88rem;
             color: var(--text-muted);
             margin-bottom: 8px;
+            font-style: italic;
         }
 
         ul {
@@ -174,32 +182,65 @@
         <h1>Curriculum Vitae</h1>
         <p>A comprehensive overview of my academic background, technical competencies, and research roles.</p>
         
-        <!-- CV Download Link configured to point to CV.pdf -->
         <a href="CV.pdf" class="btn-cv" download="Behera_CV.pdf" target="_blank">📥 Download Official CV (PDF)</a>
-        
-        <h2>Research Experience</h2>
-        
+
+        <h2>Research Projects & Experience</h2>
+
         <div class="timeline-item">
-            <div class="timeline-title">Research Assistant — Solid State Quantum Photonics</div>
-            <div class="timeline-meta">Universität des Saarlandes | Saarbrücken, Germany (May 2024 – July 2024)</div>
+            <div class="timeline-title">Quantum Sensing Researcher</div>
+            <div class="timeline-meta">QuBeats (M/s Nostradamus Technologies Private Limited), India | March 2026 – July 2026</div>
+            <div class="timeline-submeta">Supervisor: Dr. Shouvik Mukherjee | Project: Warm atomic vapour experiments – optically pumped magnetometers with Rubidium (Rb) atoms</div>
             <ul>
-                <li>Fabricated and aligned custom optical setups for two-photon interference with color centers in Silicon Carbide (4H-SiC).</li>
-                <li>Integrated pulse laser modulation using double-pass Acousto-Optic Modulators (AOMs).</li>
-                <li>Maintained high-efficiency single-photon collection optical pathways and avalanche photodiode (APD) readouts.</li>
+                <li>Designed and built a GUI for compact optically pumped magnetometer to sense and measure the magnetic field of earth.</li>
+                <li>Performed data acquisition and analysis of frequency-modulated signals in a rubidium (Rb)-based nonlinear magneto-optical rotation (NMOR) experiment using the Moku:Go platform, integrating waveform generation, lock-in detection, and oscilloscope measurements.</li>
+                <li>Built a python-based digital lock-in amplifier for signal extraction and phase-sensitive detection using butterworth low-pass filtering.</li>
+                <li>Designed, wound, and characterized Helmholtz coils for precision magnetic-field generation and control in quantum optics experiments.</li>
             </ul>
         </div>
 
         <div class="timeline-item">
-            <div class="timeline-title">Research Fellow — Nanomaterials & Optical Interfacing</div>
-            <div class="timeline-meta">Luxembourg Institute of Science and Technology (LIST) | Luxembourg (Nov 2024 – Dec 2025)</div>
+            <div class="timeline-title">Researcher — Quantum Materials Team</div>
+            <div class="timeline-meta">Luxembourg Institute of Science and Technology (LIST), Luxembourg | November 2024 – December 2025</div>
+            <div class="timeline-submeta">Supervisor: Dr. Florian Kaiser | In association with Université du Luxembourg | AQuaTSiC Project (Advanced Quantum Technologies with Silicon Carbide)</div>
             <ul>
-                <li>Engineered custom fiber-gluing precision alignment hardware for waveguided optical interfaces.</li>
-                <li>Operated within ISO 4 cleanroom environments utilizing specialized specialty optical fiber (ZBLAN, 1060XP).</li>
+                <li>Designed and built an optical fiber gluing station for waveguide–fiber interfacing from scratch, enabling stable chip–fiber coupling.</li>
+                <li>Integrated visible to near-infrared (780–1220 nm) laser systems with 4H-SiC nanophotonic devices.</li>
+                <li>Led cleanroom fabrication of specialty fibers (1060XP and ZBLAN in association with Flawless Photonics Inc.) and process logistics coordination, including process optimization, execution, and quality control.</li>
+                <li>Evaluated, qualified, and procured optical adhesives for photonic chip-level fiber attachment, defining bonding protocols and equipment requirements for long-term mechanical and optical stability.</li>
+                <li>Conducted theoretical study of neutral divacancy (VV<sup>0</sup>) in 4H-SiC, analyzing electronic structure, and optical transitions involved in single-photon generation.</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-title">Guest Scientist — Quantum Photonics Group</div>
+            <div class="timeline-meta">Universität des Saarlandes, Germany | May 2024 – July 2024</div>
+            <div class="timeline-submeta">Supervisor: Prof. Jürgen Eschner | Project: Lasing from Cold Ytterbium Atoms, Quantum Communication with Ca⁺ ions & Quantum Photonics</div>
+            <ul>
+                <li>Investigated coherent population trapping and dark-state formation in a Λ-system of <sup>174</sup>Yb using 680 nm and 770 nm repump lasers; performed fluorescence spectroscopy on the <sup>1</sup>S<sub>0</sub> to <sup>3</sup>S<sub>1</sub> transition via <sup>3</sup>P<sub>1</sub>.</li>
+                <li>Built a double pass AOM (Acousto-Optic Modulator) setup for 397 nm laser and data acquisition, analysis, and stability characterization of pulsed laser with varying radio-frequency using object-oriented programming with MATLAB.</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-title">Project Associate I — Quantum Optics and Quantum Information Processing Group</div>
+            <div class="timeline-meta">Indian Institute of Science (IISc), India | October 2022 – April 2024</div>
+            <div class="timeline-submeta">Supervisors: Dr. C. M. Chandrashekar and Dr. K. Muhammed Shafi | Center of Excellence in Quantum Technology</div>
+            <ul>
+                <li>Quantum hyperentanglement with spontaneous parametric down-conversion (SPDC) using type I and type II BBO crystals and quantum entanglement using Type II SPDC with PPKTP Crystal.</li>
+                <li>Generation of entangled and heralded single photon sources, detection and estimation by EMCCD camera to establish the violation of Bell's inequalities.</li>
+            </ul>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-title">Visiting Researcher</div>
+            <div class="timeline-meta">Institute of Mathematical Sciences (IMSc), India | July 2022 – October 2022</div>
+            <div class="timeline-submeta">Supervisor: Dr. C. M. Chandrashekar</div>
+            <ul>
+                <li>Topological networks for quantum communication between distant qubits, robust networks for efficient communication.</li>
             </ul>
         </div>
 
         <h2>Education</h2>
-
         <div class="timeline-item">
             <div class="timeline-title">Integrated Master of Science (M.Sc.) in Physics</div>
             <div class="timeline-meta">National Institute of Science Education and Research (NISER) | India</div>
@@ -210,9 +251,9 @@
 
         <h2>Core Technical Skills</h2>
         <ul>
-            <li><strong>Experimental Optics:</strong> Free-space optical design, AOM pulse shaping, Single-photon counting, Fiber alignment.</li>
-            <li><strong>Cleanroom & Fabrication:</strong> ISO 4 cleanroom standards, specialty fiber processing, UV glue precision bonding.</li>
-            <li><strong>Software & Control:</strong> Python, Qiskit, LabVIEW hardware integration, LaTeX, Git.</li>
+            <li><strong>Experimental Optics:</strong> Free-space optical design, AOM pulse shaping, Single-photon counting, Fiber alignment, Optically Pumped Magnetometers (OPM), SPDC setups.</li>
+            <li><strong>Cleanroom & Fabrication:</strong> ISO 4 cleanroom standards, specialty fiber processing (ZBLAN, 1060XP), chip-to-fiber UV adhesive bonding protocols.</li>
+            <li><strong>Software & Hardware Control:</strong> Python (Data Analysis & Lock-in Filtering), MATLAB (OOP & DAQ), LabVIEW, Moku:Go Platform, Qiskit, LaTeX, Git.</li>
         </ul>
     </div>
 
