@@ -3,23 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evanescent Waveguide Coupling</title>
+    <title>Simulation | Sushree Swateeprajnya Behera</title>
     <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #059669;
+            --accent-hover: #047857;
+            --text-dark: #1e293b;
+            --text-muted: #475569;
+            --bg-body: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --border-color: #cbd5e1;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #1e293b;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-body);
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Vector Field Canvas */
+        #vectorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Simulation Layer Canvas */
+        #gameCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            cursor: pointer;
         }
 
         nav {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: 1px solid #cbd5e1;
-            padding: 12px 20px;
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid var(--border-color);
             z-index: 1000;
+            padding: 12px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .nav-container {
@@ -28,16 +67,52 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .nav-logo { font-weight: 700; color: #0f172a; text-decoration: none; }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-links a { color: #334155; text-decoration: none; font-weight: 500; }
-        .btn-hire { background: #2563eb; color: #fff !important; padding: 6px 14px; border-radius: 6px; }
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn-hire {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: background 0.2s;
+        }
+
+        .btn-hire:hover {
+            background-color: var(--accent-hover) !important;
+        }
 
         .game-controls {
             position: fixed;
-            top: 65px;
+            top: 75px;
             left: 25%;
             transform: translateX(-50%);
             z-index: 1001;
@@ -46,10 +121,11 @@
             padding: 8px 18px;
             border-radius: 25px;
             font-size: 0.85rem;
-            display: none;
+            display: flex;
             align-items: center;
             gap: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            backdrop-filter: blur(4px);
         }
 
         .btn-exit {
@@ -60,26 +136,28 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            text-decoration: none;
+            font-size: 0.75rem;
         }
 
-        /* Top Right GIF Container */
         .gif-container {
-    position: fixed;
-    top: 120px; /* Shifted lower down the page */
-    right: 20px;
-    z-index: 1001;
-    display: none;
-    flex-direction: column;
-    align-items: flex-end;
-    background: rgba(15, 23, 42, 0.95);
-    padding: 6px;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+        }
 
         .gif-container img {
-            width: 640px;
+            width: 520px;
             height: auto;
             border-radius: 4px;
             display: block;
@@ -93,109 +171,127 @@
             padding-right: 4px;
         }
 
-        #gameCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            display: none;
-            cursor: pointer;
+        @media (max-width: 1024px) {
+            .gif-container img {
+                width: 360px;
+            }
         }
-
-        .container {
-            max-width: 800px;
-            margin: 100px auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .btn-play {
-            margin-top: 20px;
-            padding: 12px 28px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #fff;
-            background: #2563eb;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        body.game-active #gameCanvas { display: block; }
-        body.game-active .container { display: none; }
-        body.game-active .game-controls,
-        body.game-active .gif-container { display: flex; }
     </style>
 </head>
 <body>
 
-    <nav>
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
-        <div class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="game.html">Simulation</a>
-            <a href="resume.html">Resume</a>
-            <a href="research.html">Research</a>
-            <a href="contact.html">Contact</a>
-            <a href="hire.html" class="btn-hire">Hire Me</a>
-        </div>
-    </div>
-</nav>
+    <!-- Vector Field Background -->
+    <canvas id="vectorCanvas"></canvas>
 
-    <div class="game-controls" id="gameControls">
+    <!-- Simulation Layer -->
+    <canvas id="gameCanvas"></canvas>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="game.html" class="active">Simulation</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="game-controls">
         <span>✨ Click to emit a Gaussian photon!</span>
-        <button class="btn-exit" onclick="stopGame()">Exit</button>
+        <a href="index.html" class="btn-exit">Exit</a>
     </div>
 
     <!-- Top Right GIF -->
-    <div class="gif-container" id="gifContainer">
+    <div class="gif-container">
         <div class="gif-label">Mode Field Simulation</div>
         <img src="coupling_right_to_left.gif" alt="Coupling Right to Left Animation">
     </div>
 
-    <canvas id="gameCanvas"></canvas>
+    <!-- Vector Background Field Script -->
+    <script>
+        const vCanvas = document.getElementById('vectorCanvas');
+        const vCtx = vCanvas.getContext('2d');
+        let vWidth, vHeight;
+        const spacing = 36, arrowLength = 10;
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-    <div class="container">
-        <h1>Evanescent Light Coupling Simulation</h1>
-        <p style="margin-top: 10px; color: #64748b;">
-            Gaussian single-photon pulse generated from a star color center, guided along the 4H-SiC cantilever waveguide, and evanescently coupled into the SiO₂ fiber.
-        </p>
-        <button class="btn-play" onclick="startGame()">🎮 Launch Simulation</button>
-    </div>
+        function resizeVectorCanvas() { 
+            vWidth = vCanvas.width = window.innerWidth; 
+            vHeight = vCanvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', resizeVectorCanvas); 
+        resizeVectorCanvas();
 
+        window.addEventListener('mousemove', (e) => { 
+            mouse.x = e.clientX; 
+            mouse.y = e.clientY; 
+        });
+
+        function drawVector(x, y, angle, distance) {
+            vCtx.save(); 
+            vCtx.translate(x, y); 
+            vCtx.rotate(angle);
+            const maxRadius = 320;
+            const influence = Math.max(0, 1 - distance / maxRadius);
+            const currentLength = arrowLength + (influence * 6);
+            const r = Math.round(13 - (8 * influence));
+            const g = Math.round(148 + (2 * influence));
+            const b = Math.round(136 - (33 * influence));
+            const alpha = 0.20 + (influence * 0.75);
+            const colorStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            
+            vCtx.strokeStyle = colorStyle; 
+            vCtx.fillStyle = colorStyle; 
+            vCtx.lineWidth = 1.1 + (influence * 0.9);
+            
+            vCtx.beginPath(); 
+            vCtx.moveTo(-currentLength / 2, 0); 
+            vCtx.lineTo(currentLength / 2, 0); 
+            vCtx.stroke();
+            
+            const headSize = 3 + (influence * 2);
+            vCtx.beginPath(); 
+            vCtx.moveTo(currentLength / 2, 0); 
+            vCtx.lineTo(currentLength / 2 - headSize, -headSize / 1.5); 
+            vCtx.lineTo(currentLength / 2 - headSize, headSize / 1.5); 
+            vCtx.closePath(); 
+            vCtx.fill();
+            
+            vCtx.restore();
+        }
+
+        function renderVectorField() {
+            vCtx.clearRect(0, 0, vWidth, vHeight);
+            for (let x = spacing / 2; x < vWidth; x += spacing) {
+                for (let y = spacing / 2; y < vHeight; y += spacing) {
+                    const dx = mouse.x - x;
+                    const dy = mouse.y - y;
+                    drawVector(x, y, Math.atan2(dy, dx), Math.sqrt(dx * dx + dy * dy));
+                }
+            }
+            requestAnimationFrame(renderVectorField);
+        }
+        renderVectorField();
+    </script>
+
+    <!-- Interactive Photon Simulation Script -->
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
         let width, height;
         let photons = [];
-        let isGameActive = false;
-        let animId = null;
 
-        function resize() {
+        function resizeGameCanvas() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resize);
-        resize();
-
-        function startGame() {
-            isGameActive = true;
-            document.body.classList.add('game-active');
-            photons = [new GaussianPhoton()];
-            animate();
-        }
-
-        function stopGame() {
-            isGameActive = false;
-            document.body.classList.remove('game-active');
-            photons = [];
-            if (animId) cancelAnimationFrame(animId);
-            ctx.clearRect(0, 0, width, height);
-        }
+        window.addEventListener('resize', resizeGameCanvas);
+        resizeGameCanvas();
 
         class GaussianPhoton {
             constructor() {
@@ -207,7 +303,6 @@
                 this.progress += this.speed;
             }
 
-            // Custom Gaussian pulse profile: White center -> Yellow middle -> Red periphery
             drawGaussianPulse(x, y, scale = 1, angle = 0) {
                 ctx.save();
                 ctx.translate(x, y);
@@ -222,11 +317,10 @@
                     ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
 
                     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-                    
-                    grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');  // White Core
-                    grad.addColorStop(0.35, 'rgba(254, 240, 138, 0.95)'); // Yellow Inner
-                    grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');    // Red Periphery
-                    grad.addColorStop(1.0, 'rgba(220, 38, 38, 0.0)');    // Transparent Fade
+                    grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');  
+                    grad.addColorStop(0.35, 'rgba(254, 240, 138, 0.95)'); 
+                    grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');    
+                    grad.addColorStop(1.0, 'rgba(220, 38, 38, 0.0)');    
 
                     ctx.fillStyle = grad;
                     ctx.shadowColor = '#ef4444';
@@ -290,16 +384,15 @@
             ctx.lineTo(halfW, height);
             ctx.stroke();
 
-            // Shifted Headings Downwards
+            // Section Headings
             ctx.font = '600 15px -apple-system, sans-serif';
             ctx.fillStyle = '#1e293b';
             ctx.fillText("SIDE PROFILE VIEW (2D)", 30, 110);
             ctx.fillText("3D TOP / ISOMETRIC VIEW", halfW + 30, 110);
 
-            // Color Palette
-            const colSi = '#9ebac0';       // Bottom Teal-grey
-            const colSiO2 = '#e8e8e8';     // Middle Grey
-            const colSiC = '#ebd3dd';      // Pink Silicon Carbide
+            const colSi = '#9ebac0';       
+            const colSiO2 = '#e8e8e8';     
+            const colSiC = '#ebd3dd';      
             const colText = '#334155';
 
             // ==========================================
@@ -307,7 +400,7 @@
             // ==========================================
             const marginL = 30;
             const wL = halfW - 60;
-            const baseY = height * 0.94; // Shifted down slightly
+            const baseY = height * 0.94;
 
             const hSi = 55;
             const hSiO2 = 55;
@@ -331,7 +424,7 @@
             const ySiC_top = ySiC_bot - hSiC;
             const bendRightX = marginL + wL;
             const bendInnerX = marginL + wL * 0.86;
-            const cantileverTopY = ySiC_top - 160; // Positioned below headers
+            const cantileverTopY = ySiC_top - 160; 
             const taperTipX = marginL + wL * 0.42;
 
             ctx.fillStyle = colSiC;
@@ -398,7 +491,7 @@
             // RIGHT VIEW: 3D ISOMETRIC VIEW
             // ==========================================
             const ox = halfW + width * 0.22;
-            const oy = height * 0.70; // Shifted down to clear GIF area
+            const oy = height * 0.70; 
 
             function iso(x, y, z) {
                 return {
@@ -407,7 +500,7 @@
                 };
             }
 
-            // Substrate Base 3D
+            // Base 3D
             const b0 = iso(0, 0, 0);
             const b1 = iso(320, 0, 0);
             const b2 = iso(320, 200, 0);
@@ -419,7 +512,7 @@
             ctx.lineTo(b2.x, b2.y); ctx.lineTo(b3.x, b3.y);
             ctx.closePath(); ctx.fill();
 
-            // 4H-SiC Pink Waveguide 3D
+            // 4H-SiC Waveguide 3D
             const w0 = iso(320, 100, 22);
             const wKnee = iso(160, 100, 22);
             const wTip = iso(50, 100, 22);
@@ -480,14 +573,15 @@
         }
 
         window.addEventListener('click', (e) => {
-            if (isGameActive && e.target.id === 'gameCanvas') {
+            if (e.target.id === 'gameCanvas') {
                 photons.push(new GaussianPhoton());
             }
         });
 
-        function animate() {
-            if (!isGameActive) return;
+        // Initialize with 1 photon active immediately
+        photons.push(new GaussianPhoton());
 
+        function animate() {
             const { pathLeft, pathRight } = renderScene();
 
             for (let i = photons.length - 1; i >= 0; i--) {
@@ -500,8 +594,10 @@
                 }
             }
 
-            animId = requestAnimationFrame(animate);
+            requestAnimationFrame(animate);
         }
+
+        animate();
     </script>
 </body>
 </html>
