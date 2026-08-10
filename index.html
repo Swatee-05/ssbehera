@@ -29,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* Fullscreen Canvas for Vector Field */
         #vectorCanvas {
             position: fixed;
             top: 0;
@@ -94,6 +93,7 @@
             border-radius: 6px;
             font-weight: 600 !important;
             transition: background 0.2s;
+            display: inline-block;
         }
 
         .btn-hire:hover {
@@ -126,10 +126,16 @@
         }
 
         .subtitle {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--accent);
             margin-top: 5px;
             font-weight: 600;
+        }
+
+        .hero-description {
+            margin-top: 15px;
+            font-size: 1.05rem;
+            color: var(--text-dark);
         }
 
         .card {
@@ -144,7 +150,34 @@
 
         .sim-card {
             text-align: center;
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-color);
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .highlight-item {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .highlight-item h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+            color: var(--primary);
+        }
+
+        .highlight-item p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
         }
 
         footer {
@@ -162,7 +195,6 @@
 </head>
 <body>
 
-    <!-- Vector Field Background -->
     <canvas id="vectorCanvas"></canvas>
 
     <nav>
@@ -182,25 +214,38 @@
         <!-- Hero Section -->
         <header class="hero">
             <h1>Sushree Swateeprajnya Behera</h1>
-            <div class="subtitle">Experimental Quantum Hardware Researcher</div>
-            <p style="margin-top: 15px; font-size: 1.05rem; color: var(--text-dark);">
-                Hello and welcome! 👋 I am an experimental quantum physicist specializing in solid-state quantum photonics, color centers in 4H-SiC, atomic systems, and precision optical measurement platforms.
+            <div class="subtitle">Experimental Quantum Hardware & Photonic Systems Researcher</div>
+            <p class="hero-description">
+                Building scalable quantum hardware platforms at the intersection of solid-state photonics, atomic systems, and high-precision automation. Specialized in 4H-SiC color center integration, optical fiber-waveguide interfacing, and custom precision instrumentation.
             </p>
         </header>
 
-        <!-- Integrated Simulation Section -->
-        <div class="card sim-card">
-            <h2>Evanescent Light Coupling Simulation</h2>
-            <p style="color: var(--text-muted); max-width: 650px; margin: 10px auto 20px auto;">
-                Gaussian single-photon pulse generated from a star color center, guided along the 4H-SiC cantilever waveguide, and evanescently coupled into the SiO₂ fiber.
-            </p>
-            <a href="game.html" class="btn-hire">🎮 Launch Simulation</a>
+        <!-- Key Engineering & Research Core Strengths -->
+        <div class="card">
+            <h2 style="margin-top: 0; color: var(--primary);">Technical Capabilities</h2>
+            <div class="highlights-grid">
+                <div class="highlight-item">
+                    <h3>Integrated Quantum Photonics</h3>
+                    <p>Designed custom waveguide–fiber coupling stations, integrated 780–1220 nm laser platforms with 4H-SiC nanophotonic devices, and evaluated chip-level bonding protocols.</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Atomic Systems & Sensing</h3>
+                    <p>Constructed optically pumped magnetometers using Rb atomic vapor, developed Python digital lock-in amplifiers, and characterized precision Helmholtz coil systems.</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Lab Automation & Infrastructure</h3>
+                    <p>Built multi-instrument automated measurement pipelines using Python and MATLAB, coordinating multi-axis positioning, TCSPC systems, RF drivers, and digital oscilloscopes.</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Research Focus Section -->
-        <div class="card">
-            <h2 style="margin-top: 0; color: var(--primary);">Research Focus</h2>
-            <p>My work centers around developing scalable experimental hardware for quantum technologies. Explore the dedicated sections above to view my full curriculum vitae, custom optical setup implementations, cleanroom fabrication workflows, and peer-reviewed publications.</p>
+        <!-- Integrated Simulation Section -->
+        <div class="card sim-card">
+            <h2 style="margin-top: 0; color: var(--primary);">Interactive Waveguide Coupling Simulation</h2>
+            <p style="color: var(--text-muted); max-width: 680px; margin: 10px auto 20px auto;">
+                Interactive wave-propagation model illustrating a single-photon Gaussian pulse originating from a divacancy color center in 4H-SiC, guided via a cantilever waveguide, and evanescently coupled to a tapered SiO₂ fiber.
+            </p>
+            <a href="game.html" class="btn-hire">🎮 Launch Interactive Simulation</a>
         </div>
     </div>
 
@@ -208,7 +253,6 @@
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
-    <!-- Deep Green to Faint Teal Vector Field Script -->
     <script>
         const canvas = document.getElementById('vectorCanvas');
         const ctx = canvas.getContext('2d');
@@ -242,11 +286,10 @@
             
             const currentLength = arrowLength + (influence * 6);
 
-            // Interpolate from faint teal-green (distant) to deep green (near cursor)
-            const r = Math.round(13 - (8 * influence));    // 13 -> 5
-            const g = Math.round(148 + (2 * influence));   // 148 -> 150
-            const b = Math.round(136 - (33 * influence));  // 136 -> 103
-            const alpha = 0.20 + (influence * 0.75);       // 0.20 -> 0.95
+            const r = Math.round(13 - (8 * influence));
+            const g = Math.round(148 + (2 * influence));
+            const b = Math.round(136 - (33 * influence));
+            const alpha = 0.20 + (influence * 0.75);
 
             const colorStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
 
@@ -254,13 +297,11 @@
             ctx.fillStyle = colorStyle;
             ctx.lineWidth = 1.1 + (influence * 0.9);
 
-            // Shaft
             ctx.beginPath();
             ctx.moveTo(-currentLength / 2, 0);
             ctx.lineTo(currentLength / 2, 0);
             ctx.stroke();
 
-            // Arrow Tip
             const headSize = 3 + (influence * 2);
             ctx.beginPath();
             ctx.moveTo(currentLength / 2, 0);
