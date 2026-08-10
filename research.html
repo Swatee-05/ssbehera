@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research & Publications | Sushree Swateeprajnya Behera</title>
+
+    <!-- MathJax 3 CDN for rendering LaTeX math equations -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: { fontCache: 'global' }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         :root {
             --primary: #0f172a;
@@ -109,7 +122,6 @@
             margin-bottom: 8px;
         }
 
-        /* --- Game Styles --- */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -213,6 +225,19 @@
             background-color: #f8fafc;
         }
 
+        /* --- Math Equation Card Styling --- */
+        .math-block {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 18px 0;
+            font-size: 1.15rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            overflow-x: auto;
+        }
+
         footer {
             position: relative;
             z-index: 10;
@@ -267,7 +292,7 @@
             </p>
         </div>
 
-        <!-- GAME 1 CARD & DESCRIPTION -->
+        <!-- GAME 1 CARD -->
         <div class="card">
             <span class="tag" style="background: #dcfce7; color: #166534;">INTERACTIVE DEMO 1</span>
             
@@ -341,29 +366,21 @@
             </table>
 
             <h3>Applications: What Can You Do After Quantum Keys Are Generated?</h3>
-            <p>
-                Once Alice and Bob share a synchronized stream of quantum-generated key bits, they gain access to security capabilities impossible with classical mathematics alone:
-            </p>
             <ul>
                 <li><strong>Information-Theoretic Security (One-Time Pad):</strong> By combining the generated key with plaintext using XOR encryption equal to message length, data transmissions achieve mathematically unhackable secrecy guaranteed by physics laws.</li>
                 <li><strong>Eavesdropping Detection:</strong> Any interception attempt by an adversary (Eve) alters the photon's quantum state, increasing the Quantum Bit Error Rate (QBER). Alice and Bob instantly detect eavesdroppers and discard compromised key streams.</li>
-                <li><strong>Post-Quantum Infrastructure Protection:</strong> These keys protect critical infrastructure—financial networks, power grids, and defense communications—against future quantum computer decryption attacks (e.g., Shor's algorithm).</li>
+                <li><strong>Post-Quantum Infrastructure Protection:</strong> These keys protect critical infrastructure—financial networks, power grids, and defense communications—against future quantum computer decryption attacks.</li>
             </ul>
-
-            <h3>Photon Generation Mechanism</h3>
-            <p>
-                Photons are generated pseudo-randomly using JavaScript's browser RNG engine (<em>Xorshift128+</em>). Each photon is randomly assigned a path (Upper vs. Lower branch) and a polarization state (<code>+</code> or <code>x</code>). Physical quantum networks utilize <strong>Quantum Random Number Generators (QRNGs)</strong> driven by physical quantum phase noise.
-            </p>
         </div>
 
-        <!-- GAME 2 CARD & DESCRIPTION -->
+        <!-- GAME 2 CARD -->
         <div class="card">
             <span class="tag" style="background: #e0f2fe; color: #0369a1;">INTERACTIVE DEMO 2</span>
             
             <div class="game-header">
                 <h2>Cavity QED Alignment Simulator</h2>
                 <div class="game-metrics">
-                    <div class="metric-badge">Cavity Finesse (ℱ): <span id="g2Finesse" style="color: var(--accent);">0</span></div>
+                    <div class="metric-badge">Cavity Finesse ($\mathcal{F}$): <span id="g2Finesse" style="color: var(--accent);">0</span></div>
                     <div class="metric-badge">Coupling State: <span id="g2State" style="color: var(--danger);">Uncoupled</span></div>
                 </div>
             </div>
@@ -374,7 +391,7 @@
 
             <div class="game-controls">
                 <div class="slider-group">
-                    <label for="piezoSlider">Piezo Phase Offset (Δφ):</label>
+                    <label for="piezoSlider">Piezo Phase Offset ($\Delta \phi$):</label>
                     <input type="range" id="piezoSlider" min="0" max="100" value="20" style="cursor: pointer;">
                 </div>
                 <button class="btn-game" id="restartGameBtn2">Reset Alignment</button>
@@ -382,16 +399,23 @@
 
             <div class="divider"></div>
 
-            <h2>How to Play & Comprehensive Physics Principles</h2>
+            <h2>How to Play & Physics Principles</h2>
             <p>
-                This interactive simulator models an open-access <strong>Fabry-Pérot Cavity Quantum Electrodynamics (CQED) System</strong> coupled to a single quantum emitter, such as a Silicon-Vacancy (SiV) or Nitrogen-Vacancy (NV) color center embedded in 4H-SiC.
+                This interactive simulator models an open-access <strong>Fabry–Pérot Cavity Quantum Electrodynamics (CQED) System</strong> coupled to a single quantum emitter (e.g., a Silicon-Vacancy color center in SiC or a trapped atom).
             </p>
 
-            <h3>Core Mechanics & Alignment Steps</h3>
+            <h3>Core Objective</h3>
+            <p>
+                Align the movable concave mirror ($M_2$) both spatially and resonant-wise with the pump laser path:
+            </p>
             <ul>
-                <li><strong>Spatial Alignment (Transverse Mode Matching):</strong> Click and drag the right concave mirror (M2) along the transverse axis. Transverse misalignment causes optical clipping and mode field diameter mismatch, scattering photons into non-resonant Hermite-Gaussian modes and lowering cavity quality factor.</li>
-                <li><strong>Phase Tuning (Sub-Nanometer Longitudinal Control):</strong> Adjust the piezo stage slider to fine-tune the cavity length L to satisfy the longitudinal resonance condition <strong>L = n · (λ / 2)</strong>, where λ is the zero-phonon line wavelength.</li>
-                <li><strong>Achieving Strong Coupling:</strong> As alignment accuracy approaches sub-micron thresholds, cavity finesse (ℱ) spikes, boosting the single-photon Rabi frequency beyond intrinsic dissipation rates.</li>
+                <li><strong>Drag Mirror $M_2$:</strong> Click and drag the right mirror ($M_2$) to align its transverse optic axis with mirror $M_1$.</li>
+                <li><strong>Tune Piezo Stage:</strong> Adjust the piezo slider to fine-tune the cavity length to satisfy the standing-wave resonance condition:
+                    <div class="math-block">
+                        $$L = n \cdot \left(\frac{\lambda}{2}\right)$$
+                    </div>
+                </li>
+                <li><strong>Achieve Strong Coupling:</strong> When transmission efficiency reaches $\ge 85\%$, the cavity enters the <strong>Strong Coupling Regime</strong>, triggering coherent vacuum Rabi oscillations.</li>
             </ul>
 
             <h3>Optical Resonance & Finesse Parameter Table</h3>
@@ -399,61 +423,72 @@
                 <thead>
                     <tr>
                         <th>Alignment Stage</th>
-                        <th>Transverse Misalignment (Δy)</th>
-                        <th>Cavity Finesse (ℱ)</th>
+                        <th>Transverse Misalignment ($\Delta y$)</th>
+                        <th>Cavity Finesse ($\mathcal{F}$)</th>
                         <th>Quantum Interaction Regime</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><strong>Severe Off-Axis</strong></td>
-                        <td>> 25 px</td>
-                        <td>< 100</td>
-                        <td><strong>Scattered Light:</strong> Photon loss dominates; zero standing wave density.</td>
+                        <td>$> 25\text{ px}$</td>
+                        <td>$< 100$</td>
+                        <td><strong>Scattered Light</strong> (No Cavity Formation)</td>
                     </tr>
                     <tr>
                         <td><strong>Weak Resonance</strong></td>
-                        <td>5 px - 25 px</td>
-                        <td>100 - 1,200</td>
-                        <td><strong>Purcell Weak Coupling:</strong> Enhanced spontaneous emission rate (F_P > 1).</td>
+                        <td>$5\text{ px} - 25\text{ px}$</td>
+                        <td>$100 - 1,200$</td>
+                        <td><strong>Purcell Weak Coupling</strong> (Purcell factor $F_P > 1$)</td>
                     </tr>
                     <tr>
-                        <td><strong>Optimal Alignment</strong></td>
-                        <td>< 5 px</td>
-                        <td>> 2,500</td>
-                        <td><strong>Strong Coupling Regime:</strong> Coherent photon-emitter energy exchange.</td>
+                        <td><strong>Optimal Resonance</strong></td>
+                        <td>$< 5\text{ px}$</td>
+                        <td>$> 2,500$</td>
+                        <td><strong>Strong Coupling Regime</strong> (Vacuum Rabi Splitting)</td>
                     </tr>
                 </tbody>
             </table>
 
             <h3>Physics Breakdown: Jaynes-Cummings Dynamics & Vacuum Rabi Splitting</h3>
             <p>
-                The physics of single-emitter Cavity QED is governed by the <strong>Jaynes-Cummings Hamiltonian</strong>, which models the fundamental interaction between a two-level quantum emitter and a single quantized field mode:
+                The interaction between the single quantized cavity field mode and the two-level quantum emitter is modeled by the fundamental <strong>Jaynes-Cummings Hamiltonian</strong>:
             </p>
-            <p style="text-align: center; font-weight: 600; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color);">
-                H = ℏ ω_c a† a + (1/2) ℏ ω_a σ_z + ℏ g (a† σ_- + a σ_+)
-            </p>
+            
+            <div class="math-block">
+                $$\hat{H} = \hbar \omega_c \hat{a}^\dagger \hat{a} + \frac{1}{2}\hbar \omega_a \hat{\sigma}_z + \hbar g \left( \hat{a}^\dagger \hat{\sigma}_- + \hat{a} \hat{\sigma}_+ \right)$$
+            </div>
+
             <p>
-                Here, <strong>a†</strong> and <strong>a</strong> represent the photon creation and annihilation operators, <strong>σ_+</strong> and <strong>σ_-</strong> represent the atomic raising and lowering operators, and <strong>g</strong> is the single-photon coherent coupling strength defined by:
+                Here, $\hat{a}^\dagger$ and $\hat{a}$ represent the photon creation and annihilation operators, $\hat{\sigma}_+$ and $\hat{\sigma}_-$ represent the atomic raising and lowering operators, and $g$ is the single-photon coherent coupling strength defined by:
             </p>
-            <p style="text-align: center; font-weight: 600; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color);">
-                g = ( μ / ℏ ) · √( ℏ ω_c / (2 ε_0 V_mode) )
-            </p>
+
+            <div class="math-block">
+                $$g = \frac{\mu}{\hbar} \sqrt{\frac{\hbar \omega_c}{2 \varepsilon_0 V_{\text{mode}}}}$$
+            </div>
 
             <h3>Key Regime Thresholds & Physics Definitions</h3>
             <ul>
-                <li><strong>Mode Volume Minimization (V_mode):</strong> To maximize the electric field strength per photon, the cavity mode volume V_mode is minimized using tightly curved concave micro-mirrors.</li>
-                <li><strong>The Purcell Effect (Weak Coupling):</strong> When the emitter is resonant with the cavity mode but photon leakage rate (κ) or emitter dephasing (γ) exceeds coupling strength (g < κ, γ), the system sits in the weak coupling regime. Spontaneous emission is accelerated by the Purcell Factor: <strong>F_P = (3 / 4 π²) · (λ / n)³ · (Q / V_mode)</strong>.</li>
-                <li><strong>Vacuum Rabi Splitting (Strong Coupling):</strong> When mirror alignment yields maximum finesse such that <strong>g > (κ, γ)</strong>, energy is coherently swapped between the atom and the cavity field faster than decoherence occurs. The uncoupled transmission peak splits into two polariton polariton modes separated by twice the vacuum Rabi frequency (2g).</li>
+                <li><strong>Mode Volume Minimization ($V_{\text{mode}}$):</strong> Minimizing cavity mode volume $V_{\text{mode}}$ maximizes local vacuum electric field amplitude, boosting photon-emitter interaction efficiency.</li>
+                <li><strong>The Purcell Effect (Weak Coupling):</strong> When the emitter is resonant with the cavity mode but cavity field dissipation ($\kappa$) or atomic dephasing ($\gamma$) dominates ($g < \kappa, \gamma$), spontaneous emission into the mode is accelerated by the <strong>Purcell Factor</strong>:
+                    <div class="math-block">
+                        $$F_P = \frac{3}{4\pi^2} \left(\frac{\lambda}{n}\right)^3 \left(\frac{Q}{V_{\text{mode}}}\right)$$
+                    </div>
+                </li>
+                <li><strong>Vacuum Rabi Splitting (Strong Coupling):</strong> When alignment yields maximum finesse such that $g > (\kappa, \gamma)$, coherent energy exchange between emitter and photon occurs faster than decoherence. The transmission spectrum splits into double polariton peaks separated by $2g$:
+                    <div class="math-block">
+                        $$g > (\kappa, \gamma) \implies \Delta \omega_{\text{Rabi}} = 2g$$
+                    </div>
+                </li>
             </ul>
 
             <h3>Solid-State Quantum Hardware Applications</h3>
             <p>
-                High-finesse microcavity integration is essential for scaling up solid-state quantum optics architectures:
+                Microcavity optical alignment is fundamental to building scalable optical quantum computers and quantum internet hardware:
             </p>
             <ul>
-                <li><strong>High-Fidelity Single-Photon Sources:</strong> Purcell suppression channels >95% of emitted luminescence into the zero-phonon line (ZPL), yielding indistinguishable single photons required for linear optical quantum computing.</li>
-                <li><strong>Spin-Photon Entanglement Interface:</strong> Serves as a memory node in a quantum repeater network by entangling the spin state of an electron in Silicon Carbide (SiC) with the polarization state of an emitted flying qubit.</li>
+                <li><strong>Purcell Enhancement:</strong> Enclosing color center emitters inside high-finesse microcavities suppresses unwanted spontaneous emission, channeling $>95\%$ of emitted photons into a zero-phonon line (ZPL).</li>
+                <li><strong>Deterministic Spin-Photon Interfaces:</strong> Strong cavity coupling enables single photons to swap quantum states deterministically with electron spins in SiC or diamond substrates.</li>
             </ul>
         </div>
     </div>
@@ -897,7 +932,6 @@
                 gCtx.lineWidth = 2;
                 gCtx.beginPath();
                 if (finesse > 2200) {
-                    // Double peak (Vacuum Rabi Splitting)
                     for (let px = 0; px <= spectrumW; px++) {
                         const normX1 = (px - spectrumW / 2 + 18) / 8;
                         const normX2 = (px - spectrumW / 2 - 18) / 8;
@@ -908,7 +942,6 @@
                         else gCtx.lineTo(spectrumX + px, py);
                     }
                 } else {
-                    // Single resonance peak
                     for (let px = 0; px <= spectrumW; px++) {
                         const normX = (px - spectrumW / 2) / 12;
                         const peakHeight = (finesse / 3500) * spectrumH;
