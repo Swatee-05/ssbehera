@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Certifications | Sushree Swateeprajnya Behera</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #059669;
+            --accent-hover: #047857;
+            --text-dark: #1e293b;
+            --text-muted: #475569;
+            --bg-body: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-body);
+            min-height: 100vh;
+        }
+
+        #vectorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid var(--border-color);
+            z-index: 1000;
+            padding: 12px 20px;
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(4px);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 2.2rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            align-items: stretch;
+            justify-items: center;
+        }
+
+        .badge-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .badge-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .badge-card img {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .badge-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .btn-verify {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #ffffff;
+            font-size: 0.82rem;
+            padding: 6px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .btn-verify:hover {
+            background-color: var(--accent-hover);
+        }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            margin-top: 60px;
+            padding: 25px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="vectorCanvas"></canvas>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="resume.html">← Back to Resume</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h1>Quantum & HPC Certifications</h1>
+            <p class="subtitle">Official badges and verified credentials from IBM Quantum and Amazon Web Services.</p>
+
+            <div class="badge-grid">
+                <!-- 1. Fundamentals of Quantum Algorithms -->
+                <div class="badge-card">
+                    <img src="FQA_IBM_badge.png" alt="Fundamentals of Quantum Algorithms Badge">
+                    <div class="badge-title">Fundamentals of Quantum Algorithms</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 2. Basics of Quantum Information -->
+                <div class="badge-card">
+                    <img src="FQA_IBM_badge.png" alt="Basics of Quantum Information Badge">
+                    <div class="badge-title">Basics of Quantum Information</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 3. AWS Knowledge: Amazon Braket -->
+                <div class="badge-card">
+                    <img src="aws_braket_badge.png" alt="AWS Knowledge: Amazon Braket Badge">
+                    <div class="badge-title">AWS Knowledge: Amazon Braket</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 4. Integrating Quantum and HPC -->
+                <div class="badge-card">
+                    <img src="IQHC_IBM_badge.png" alt="Integrating Quantum and HPC Badge">
+                    <div class="badge-title">Integrating Quantum and HPC</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 5. Quantum Diagonalization Algorithms -->
+                <div class="badge-card">
+                    <img src="QDA_IBM_badge.png" alt="Quantum Diagonalization Algorithms Badge">
+                    <div class="badge-title">Quantum Diagonalization Algorithms</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 6. Variational Algorithm Design -->
+                <div class="badge-card">
+                    <img src="VAD_Badge_IBM.png" alt="Variational Algorithm Design Badge">
+                    <div class="badge-title">Variational Algorithm Design</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 7. Quantum Machine Learning -->
+                <div class="badge-card">
+                    <img src="QML_badge.png" alt="Quantum Machine Learning Badge">
+                    <div class="badge-title">Quantum Machine Learning</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 8. Foundations of Quantum Error Correction -->
+                <div class="badge-card">
+                    <img src="FQEC_ibm_badge.png" alt="Foundations of Quantum Error Correction Badge">
+                    <div class="badge-title">Foundations of Quantum Error Correction</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 9. General Formulation of Quantum Information -->
+                <div class="badge-card">
+                    <img src="GFQI_IBM_badge.png" alt="General Formulation of Quantum Information Badge">
+                    <div class="badge-title">General Formulation of Quantum Information</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 10. Quantum-Safe Cryptography -->
+                <div class="badge-card">
+                    <img src="IBM_Q_cryptography_Badge.png" alt="Quantum-Safe Cryptography Badge">
+                    <div class="badge-title">Quantum-Safe Cryptography</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+
+                <!-- 11. Quantum Business Foundations -->
+                <div class="badge-card">
+                    <img src="IBM_QBF_Badge.png" alt="Quantum Business Foundations Badge">
+                    <div class="badge-title">Quantum Business Foundations</div>
+                    <a href="https://www.credly.com/" target="_blank" class="btn-verify">Verify Credential 🔗</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        const spacing = 36, arrowLength = 10;
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+        function resizeCanvas() { 
+            width = canvas.width = window.innerWidth; 
+            height = canvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', resizeCanvas); 
+        resizeCanvas();
+        window.addEventListener('mousemove', (e) => { 
+            mouse.x = e.clientX; 
+            mouse.y = e.clientY; 
+        });
+
+        function drawVector(x, y, angle, distance) {
+            ctx.save(); 
+            ctx.translate(x, y); 
+            ctx.rotate(angle);
+            const maxRadius = 320;
+            const influence = Math.max(0, 1 - distance / maxRadius);
+            const currentLength = arrowLength + (influence * 6);
+            const r = Math.round(13 - (8 * influence));
+            const g = Math.round(148 + (2 * influence));
+            const b = Math.round(136 - (33 * influence));
+            const alpha = 0.20 + (influence * 0.75);
+            const colorStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            
+            ctx.strokeStyle = colorStyle; 
+            ctx.fillStyle = colorStyle; 
+            ctx.lineWidth = 1.1 + (influence * 0.9);
+            
+            ctx.beginPath(); 
+            ctx.moveTo(-currentLength / 2, 0); 
+            ctx.lineTo(currentLength / 2, 0); 
+            ctx.stroke();
+            
+            const headSize = 3 + (influence * 2);
+            ctx.beginPath(); 
+            ctx.moveTo(currentLength / 2, 0); 
+            ctx.lineTo(currentLength / 2 - headSize, -headSize / 1.5); 
+            ctx.lineTo(currentLength / 2 - headSize, headSize / 1.5); 
+            ctx.closePath(); 
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, width, height);
+            for (let x = spacing / 2; x < width; x += spacing) {
+                for (let y = spacing / 2; y < height; y += spacing) {
+                    const dx = mouse.x - x;
+                    const dy = mouse.y - y;
+                    drawVector(x, y, Math.atan2(dy, dx), Math.sqrt(dx * dx + dy * dy));
+                }
+            }
+            requestAnimationFrame(render);
+        }
+        render();
+    </script>
+</body>
+</html>
