@@ -363,7 +363,7 @@
             <div class="game-header">
                 <h2>Cavity QED Alignment Simulator</h2>
                 <div class="game-metrics">
-                    <div class="metric-badge">Cavity Finesse ($\mathcal{F}$): <span id="g2Finesse" style="color: var(--accent);">0</span></div>
+                    <div class="metric-badge">Cavity Finesse (ℱ): <span id="g2Finesse" style="color: var(--accent);">0</span></div>
                     <div class="metric-badge">Coupling State: <span id="g2State" style="color: var(--danger);">Uncoupled</span></div>
                 </div>
             </div>
@@ -374,7 +374,7 @@
 
             <div class="game-controls">
                 <div class="slider-group">
-                    <label for="piezoSlider">Piezo Phase Offset ($\Delta \phi$):</label>
+                    <label for="piezoSlider">Piezo Phase Offset (Δφ):</label>
                     <input type="range" id="piezoSlider" min="0" max="100" value="20" style="cursor: pointer;">
                 </div>
                 <button class="btn-game" id="restartGameBtn2">Reset Alignment</button>
@@ -382,19 +382,16 @@
 
             <div class="divider"></div>
 
-            <h2>How to Play & Physics Principles</h2>
+            <h2>How to Play & Comprehensive Physics Principles</h2>
             <p>
-                This interactive simulator models an <strong>Optical Fabry-Pérot Cavity</strong> coupled to a single quantum emitter (e.g., a Silicon-Vacancy color center in SiC or a trapped atom).
+                This interactive simulator models an open-access <strong>Fabry-Pérot Cavity Quantum Electrodynamics (CQED) System</strong> coupled to a single quantum emitter, such as a Silicon-Vacancy (SiV) or Nitrogen-Vacancy (NV) color center embedded in 4H-SiC.
             </p>
 
-            <h3>Core Objective</h3>
-            <p>
-                Align the movable concave mirror ($M_2$) both spatially and resonant-wise with the pump laser path:
-            </p>
+            <h3>Core Mechanics & Alignment Steps</h3>
             <ul>
-                <li><strong>Drag Mirror $M_2$:</strong> Click and drag the right mirror ($M_2$) to align its transverse optic axis with mirror $M_1$.</li>
-                <li><strong>Tune Piezo Stage:</strong> Adjust the piezo slider to fine-tune the cavity length to satisfy the standing-wave resonance condition ($L = n \cdot \frac{\lambda}{2}$).</li>
-                <li><strong>Achieve Strong Coupling:</strong> When transmission efficiency reaches $\ge 85\%$, the cavity enters the <strong>Strong Coupling Regime</strong>, triggering coherent vacuum Rabi oscillations.</li>
+                <li><strong>Spatial Alignment (Transverse Mode Matching):</strong> Click and drag the right concave mirror (M2) along the transverse axis. Transverse misalignment causes optical clipping and mode field diameter mismatch, scattering photons into non-resonant Hermite-Gaussian modes and lowering cavity quality factor.</li>
+                <li><strong>Phase Tuning (Sub-Nanometer Longitudinal Control):</strong> Adjust the piezo stage slider to fine-tune the cavity length L to satisfy the longitudinal resonance condition <strong>L = n · (λ / 2)</strong>, where λ is the zero-phonon line wavelength.</li>
+                <li><strong>Achieving Strong Coupling:</strong> As alignment accuracy approaches sub-micron thresholds, cavity finesse (ℱ) spikes, boosting the single-photon Rabi frequency beyond intrinsic dissipation rates.</li>
             </ul>
 
             <h3>Optical Resonance & Finesse Parameter Table</h3>
@@ -402,40 +399,61 @@
                 <thead>
                     <tr>
                         <th>Alignment Stage</th>
-                        <th>Transverse Misalignment ($\Delta y$)</th>
-                        <th>Cavity Finesse ($\mathcal{F}$)</th>
+                        <th>Transverse Misalignment (Δy)</th>
+                        <th>Cavity Finesse (ℱ)</th>
                         <th>Quantum Interaction Regime</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><strong>Severe Off-Axis</strong></td>
-                        <td>$> 25\text{ px}$</td>
-                        <td>$< 100$</td>
-                        <td><strong>Scattered Light</strong> (No Cavity Formation)</td>
+                        <td>> 25 px</td>
+                        <td>< 100</td>
+                        <td><strong>Scattered Light:</strong> Photon loss dominates; zero standing wave density.</td>
                     </tr>
                     <tr>
                         <td><strong>Weak Resonance</strong></td>
-                        <td>$5\text{ px} - 25\text{ px}$</td>
-                        <td>$100 - 1,200$</td>
-                        <td><strong>Purcell Weak Coupling</strong> (Purcell factor $F_P > 1$)</td>
+                        <td>5 px - 25 px</td>
+                        <td>100 - 1,200</td>
+                        <td><strong>Purcell Weak Coupling:</strong> Enhanced spontaneous emission rate (F_P > 1).</td>
                     </tr>
                     <tr>
-                        <td><strong>Optimal Resonance</strong></td>
-                        <td>$< 5\text{ px}$</td>
-                        <td>$> 2,500$</td>
-                        <td><strong>Strong Coupling Regime</strong> (Vacuum Rabi Splitting)</td>
+                        <td><strong>Optimal Alignment</strong></td>
+                        <td>< 5 px</td>
+                        <td>> 2,500</td>
+                        <td><strong>Strong Coupling Regime:</strong> Coherent photon-emitter energy exchange.</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3>Applications in Solid-State Quantum Hardware</h3>
+            <h3>Physics Breakdown: Jaynes-Cummings Dynamics & Vacuum Rabi Splitting</h3>
             <p>
-                Microcavity optical alignment is fundamental to building scalable optical quantum computers and quantum internet hardware:
+                The physics of single-emitter Cavity QED is governed by the <strong>Jaynes-Cummings Hamiltonian</strong>, which models the fundamental interaction between a two-level quantum emitter and a single quantized field mode:
+            </p>
+            <p style="text-align: center; font-weight: 600; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                H = ℏ ω_c a† a + (1/2) ℏ ω_a σ_z + ℏ g (a† σ_- + a σ_+)
+            </p>
+            <p>
+                Here, <strong>a†</strong> and <strong>a</strong> represent the photon creation and annihilation operators, <strong>σ_+</strong> and <strong>σ_-</strong> represent the atomic raising and lowering operators, and <strong>g</strong> is the single-photon coherent coupling strength defined by:
+            </p>
+            <p style="text-align: center; font-weight: 600; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+                g = ( μ / ℏ ) · √( ℏ ω_c / (2 ε_0 V_mode) )
+            </p>
+
+            <h3>Key Regime Thresholds & Physics Definitions</h3>
+            <ul>
+                <li><strong>Mode Volume Minimization (V_mode):</strong> To maximize the electric field strength per photon, the cavity mode volume V_mode is minimized using tightly curved concave micro-mirrors.</li>
+                <li><strong>The Purcell Effect (Weak Coupling):</strong> When the emitter is resonant with the cavity mode but photon leakage rate (κ) or emitter dephasing (γ) exceeds coupling strength (g < κ, γ), the system sits in the weak coupling regime. Spontaneous emission is accelerated by the Purcell Factor: <strong>F_P = (3 / 4 π²) · (λ / n)³ · (Q / V_mode)</strong>.</li>
+                <li><strong>Vacuum Rabi Splitting (Strong Coupling):</strong> When mirror alignment yields maximum finesse such that <strong>g > (κ, γ)</strong>, energy is coherently swapped between the atom and the cavity field faster than decoherence occurs. The uncoupled transmission peak splits into two polariton polariton modes separated by twice the vacuum Rabi frequency (2g).</li>
+            </ul>
+
+            <h3>Solid-State Quantum Hardware Applications</h3>
+            <p>
+                High-finesse microcavity integration is essential for scaling up solid-state quantum optics architectures:
             </p>
             <ul>
-                <li><strong>Purcell Enhancement:</strong> Enclosing color center emitters inside high-finesse microcavities suppresses unwanted spontaneous emission, channeling $>95\%$ of emitted photons into a zero-phonon line (ZPL).</li>
-                <li><strong>Deterministic Spin-Photon Interfaces:</strong> Strong cavity coupling enables single photons to swap quantum states deterministically with electron spins in SiC or diamond substrates.</li>
+                <li><strong>High-Fidelity Single-Photon Sources:</strong> Purcell suppression channels >95% of emitted luminescence into the zero-phonon line (ZPL), yielding indistinguishable single photons required for linear optical quantum computing.</li>
+                <li><strong>Spin-Photon Entanglement Interface:</strong> Serves as a memory node in a quantum repeater network by entangling the spin state of an electron in Silicon Carbide (SiC) with the polarization state of an emitted flying qubit.</li>
             </ul>
         </div>
     </div>
@@ -702,7 +720,6 @@
             let gWidth, gHeight;
             let isDragging = false;
 
-            // Mirror 2 state
             let mirror2 = { x: 0, y: 0, targetY: 0, isHovered: false };
             let targetX = 0;
             let m1X = 100;
@@ -722,8 +739,8 @@
             function initGame() {
                 m1X = 120;
                 targetX = gWidth - 180;
-                mirror2.x = gWidth - 120; // Starts misaligned
-                mirror2.y = opticalCenterY + 45; // Vertical offset
+                mirror2.x = gWidth - 120;
+                mirror2.y = opticalCenterY + 45;
                 piezoSlider.value = 20;
             }
 
@@ -754,13 +771,11 @@
             function update() {
                 wavePhase += 0.12;
 
-                // Calculate alignment physics
                 const dy = Math.abs(mirror2.y - opticalCenterY);
                 const dx = Math.abs(mirror2.x - targetX);
                 const piezoVal = parseInt(piezoSlider.value, 10);
-                const piezoError = Math.abs(piezoVal - 72); // Ideal piezo resonant point = 72
+                const piezoError = Math.abs(piezoVal - 72);
 
-                // Finesse Lorentzian equation
                 const alignScore = Math.max(0, 1 - (dy / 50) - (dx / 150));
                 const piezoScore = Math.max(0, 1 - (piezoError / 35));
                 
@@ -786,7 +801,6 @@
             function draw(finesse, dy, piezoScore) {
                 gCtx.clearRect(0, 0, gWidth, gHeight);
 
-                // Laser Source (Left)
                 gCtx.fillStyle = '#0284c7';
                 gCtx.fillRect(20, opticalCenterY - 18, 50, 36);
                 gCtx.fillStyle = '#ffffff';
@@ -794,7 +808,6 @@
                 gCtx.textAlign = 'center';
                 gCtx.fillText('PUMP', 45, opticalCenterY + 4);
 
-                // Laser Beam entering
                 gCtx.strokeStyle = '#38bdf8';
                 gCtx.lineWidth = 3;
                 gCtx.beginPath();
@@ -802,14 +815,12 @@
                 gCtx.lineTo(m1X, opticalCenterY);
                 gCtx.stroke();
 
-                // Fixed Mirror M1 (Flat Transmissive)
                 gCtx.fillStyle = '#94a3b8';
                 gCtx.fillRect(m1X - 6, opticalCenterY - 40, 12, 80);
                 gCtx.strokeStyle = '#38bdf8';
                 gCtx.lineWidth = 2;
                 gCtx.strokeRect(m1X - 6, opticalCenterY - 40, 12, 80);
 
-                // Emitter Atom (Center of Cavity)
                 const emitterX = (m1X + mirror2.x) / 2;
                 const emitterY = opticalCenterY;
                 gCtx.beginPath();
@@ -820,7 +831,6 @@
                 gCtx.fill();
                 gCtx.shadowBlur = 0;
 
-                // Standing Wave Light inside Cavity
                 if (dy < 40) {
                     const waveIntensity = Math.min(1, finesse / 2800);
                     gCtx.strokeStyle = `rgba(56, 189, 248, ${0.15 + waveIntensity * 0.8})`;
@@ -839,18 +849,15 @@
                     gCtx.stroke();
                 }
 
-                // Movable Mirror M2 (Concave)
                 gCtx.save();
                 gCtx.translate(mirror2.x, mirror2.y);
 
-                // Draw Concave Arc
                 gCtx.beginPath();
                 gCtx.arc(-20, 0, 45, -Math.PI / 3, Math.PI / 3);
                 gCtx.lineWidth = 8;
                 gCtx.strokeStyle = isDragging ? '#38bdf8' : '#cbd5e1';
                 gCtx.stroke();
 
-                // Handles
                 gCtx.fillStyle = '#059669';
                 gCtx.fillRect(-4, -45, 8, 90);
 
@@ -860,7 +867,6 @@
                 gCtx.fillText('M2 (Drag)', 22, 4);
                 gCtx.restore();
 
-                // Draw Transmission Output Optical Signal
                 if (finesse > 300) {
                     const outAlpha = Math.min(1, finesse / 3000);
                     gCtx.strokeStyle = `rgba(16, 185, 129, ${outAlpha})`;
@@ -871,7 +877,6 @@
                     gCtx.stroke();
                 }
 
-                // Draw Real-Time Resonance Lorentzian Curve (Bottom Corner)
                 const spectrumX = gWidth - 160;
                 const spectrumY = gHeight - 20;
                 const spectrumW = 140;
@@ -891,13 +896,27 @@
                 gCtx.strokeStyle = '#059669';
                 gCtx.lineWidth = 2;
                 gCtx.beginPath();
-                for (let px = 0; px <= spectrumW; px++) {
-                    const normX = (px - spectrumW / 2) / 12;
-                    const peakHeight = (finesse / 3500) * spectrumH;
-                    const lorentzian = peakHeight / (1 + normX * normX);
-                    const py = spectrumY - lorentzian;
-                    if (px === 0) gCtx.moveTo(spectrumX + px, py);
-                    else gCtx.lineTo(spectrumX + px, py);
+                if (finesse > 2200) {
+                    // Double peak (Vacuum Rabi Splitting)
+                    for (let px = 0; px <= spectrumW; px++) {
+                        const normX1 = (px - spectrumW / 2 + 18) / 8;
+                        const normX2 = (px - spectrumW / 2 - 18) / 8;
+                        const peakHeight = (finesse / 3500) * spectrumH * 0.85;
+                        const lorentzian = (peakHeight / (1 + normX1 * normX1)) + (peakHeight / (1 + normX2 * normX2));
+                        const py = spectrumY - lorentzian;
+                        if (px === 0) gCtx.moveTo(spectrumX + px, py);
+                        else gCtx.lineTo(spectrumX + px, py);
+                    }
+                } else {
+                    // Single resonance peak
+                    for (let px = 0; px <= spectrumW; px++) {
+                        const normX = (px - spectrumW / 2) / 12;
+                        const peakHeight = (finesse / 3500) * spectrumH;
+                        const lorentzian = peakHeight / (1 + normX * normX);
+                        const py = spectrumY - lorentzian;
+                        if (px === 0) gCtx.moveTo(spectrumX + px, py);
+                        else gCtx.lineTo(spectrumX + px, py);
+                    }
                 }
                 gCtx.stroke();
             }
