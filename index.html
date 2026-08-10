@@ -88,16 +88,18 @@
         }
 
         .btn-hire {
-            background-color: #2563eb;
+            display: inline-block;
+            background-color: var(--accent);
             color: #ffffff !important;
-            padding: 6px 14px;
+            padding: 8px 18px;
             border-radius: 6px;
             font-weight: 600 !important;
+            text-decoration: none;
             transition: background 0.2s;
         }
 
         .btn-hire:hover {
-            background-color: #1d4ed8 !important;
+            background-color: var(--accent-hover) !important;
         }
 
         .container {
@@ -127,7 +129,7 @@
 
         .subtitle {
             font-size: 1.25rem;
-            color: #2563eb;
+            color: var(--accent);
             margin-top: 5px;
             font-weight: 600;
         }
@@ -145,25 +147,6 @@
         .sim-card {
             text-align: center;
             border: 1px solid #cbd5e1;
-        }
-
-        .btn-play {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #fff;
-            background: #2563eb;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .btn-play:hover {
-            background: #1d4ed8;
         }
 
         footer {
@@ -209,11 +192,11 @@
 
         <!-- Integrated Simulation Section -->
         <div class="card sim-card">
-            <h2 style="margin-top: 0; color: var(--primary); font-size: 1.8rem;">Evanescent Light Coupling Simulation</h2>
-            <p style="color: var(--text-muted); max-width: 650px; margin: 10px auto 0 auto;">
+            <h2>Evanescent Light Coupling Simulation</h2>
+            <p style="color: var(--text-muted); max-width: 650px; margin: 10px auto 20px auto;">
                 Gaussian single-photon pulse generated from a star color center, guided along the 4H-SiC cantilever waveguide, and evanescently coupled into the SiO₂ fiber.
             </p>
-            <a href="game.html" class="btn-play">🎮 Launch Simulation</a>
+            <a href="simulation.html" class="btn-hire">🎮 Launch Simulation</a>
         </div>
 
         <!-- Research Focus Section -->
