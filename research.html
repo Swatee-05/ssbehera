@@ -107,6 +107,77 @@
             margin-bottom: 8px;
         }
 
+        /* --- Quantum Router Game Styles --- */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .game-metrics {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .metric-badge {
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .game-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            background: #090d16;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: pointer;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .btn-game {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-game:hover {
+            background: var(--accent);
+        }
+
+        .game-instructions {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
         footer {
             position: relative;
             z-index: 10;
@@ -160,12 +231,36 @@
                 Implementation of warm atomic vapor magnetometry platforms using nonlinear magneto-optical rotation (NMOR). Developing digital lock-in amplifier signal processing algorithms in Python and custom hardware interfaces for sub-picotesla magnetic field sensing.
             </p>
         </div>
+
+        <!-- QUANTUM NETWORK GAME CARD -->
+        <div class="card">
+            <span class="tag" style="background: #dcfce7; color: #166534;">INTERACTIVE DEMO</span>
+            <div class="game-header">
+                <h2>Quantum Entanglement Router</h2>
+                <div class="game-metrics">
+                    <div class="metric-badge">Entangled Keys: <span id="keyCount" style="color: var(--accent);">0</span></div>
+                    <div class="metric-badge">Decoherence: <span id="decoherence">100%</span></div>
+                </div>
+            </div>
+            
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+
+            <div class="game-controls">
+                <p class="game-instructions">
+                    <strong>How to play:</strong> Click intermediate repeater nodes to match incoming photon polarization bases (<strong>+</strong> or <strong>x</strong>). Matched bases establish entanglement from Alice to Bob before decoherence occurs.
+                </p>
+                <button class="btn-game" id="restartGameBtn">Reset Network</button>
+            </div>
+        </div>
     </div>
 
     <footer>
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
+    <!-- Background Vector Field Script -->
     <script>
         const canvas = document.getElementById('vectorCanvas');
         const ctx = canvas.getContext('2d');
@@ -202,6 +297,218 @@
             requestAnimationFrame(render);
         }
         render();
+    </script>
+
+    <!-- Quantum Router Game Engine Script -->
+    <script>
+        (function() {
+            const gCanvas = document.getElementById('gameCanvas');
+            const gCtx = gCanvas.getContext('2d');
+            const keyCountEl = document.getElementById('keyCount');
+            const decoherenceEl = document.getElementById('decoherence');
+            const restartBtn = document.getElementById('restartGameBtn');
+
+            let gWidth, gHeight;
+            let keysGenerated = 0;
+            let decoherenceTimer = 100;
+            let gameOver = false;
+
+            const bases = ['+', 'x'];
+            let nodes = [];
+            let photons = [];
+
+            function fitGameCanvas() {
+                const rect = gCanvas.getBoundingClientRect();
+                gCanvas.width = rect.width;
+                gCanvas.height = rect.height;
+                gWidth = rect.width;
+                gHeight = rect.height;
+                initNetwork();
+            }
+
+            function initNetwork() {
+                keysGenerated = 0;
+                decoherenceTimer = 100;
+                gameOver = false;
+                keyCountEl.textContent = keysGenerated;
+                decoherenceEl.textContent = '100%';
+
+                const cy = gHeight / 2;
+                nodes = [
+                    { id: 'Alice', x: 50, y: cy, basis: '+', fixed: true, label: 'Alice' },
+                    { id: 'N1', x: gWidth * 0.3, y: cy - 60, basis: '+', fixed: false },
+                    { id: 'N2', x: gWidth * 0.3, y: cy + 60, basis: 'x', fixed: false },
+                    { id: 'N3', x: gWidth * 0.6, y: cy - 60, basis: 'x', fixed: false },
+                    { id: 'N4', x: gWidth * 0.6, y: cy + 60, basis: '+', fixed: false },
+                    { id: 'Bob', x: gWidth - 50, y: cy, basis: '+', fixed: true, label: 'Bob' }
+                ];
+
+                photons = [];
+                spawnPhoton();
+            }
+
+            function spawnPhoton() {
+                if (gameOver) return;
+                const pathType = Math.random() > 0.5 ? 0 : 1;
+                const route = pathType === 0 
+                    ? [nodes[0], nodes[1], nodes[3], nodes[5]] 
+                    : [nodes[0], nodes[2], nodes[4], nodes[5]];
+
+                photons.push({
+                    route: route,
+                    targetIdx: 1,
+                    x: route[0].x,
+                    y: route[0].y,
+                    basis: bases[Math.floor(Math.random() * bases.length)],
+                    speed: 1.8 + Math.random() * 0.8
+                });
+            }
+
+            gCanvas.addEventListener('click', (e) => {
+                if (gameOver) return;
+                const rect = gCanvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                nodes.forEach(node => {
+                    if (!node.fixed) {
+                        const dist = Math.hypot(node.x - clickX, node.y - clickY);
+                        if (dist < 25) {
+                            node.basis = node.basis === '+' ? 'x' : '+';
+                        }
+                    }
+                });
+            });
+
+            restartBtn.addEventListener('click', initNetwork);
+
+            let lastSpawn = 0;
+            function updateGame(timestamp) {
+                if (!lastSpawn) lastSpawn = timestamp;
+                
+                if (!gameOver) {
+                    decoherenceTimer -= 0.04;
+                    if (decoherenceTimer <= 0) {
+                        decoherenceTimer = 0;
+                        gameOver = true;
+                    }
+                    decoherenceEl.textContent = Math.ceil(decoherenceTimer) + '%';
+
+                    if (timestamp - lastSpawn > 1600) {
+                        spawnPhoton();
+                        lastSpawn = timestamp;
+                    }
+                }
+
+                // Update Photons
+                for (let i = photons.length - 1; i >= 0; i--) {
+                    const p = photons[i];
+                    const targetNode = p.route[p.targetIdx];
+
+                    const dx = targetNode.x - p.x;
+                    const dy = targetNode.y - p.y;
+                    const dist = Math.hypot(dx, dy);
+
+                    if (dist < p.speed) {
+                        // Reached node
+                        if (targetNode.basis !== p.basis && !targetNode.fixed) {
+                            // Mismatched basis collapses photon
+                            photons.splice(i, 1);
+                            continue;
+                        }
+
+                        p.targetIdx++;
+                        if (p.targetIdx >= p.route.length) {
+                            // Reached Bob!
+                            keysGenerated++;
+                            keyCountEl.textContent = keysGenerated;
+                            photons.splice(i, 1);
+                            continue;
+                        }
+                    } else {
+                        p.x += (dx / dist) * p.speed;
+                        p.y += (dy / dist) * p.speed;
+                    }
+                }
+
+                drawGame();
+                requestAnimationFrame(updateGame);
+            }
+
+            function drawGame() {
+                gCtx.clearRect(0, 0, gWidth, gHeight);
+
+                // Draw Network Channels
+                const drawLink = (n1, n2) => {
+                    gCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                    gCtx.lineWidth = 2;
+                    gCtx.setLineDash([4, 4]);
+                    gCtx.beginPath();
+                    gCtx.moveTo(n1.x, n1.y);
+                    gCtx.lineTo(n2.x, n2.y);
+                    gCtx.stroke();
+                    gCtx.setLineDash([]);
+                };
+
+                drawLink(nodes[0], nodes[1]); drawLink(nodes[0], nodes[2]);
+                drawLink(nodes[1], nodes[3]); drawLink(nodes[2], nodes[4]);
+                drawLink(nodes[3], nodes[5]); drawLink(nodes[4], nodes[5]);
+
+                // Draw Nodes
+                nodes.forEach(node => {
+                    gCtx.beginPath();
+                    gCtx.arc(node.x, node.y, 20, 0, Math.PI * 2);
+                    gCtx.fillStyle = node.fixed ? '#059669' : '#1e293b';
+                    gCtx.fill();
+                    gCtx.strokeStyle = '#38bdf8';
+                    gCtx.lineWidth = 2;
+                    gCtx.stroke();
+
+                    // Basis Text
+                    gCtx.fillStyle = '#ffffff';
+                    gCtx.font = 'bold 14px sans-serif';
+                    gCtx.textAlign = 'center';
+                    gCtx.textBaseline = 'middle';
+                    gCtx.fillText(node.label || node.basis, node.x, node.y);
+                });
+
+                // Draw Photons
+                photons.forEach(p => {
+                    gCtx.beginPath();
+                    gCtx.arc(p.x, p.y, 7, 0, Math.PI * 2);
+                    gCtx.fillStyle = p.basis === '+' ? '#38bdf8' : '#f43f5e';
+                    gCtx.shadowColor = p.basis === '+' ? '#38bdf8' : '#f43f5e';
+                    gCtx.shadowBlur = 10;
+                    gCtx.fill();
+                    gCtx.shadowBlur = 0;
+
+                    // Basis mark inside photon
+                    gCtx.fillStyle = '#ffffff';
+                    gCtx.font = '10px sans-serif';
+                    gCtx.fillText(p.basis, p.x, p.y);
+                });
+
+                // Game Over Overlay
+                if (gameOver) {
+                    gCtx.fillStyle = 'rgba(9, 13, 22, 0.85)';
+                    gCtx.fillRect(0, 0, gWidth, gHeight);
+
+                    gCtx.fillStyle = '#ffffff';
+                    gCtx.font = 'bold 20px sans-serif';
+                    gCtx.fillText('Decoherence Reached!', gWidth / 2, gHeight / 2 - 15);
+
+                    gCtx.fillStyle = '#38bdf8';
+                    gCtx.font = '15px sans-serif';
+                    gCtx.fillText(`Final Quantum Keys Generated: ${keysGenerated}`, gWidth / 2, gHeight / 2 + 15);
+                }
+            }
+
+            window.addEventListener('resize', fitGameCanvas);
+            setTimeout(() => {
+                fitGameCanvas();
+                requestAnimationFrame(updateGame);
+            }, 100);
+        })();
     </script>
 </body>
 </html>
