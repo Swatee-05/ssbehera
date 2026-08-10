@@ -12,7 +12,7 @@
             --text-dark: #1e293b;
             --text-muted: #475569;
             --bg-body: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-card: rgba(255, 255, 255, 0.92);
             --border-color: #cbd5e1;
         }
 
@@ -29,10 +29,21 @@
             min-height: 100vh;
         }
 
+        /* Interactive Vector Field Canvas Background */
+        #vectorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none; /* Allows user to click buttons and text over the canvas */
+        }
+
         nav {
             position: sticky;
             top: 0;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(8px);
             border-bottom: 2px solid var(--border-color);
             z-index: 1000;
@@ -90,6 +101,8 @@
         }
 
         .container {
+            position: relative;
+            z-index: 10;
             max-width: 1000px;
             margin: 0 auto;
             padding: 40px 20px;
@@ -102,6 +115,7 @@
             background: var(--bg-card);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(4px);
         }
 
         h1 {
@@ -125,34 +139,40 @@
             padding: 25px;
             margin-top: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(4px);
         }
 
         footer {
+            position: relative;
+            z-index: 10;
             margin-top: 60px;
             padding: 25px 0;
             border-top: 1px solid var(--border-color);
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.95);
         }
     </style>
 </head>
 <body>
 
+    <!-- Vector Field Background Canvas -->
+    <canvas id="vectorCanvas"></canvas>
+
     <nav>
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
-        <div class="nav-links">
-            <a href="index.html" class="active">Home</a>
-            <a href="game.html">Simulation</a>
-            <a href="resume.html">Resume</a>
-            <a href="research.html">Research</a>
-            <a href="contact.html">Contact</a>
-            <a href="hire.html" class="btn-hire">Hire Me</a>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="game.html">Simulation</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="container">
         <header class="hero">
@@ -173,5 +193,82 @@
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
+    <script>
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        const spacing = 35; // Grid spacing for vectors
+        const arrowLength = 10; // Length of individual vector arrows
+
+        // Default mouse position at center screen
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        function drawVector(x, y, angle, distance) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+
+            // Proximity highlight: Arrows closer to the cursor glow blue and grow slightly longer
+            const maxRadius = 300;
+            const influence = Math.max(0, 1 - distance / maxRadius);
+            
+            const currentLength = arrowLength + (influence * 6);
+            const opacity = 0.15 + (influence * 0.65);
+
+            ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
+            ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
+            ctx.lineWidth = 1.2 + (influence * 0.8);
+
+            // Draw line
+            ctx.beginPath();
+            ctx.moveTo(-currentLength / 2, 0);
+            ctx.lineTo(currentLength / 2, 0);
+            ctx.stroke();
+
+            // Draw arrow head
+            const headSize = 3 + (influence * 2);
+            ctx.beginPath();
+            ctx.moveTo(currentLength / 2, 0);
+            ctx.lineTo(currentLength / 2 - headSize, -headSize / 1.5);
+            ctx.lineTo(currentLength / 2 - headSize, headSize / 1.5);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let x = spacing / 2; x < width; x += spacing) {
+                for (let y = spacing / 2; y < height; y += spacing) {
+                    const dx = mouse.x - x;
+                    const dy = mouse.y - y;
+                    const angle = Math.atan2(dy, dx);
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    drawVector(x, y, angle, distance);
+                }
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
 </body>
 </html>
