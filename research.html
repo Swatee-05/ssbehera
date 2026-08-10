@@ -109,7 +109,7 @@
             margin-bottom: 8px;
         }
 
-        /* --- Unified Game Styles --- */
+        /* --- Game Styles --- */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -137,8 +137,8 @@
         .game-canvas-container {
             position: relative;
             width: 100%;
-            height: 340px;
-            background: #090d16;
+            height: 360px;
+            background: #080c14;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
@@ -158,6 +158,7 @@
             margin-top: 15px;
             margin-bottom: 25px;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-game {
@@ -173,6 +174,14 @@
 
         .btn-game:hover {
             background: var(--accent);
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
         }
 
         .divider {
@@ -349,13 +358,13 @@
 
         <!-- GAME 2 CARD & DESCRIPTION -->
         <div class="card">
-            <span class="tag" style="background: #fef3c7; color: #92400e;">INTERACTIVE DEMO 2</span>
+            <span class="tag" style="background: #e0f2fe; color: #0369a1;">INTERACTIVE DEMO 2</span>
             
             <div class="game-header">
-                <h2>BB84 Eavesdropper Defense (Eve Interception)</h2>
+                <h2>Cavity QED Alignment Simulator</h2>
                 <div class="game-metrics">
-                    <div class="metric-badge">Secure Keys: <span id="g2Keys" style="color: var(--accent);">0</span></div>
-                    <div class="metric-badge">QBER: <span id="g2Qber" style="color: var(--primary);">0.0%</span></div>
+                    <div class="metric-badge">Cavity Finesse ($\mathcal{F}$): <span id="g2Finesse" style="color: var(--accent);">0</span></div>
+                    <div class="metric-badge">Coupling State: <span id="g2State" style="color: var(--danger);">Uncoupled</span></div>
                 </div>
             </div>
             
@@ -364,70 +373,69 @@
             </div>
 
             <div class="game-controls">
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
-                    Click Eve's red probe nodes before they measure passing photons and corrupt the Quantum Bit Error Rate (QBER)!
-                </p>
-                <button class="btn-game" id="restartGameBtn2">Reset Defense</button>
+                <div class="slider-group">
+                    <label for="piezoSlider">Piezo Phase Offset ($\Delta \phi$):</label>
+                    <input type="range" id="piezoSlider" min="0" max="100" value="20" style="cursor: pointer;">
+                </div>
+                <button class="btn-game" id="restartGameBtn2">Reset Alignment</button>
             </div>
 
             <div class="divider"></div>
 
-            <h2>How to Play & Eavesdropping Principles</h2>
+            <h2>How to Play & Physics Principles</h2>
             <p>
-                This arcade simulation highlights the fundamental security mechanism of Quantum Key Distribution: <strong>Interception Detection via State Collapse</strong>.
+                This interactive simulator models an <strong>Optical Fabry-Pérot Cavity</strong> coupled to a single quantum emitter (e.g., a Silicon-Vacancy color center in SiC or a trapped atom).
             </p>
 
             <h3>Core Objective</h3>
             <p>
-                Protect the fiber optic link between Alice and Bob. Eavesdropper probes (<strong>Eve</strong>) spawn periodically in the channel. If a photon passes through an active Eve probe, Eve measures it in a random basis, introducing errors into the system. Neutralize Eve probes by clicking them before QBER reaches the critical <strong>$11\%$ abort threshold</strong>.
+                Align the movable concave mirror ($M_2$) both spatially and resonant-wise with the pump laser path:
             </p>
+            <ul>
+                <li><strong>Drag Mirror $M_2$:</strong> Click and drag the right mirror ($M_2$) to align its transverse optic axis with mirror $M_1$.</li>
+                <li><strong>Tune Piezo Stage:</strong> Adjust the piezo slider to fine-tune the cavity length to satisfy the standing-wave resonance condition ($L = n \cdot \frac{\lambda}{2}$).</li>
+                <li><strong>Achieve Strong Coupling:</strong> When transmission efficiency reaches $\ge 85\%$, the cavity enters the <strong>Strong Coupling Regime</strong>, triggering coherent vacuum Rabi oscillations.</li>
+            </ul>
 
-            <h3>Quantum Bit Error Rate (QBER) Impact Table</h3>
+            <h3>Optical Resonance & Finesse Parameter Table</h3>
             <table class="quantum-table">
                 <thead>
                     <tr>
-                        <th>Channel Condition</th>
-                        <th>Eve State</th>
-                        <th>QBER Error Rate Added</th>
-                        <th>Key Security Status</th>
+                        <th>Alignment Stage</th>
+                        <th>Transverse Misalignment ($\Delta y$)</th>
+                        <th>Cavity Finesse ($\mathcal{F}$)</th>
+                        <th>Quantum Interaction Regime</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Direct Path</strong></td>
-                        <td>No Probe / Probe Destroyed</td>
-                        <td>$0\%$ Error</td>
-                        <td><strong>Secure Key Bit Distilled</strong></td>
+                        <td><strong>Severe Off-Axis</strong></td>
+                        <td>$> 25\text{ px}$</td>
+                        <td>$< 100$</td>
+                        <td><strong>Scattered Light</strong> (No Cavity Formation)</td>
                     </tr>
                     <tr>
-                        <td><strong>Intercepted Path</strong></td>
-                        <td>Eve Probe Active</td>
-                        <td>$+25\%$ Error Probability</td>
-                        <td><strong>QBER Spike</strong> (State Collapsed)</td>
+                        <td><strong>Weak Resonance</strong></td>
+                        <td>$5\text{ px} - 25\text{ px}$</td>
+                        <td>$100 - 1,200$</td>
+                        <td><strong>Purcell Weak Coupling</strong> (Purcell factor $F_P > 1$)</td>
                     </tr>
                     <tr>
-                        <td><strong>QBER $< 11\%$</strong></td>
-                        <td>Minimal Interception</td>
-                        <td>Nominal Noise</td>
-                        <td>Error Correction succeeds</td>
-                    </tr>
-                    <tr>
-                        <td><strong>QBER $\ge 11\%$</strong></td>
-                        <td>High Interception</td>
-                        <td>Critical Noise Threshold</td>
-                        <td><strong>Channel Aborted</strong> (Key Dumped)</td>
+                        <td><strong>Optimal Resonance</strong></td>
+                        <td>$< 5\text{ px}$</td>
+                        <td>$> 2,500$</td>
+                        <td><strong>Strong Coupling Regime</strong> (Vacuum Rabi Splitting)</td>
                     </tr>
                 </tbody>
             </table>
 
-            <h3>Why Eavesdropping Fails in Quantum Networks</h3>
+            <h3>Applications in Solid-State Quantum Hardware</h3>
             <p>
-                In classical optics, a sniffer can intercept photons or split optical signals with a beam-splitter without altering the original message. In quantum networks:
+                Microcavity optical alignment is fundamental to building scalable optical quantum computers and quantum internet hardware:
             </p>
             <ul>
-                <li><strong>No-Cloning Theorem:</strong> Eve cannot copy an unknown quantum photon state without destroying it.</li>
-                <li><strong>Measurement Collapses State:</strong> When Eve measures a photon using the wrong basis ($50\%$ probability), she alters its polarization. When Bob measures the same photon, he receives an erroneous bit $25\%$ of the time.</li>
-                <li><strong>Automatic Detection:</strong> By comparing a subset of their keys over a classical channel, Alice and Bob calculate the exact QBER. An elevated QBER reliably signals the presence of an eavesdropper, triggering an immediate session drop.</li>
+                <li><strong>Purcell Enhancement:</strong> Enclosing color center emitters inside high-finesse microcavities suppresses unwanted spontaneous emission, channeling $>95\%$ of emitted photons into a zero-phonon line (ZPL).</li>
+                <li><strong>Deterministic Spin-Photon Interfaces:</strong> Strong cavity coupling enables single photons to swap quantum states deterministically with electron spins in SiC or diamond substrates.</li>
             </ul>
         </div>
     </div>
@@ -681,24 +689,25 @@
         })();
     </script>
 
-    <!-- Game 2 Engine (BB84 Eavesdropper Defense) -->
+    <!-- Game 2 Engine (Cavity QED Alignment Simulator) -->
     <script>
         (function() {
             const gCanvas = document.getElementById('gameCanvas2');
             const gCtx = gCanvas.getContext('2d');
-            const keysEl = document.getElementById('g2Keys');
-            const qberEl = document.getElementById('g2Qber');
+            const finesseEl = document.getElementById('g2Finesse');
+            const stateEl = document.getElementById('g2State');
+            const piezoSlider = document.getElementById('piezoSlider');
             const restartBtn = document.getElementById('restartGameBtn2');
 
             let gWidth, gHeight;
-            let secureKeys = 0;
-            let totalBits = 0;
-            let errorBits = 0;
-            let gameOver = false;
+            let isDragging = false;
 
-            let eveProbes = [];
-            let g2Photons = [];
-            let particles = [];
+            // Mirror 2 state
+            let mirror2 = { x: 0, y: 0, targetY: 0, isHovered: false };
+            let targetX = 0;
+            let m1X = 100;
+            let opticalCenterY = 0;
+            let wavePhase = 0;
 
             function fitCanvas() {
                 const rect = gCanvas.getBoundingClientRect();
@@ -706,250 +715,191 @@
                 gCanvas.height = rect.height;
                 gWidth = rect.width;
                 gHeight = rect.height;
+                opticalCenterY = gHeight / 2 - 20;
                 initGame();
             }
 
             function initGame() {
-                secureKeys = 0;
-                totalBits = 0;
-                errorBits = 0;
-                gameOver = false;
-                eveProbes = [];
-                g2Photons = [];
-                particles = [];
-
-                keysEl.textContent = '0';
-                qberEl.textContent = '0.0%';
-                qberEl.style.color = 'var(--accent)';
+                m1X = 120;
+                targetX = gWidth - 180;
+                mirror2.x = gWidth - 120; // Starts misaligned
+                mirror2.y = opticalCenterY + 45; // Vertical offset
+                piezoSlider.value = 20;
             }
 
-            function spawnEve() {
-                if (gameOver || eveProbes.length >= 3) return;
-                const margin = 120;
-                const x = margin + Math.random() * (gWidth - margin * 2);
-                const y = gHeight / 2 + (Math.random() > 0.5 ? -45 : 45);
-                eveProbes.push({
-                    x: x,
-                    y: y,
-                    radius: 22,
-                    pulse: 0,
-                    hp: 1
-                });
-            }
-
-            function spawnPhotonG2() {
-                if (gameOver) return;
-                g2Photons.push({
-                    x: 50,
-                    y: gHeight / 2,
-                    speed: 2.5 + Math.random() * 0.8,
-                    basis: Math.random() > 0.5 ? '+' : 'x',
-                    intercepted: false
-                });
-            }
-
-            function createExplosion(x, y, color) {
-                for (let i = 0; i < 12; i++) {
-                    particles.push({
-                        x: x,
-                        y: y,
-                        vx: (Math.random() - 0.5) * 6,
-                        vy: (Math.random() - 0.5) * 6,
-                        life: 1.0,
-                        color: color
-                    });
-                }
-            }
-
-            gCanvas.addEventListener('click', (e) => {
-                if (gameOver) return;
+            gCanvas.addEventListener('mousedown', (e) => {
                 const rect = gCanvas.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
                 const clickY = e.clientY - rect.top;
 
-                for (let i = eveProbes.length - 1; i >= 0; i--) {
-                    const eve = eveProbes[i];
-                    const dist = Math.hypot(eve.x - clickX, eve.y - clickY);
-                    if (dist < eve.radius + 10) {
-                        createExplosion(eve.x, eve.y, '#f43f5e');
-                        eveProbes.splice(i, 1);
-                    }
+                if (Math.hypot(clickX - mirror2.x, clickY - mirror2.y) < 35) {
+                    isDragging = true;
                 }
             });
 
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const rect = gCanvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                mirror2.x = Math.max(m1X + 120, Math.min(gWidth - 80, clickX));
+                mirror2.y = Math.max(opticalCenterY - 60, Math.min(opticalCenterY + 60, clickY));
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+
             restartBtn.addEventListener('click', initGame);
 
-            let lastEveSpawn = 0;
-            let lastPhotonSpawn = 0;
+            function update() {
+                wavePhase += 0.12;
 
-            function update(timestamp) {
-                if (!lastEveSpawn) lastEveSpawn = timestamp;
-                if (!lastPhotonSpawn) lastPhotonSpawn = timestamp;
+                // Calculate alignment physics
+                const dy = Math.abs(mirror2.y - opticalCenterY);
+                const dx = Math.abs(mirror2.x - targetX);
+                const piezoVal = parseInt(piezoSlider.value, 10);
+                const piezoError = Math.abs(piezoVal - 72); // Ideal piezo resonant point = 72
 
-                if (!gameOver) {
-                    if (timestamp - lastEveSpawn > 2200) {
-                        spawnEve();
-                        lastEveSpawn = timestamp;
-                    }
-                    if (timestamp - lastPhotonSpawn > 1200) {
-                        spawnPhotonG2();
-                        lastPhotonSpawn = timestamp;
-                    }
+                // Finesse Lorentzian equation
+                const alignScore = Math.max(0, 1 - (dy / 50) - (dx / 150));
+                const piezoScore = Math.max(0, 1 - (piezoError / 35));
+                
+                const finesse = Math.round(3500 * Math.pow(alignScore, 2) * Math.pow(piezoScore, 2));
+                
+                finesseEl.textContent = finesse.toLocaleString();
+
+                if (finesse > 2200) {
+                    stateEl.textContent = "Strong Coupling Regime";
+                    stateEl.style.color = "var(--accent)";
+                } else if (finesse > 500) {
+                    stateEl.textContent = "Weak Purcell Coupling";
+                    stateEl.style.color = "#f59e0b";
+                } else {
+                    stateEl.textContent = "Uncoupled / Scattered";
+                    stateEl.style.color = "var(--danger)";
                 }
 
-                // Update particles
-                for (let i = particles.length - 1; i >= 0; i--) {
-                    const pt = particles[i];
-                    pt.x += pt.vx;
-                    pt.y += pt.vy;
-                    pt.life -= 0.04;
-                    if (pt.life <= 0) particles.splice(i, 1);
-                }
-
-                // Update Photons
-                for (let i = g2Photons.length - 1; i >= 0; i--) {
-                    const p = g2Photons[i];
-                    p.x += p.speed;
-
-                    // Interception check
-                    if (!p.intercepted) {
-                        eveProbes.forEach(eve => {
-                            if (Math.hypot(p.x - eve.x, p.y - eve.y) < eve.radius + 8) {
-                                p.intercepted = true;
-                                createExplosion(p.x, p.y, '#f59e0b');
-                            }
-                        });
-                    }
-
-                    // Reached Bob
-                    if (p.x >= gWidth - 50) {
-                        totalBits++;
-                        if (p.intercepted) {
-                            if (Math.random() < 0.5) errorBits++;
-                        } else {
-                            secureKeys++;
-                        }
-
-                        const qber = totalBits > 0 ? (errorBits / totalBits) * 100 : 0;
-                        keysEl.textContent = secureKeys;
-                        qberEl.textContent = qber.toFixed(1) + '%';
-
-                        if (qber >= 11.0 && totalBits >= 5) {
-                            gameOver = true;
-                            qberEl.style.color = 'var(--danger)';
-                        } else if (qber > 5) {
-                            qberEl.style.color = '#f59e0b';
-                        } else {
-                            qberEl.style.color = 'var(--accent)';
-                        }
-
-                        g2Photons.splice(i, 1);
-                    }
-                }
-
-                draw();
+                draw(finesse, dy, piezoScore);
                 requestAnimationFrame(update);
             }
 
-            function draw() {
+            function draw(finesse, dy, piezoScore) {
                 gCtx.clearRect(0, 0, gWidth, gHeight);
 
-                const cy = gHeight / 2;
+                // Laser Source (Left)
+                gCtx.fillStyle = '#0284c7';
+                gCtx.fillRect(20, opticalCenterY - 18, 50, 36);
+                gCtx.fillStyle = '#ffffff';
+                gCtx.font = 'bold 11px sans-serif';
+                gCtx.textAlign = 'center';
+                gCtx.fillText('PUMP', 45, opticalCenterY + 4);
 
-                // Optical Fiber Channel
-                gCtx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
-                gCtx.lineWidth = 4;
+                // Laser Beam entering
+                gCtx.strokeStyle = '#38bdf8';
+                gCtx.lineWidth = 3;
                 gCtx.beginPath();
-                gCtx.moveTo(50, cy);
-                gCtx.lineTo(gWidth - 50, cy);
+                gCtx.moveTo(70, opticalCenterY);
+                gCtx.lineTo(m1X, opticalCenterY);
                 gCtx.stroke();
 
-                // Draw Endpoints
-                const drawEndpoint = (x, name, color) => {
+                // Fixed Mirror M1 (Flat Transmissive)
+                gCtx.fillStyle = '#94a3b8';
+                gCtx.fillRect(m1X - 6, opticalCenterY - 40, 12, 80);
+                gCtx.strokeStyle = '#38bdf8';
+                gCtx.lineWidth = 2;
+                gCtx.strokeRect(m1X - 6, opticalCenterY - 40, 12, 80);
+
+                // Emitter Atom (Center of Cavity)
+                const emitterX = (m1X + mirror2.x) / 2;
+                const emitterY = opticalCenterY;
+                gCtx.beginPath();
+                gCtx.arc(emitterX, emitterY, 8, 0, Math.PI * 2);
+                gCtx.fillStyle = finesse > 2200 ? '#f43f5e' : '#64748b';
+                gCtx.shadowColor = '#f43f5e';
+                gCtx.shadowBlur = finesse > 2200 ? 15 : 0;
+                gCtx.fill();
+                gCtx.shadowBlur = 0;
+
+                // Standing Wave Light inside Cavity
+                if (dy < 40) {
+                    const waveIntensity = Math.min(1, finesse / 2800);
+                    gCtx.strokeStyle = `rgba(56, 189, 248, ${0.15 + waveIntensity * 0.8})`;
+                    gCtx.lineWidth = 2 + waveIntensity * 3;
                     gCtx.beginPath();
-                    gCtx.arc(x, cy, 24, 0, Math.PI * 2);
-                    gCtx.fillStyle = color;
-                    gCtx.fill();
-                    gCtx.strokeStyle = '#38bdf8';
-                    gCtx.lineWidth = 2.5;
+                    const cavityLength = mirror2.x - m1X;
+                    const numNodes = 12;
+                    for (let x = 0; x <= cavityLength; x += 2) {
+                        const env = Math.sin((x / cavityLength) * Math.PI);
+                        const wave = Math.sin((x / cavityLength) * numNodes * Math.PI + wavePhase) * env * 25 * waveIntensity;
+                        const drawX = m1X + x;
+                        const drawY = opticalCenterY + wave;
+                        if (x === 0) gCtx.moveTo(drawX, drawY);
+                        else gCtx.lineTo(drawX, drawY);
+                    }
                     gCtx.stroke();
-
-                    gCtx.fillStyle = '#ffffff';
-                    gCtx.font = 'bold 13px sans-serif';
-                    gCtx.textAlign = 'center';
-                    gCtx.textBaseline = 'middle';
-                    gCtx.fillText(name, x, cy);
-                };
-
-                drawEndpoint(50, 'Alice', '#059669');
-                drawEndpoint(gWidth - 50, 'Bob', '#059669');
-
-                // Draw Eve Probes
-                eveProbes.forEach(eve => {
-                    eve.pulse = (eve.pulse + 0.05) % (Math.PI * 2);
-                    const pulseRadius = eve.radius + Math.sin(eve.pulse) * 4;
-
-                    gCtx.beginPath();
-                    gCtx.arc(eve.x, eve.y, pulseRadius, 0, Math.PI * 2);
-                    gCtx.fillStyle = 'rgba(225, 29, 72, 0.85)';
-                    gCtx.shadowColor = '#f43f5e';
-                    gCtx.shadowBlur = 15;
-                    gCtx.fill();
-                    gCtx.shadowBlur = 0;
-
-                    gCtx.strokeStyle = '#ffffff';
-                    gCtx.lineWidth = 2;
-                    gCtx.stroke();
-
-                    gCtx.fillStyle = '#ffffff';
-                    gCtx.font = '900 13px sans-serif';
-                    gCtx.textAlign = 'center';
-                    gCtx.textBaseline = 'middle';
-                    gCtx.fillText('EVE', eve.x, eve.y);
-                });
-
-                // Draw Photons
-                g2Photons.forEach(p => {
-                    gCtx.beginPath();
-                    gCtx.arc(p.x, cy, 10, 0, Math.PI * 2);
-                    gCtx.fillStyle = p.intercepted ? '#f59e0b' : (p.basis === '+' ? '#38bdf8' : '#f43f5e');
-                    gCtx.shadowColor = p.intercepted ? '#f59e0b' : (p.basis === '+' ? '#38bdf8' : '#f43f5e');
-                    gCtx.shadowBlur = 12;
-                    gCtx.fill();
-                    gCtx.shadowBlur = 0;
-
-                    gCtx.fillStyle = '#ffffff';
-                    gCtx.font = 'bold 14px sans-serif';
-                    gCtx.textAlign = 'center';
-                    gCtx.textBaseline = 'middle';
-                    gCtx.fillText(p.basis, p.x, cy - 1);
-                });
-
-                // Draw Particles
-                particles.forEach(pt => {
-                    gCtx.beginPath();
-                    gCtx.arc(pt.x, pt.y, 3, 0, Math.PI * 2);
-                    gCtx.fillStyle = pt.color;
-                    gCtx.globalAlpha = pt.life;
-                    gCtx.fill();
-                    gCtx.globalAlpha = 1.0;
-                });
-
-                // Game Over Overlay
-                if (gameOver) {
-                    gCtx.fillStyle = 'rgba(9, 13, 22, 0.90)';
-                    gCtx.fillRect(0, 0, gWidth, gHeight);
-
-                    gCtx.fillStyle = '#f43f5e';
-                    gCtx.font = 'bold 22px sans-serif';
-                    gCtx.textAlign = 'center';
-                    gCtx.textBaseline = 'middle';
-                    gCtx.fillText('QBER Threshold Exceeded (>11%)!', gWidth / 2, gHeight / 2 - 15);
-
-                    gCtx.fillStyle = '#ffffff';
-                    gCtx.font = '16px sans-serif';
-                    gCtx.fillText(`Channel Aborted. Final Secure Keys: ${secureKeys}`, gWidth / 2, gHeight / 2 + 18);
                 }
+
+                // Movable Mirror M2 (Concave)
+                gCtx.save();
+                gCtx.translate(mirror2.x, mirror2.y);
+
+                // Draw Concave Arc
+                gCtx.beginPath();
+                gCtx.arc(-20, 0, 45, -Math.PI / 3, Math.PI / 3);
+                gCtx.lineWidth = 8;
+                gCtx.strokeStyle = isDragging ? '#38bdf8' : '#cbd5e1';
+                gCtx.stroke();
+
+                // Handles
+                gCtx.fillStyle = '#059669';
+                gCtx.fillRect(-4, -45, 8, 90);
+
+                gCtx.fillStyle = '#ffffff';
+                gCtx.font = 'bold 11px sans-serif';
+                gCtx.textAlign = 'center';
+                gCtx.fillText('M2 (Drag)', 22, 4);
+                gCtx.restore();
+
+                // Draw Transmission Output Optical Signal
+                if (finesse > 300) {
+                    const outAlpha = Math.min(1, finesse / 3000);
+                    gCtx.strokeStyle = `rgba(16, 185, 129, ${outAlpha})`;
+                    gCtx.lineWidth = 4;
+                    gCtx.beginPath();
+                    gCtx.moveTo(mirror2.x + 8, mirror2.y);
+                    gCtx.lineTo(gWidth - 20, mirror2.y);
+                    gCtx.stroke();
+                }
+
+                // Draw Real-Time Resonance Lorentzian Curve (Bottom Corner)
+                const spectrumX = gWidth - 160;
+                const spectrumY = gHeight - 20;
+                const spectrumW = 140;
+                const spectrumH = 60;
+
+                gCtx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                gCtx.fillRect(spectrumX - 10, spectrumY - spectrumH - 15, spectrumW + 20, spectrumH + 25);
+                gCtx.strokeStyle = '#475569';
+                gCtx.lineWidth = 1;
+                gCtx.strokeRect(spectrumX - 10, spectrumY - spectrumH - 15, spectrumW + 20, spectrumH + 25);
+
+                gCtx.fillStyle = '#94a3b8';
+                gCtx.font = '10px sans-serif';
+                gCtx.textAlign = 'left';
+                gCtx.fillText('Cavity Resonance Spectrum', spectrumX - 4, spectrumY - spectrumH - 3);
+
+                gCtx.strokeStyle = '#059669';
+                gCtx.lineWidth = 2;
+                gCtx.beginPath();
+                for (let px = 0; px <= spectrumW; px++) {
+                    const normX = (px - spectrumW / 2) / 12;
+                    const peakHeight = (finesse / 3500) * spectrumH;
+                    const lorentzian = peakHeight / (1 + normX * normX);
+                    const py = spectrumY - lorentzian;
+                    if (px === 0) gCtx.moveTo(spectrumX + px, py);
+                    else gCtx.lineTo(spectrumX + px, py);
+                }
+                gCtx.stroke();
             }
 
             window.addEventListener('resize', fitCanvas);
