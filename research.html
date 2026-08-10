@@ -95,6 +95,7 @@
 
         h1 { margin: 0; color: var(--primary); font-size: 2.2rem; }
         h2 { color: var(--primary); margin-top: 0; }
+        h3 { color: var(--primary); margin-top: 15px; margin-bottom: 10px; }
         
         .tag {
             display: inline-block;
@@ -107,7 +108,7 @@
             margin-bottom: 8px;
         }
 
-        /* --- Quantum Router Game Styles --- */
+        /* --- Quantum Router Game & Table Styles --- */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -172,10 +173,28 @@
             background: var(--accent);
         }
 
-        .game-instructions {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 10px;
+        /* Combination Table */
+        .quantum-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        .quantum-table th, .quantum-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .quantum-table th {
+            background-color: #f8fafc;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .quantum-table tr:nth-child(even) {
+            background-color: #f8fafc;
         }
 
         footer {
@@ -213,7 +232,6 @@
             <h1>Research</h1>
             <p style="color: var(--text-muted); margin-top: 5px;">
                 Detailed overview of solid-state quantum optics, cleanroom microfabrication, and atomic physics projects.
-                This website is under construction!
             </p>
         </div>
 
@@ -249,11 +267,67 @@
             </div>
 
             <div class="game-controls">
-                <p class="game-instructions">
-                    <strong>How to play:</strong> Click intermediate repeater nodes to match incoming photon polarization bases (<strong>+</strong> or <strong>x</strong>). Matched bases establish entanglement from Alice to Bob before decoherence occurs.
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                    Click intermediate repeater nodes to align measurement bases before decoherence hits 0%.
                 </p>
                 <button class="btn-game" id="restartGameBtn">Reset Network</button>
             </div>
+        </div>
+
+        <!-- GAME DESCRIPTION & COMBINATION TABLE CARD -->
+        <div class="card">
+            <h2>How to Play & Quantum Principles</h2>
+            <p>
+                This interactive demo simulates a <strong>Quantum Repeater Network</strong> implementing a Quantum Key Distribution (QKD) protocol similar to <strong>BB84</strong>.
+            </p>
+
+            <h3>Core Objective</h3>
+            <p>
+                Route incoming single photons emitted from <strong>Alice</strong> (left) across intermediate quantum repeater nodes to <strong>Bob</strong> (right). Successfully transmitted photons establish shared secret keys. You must maximize key generation before environmental <strong>Decoherence</strong> drains state fidelity to 0%.
+            </p>
+
+            <h3>Basis Combination Table</h3>
+            <table class="quantum-table">
+                <thead>
+                    <tr>
+                        <th>Photon State</th>
+                        <th>Repeater Node Basis</th>
+                        <th>Measurement Outcome</th>
+                        <th>Game Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Blue ( + )</strong></td>
+                        <td><strong>+ (Rectilinear)</strong></td>
+                        <td>Match (100% transmission)</td>
+                        <td><strong>Passes through</strong> safely</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blue ( + )</strong></td>
+                        <td><strong>x (Diagonal)</strong></td>
+                        <td>Mismatch (Collapse)</td>
+                        <td><strong>Destroyed</strong> mid-route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Red/Pink ( x )</strong></td>
+                        <td><strong>x (Diagonal)</strong></td>
+                        <td>Match (100% transmission)</td>
+                        <td><strong>Passes through</strong> safely</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Red/Pink ( x )</strong></td>
+                        <td><strong>+ (Rectilinear)</strong></td>
+                        <td>Mismatch (Collapse)</td>
+                        <td><strong>Destroyed</strong> mid-route</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Photon Generation</h3>
+            <p>
+                Photons are generated pseudo-randomly using JavaScript's browser RNG engine (<em>Xorshift128+</em>). Each photon is randomly assigned a path (Upper vs. Lower branch) and a polarization state (<code>+</code> or <code>x</code>). In real-world quantum optic systems, true randomness is generated using physical <strong>Quantum Random Number Generators (QRNGs)</strong>.
+            </p>
         </div>
     </div>
 
