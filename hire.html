@@ -7,12 +7,12 @@
     <style>
         :root {
             --primary: #0f172a;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
+            --accent: #059669;
+            --accent-hover: #047857;
             --text-dark: #1e293b;
             --text-muted: #475569;
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
+            --bg-body: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
             --border-color: #cbd5e1;
         }
 
@@ -25,12 +25,25 @@
             background-color: var(--bg-body);
             margin: 0;
             padding: 0;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #vectorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
         }
 
         nav {
             position: sticky;
             top: 0;
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
             border-bottom: 2px solid var(--border-color);
             z-index: 1000;
             padding: 12px 20px;
@@ -47,34 +60,13 @@
             gap: 10px;
         }
 
-        .nav-logo {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--accent);
-            font-weight: 600;
-        }
+        .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 18px; align-items: center; }
+        .nav-links a { color: var(--text-dark); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent); font-weight: 600; }
 
         .btn-hire {
-            background-color: var(--accent);
+            background-color: #2563eb;
             color: #ffffff !important;
             padding: 6px 14px;
             border-radius: 6px;
@@ -82,154 +74,87 @@
             transition: background 0.2s;
         }
 
-        .btn-hire:hover {
-            background-color: var(--accent-hover) !important;
-        }
-
         .container {
-            max-width: 1000px;
+            position: relative;
+            z-index: 10;
+            max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        h1 { color: var(--primary); }
-
-        .hire-card {
-            background: #f0f7ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 10px;
-            padding: 30px;
-            margin-top: 20px;
-        }
-
-        .hire-intro {
-            font-size: 1.05rem;
-            color: var(--text-dark);
-            margin-bottom: 25px;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--primary);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
+        .card {
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: #ffffff;
-            transition: border-color 0.2s;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(4px);
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
+        h1 { margin: 0; color: var(--primary); font-size: 2.2rem; }
 
-        .btn-submit {
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
+        .btn-contact {
+            display: inline-block;
+            background: #2563eb;
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
             font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            align-self: flex-start;
+            margin-top: 20px;
             transition: background 0.2s;
         }
+        .btn-contact:hover { background: #1d4ed8; }
 
-        .btn-submit:hover {
-            background: var(--accent-hover);
-        }
-
-        .success-message {
-            display: none;
-            background-color: #dcfce7;
-            border: 1px solid #86efac;
-            color: #166534;
-            padding: 16px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-top: 15px;
-        }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
 
         footer {
+            position: relative;
+            z-index: 10;
             margin-top: 60px;
             padding: 25px 0;
             border-top: 1px solid var(--border-color);
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.95);
         }
     </style>
 </head>
 <body>
 
+    <canvas id="vectorCanvas"></canvas>
+
     <nav>
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
-        <div class="nav-links">
-            <a href="game.html">Home</a>
-            <a href="resume.html">Resume</a>
-            <a href="research.html">Research</a>
-            <a href="contact.html">Contact</a>
-            <a href="hire.html" class="btn-hire">Hire Me</a>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire active">Hire Me</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <div class="container">
-        <h1>Hello there, I look forward for our future collaborations.</h1>
-        
-        <div class="hire-card">
-            <p class="hire-intro">
-                I am actively open to <strong>research positions</strong>, <strong>R&amp;D Quantum Hardware and Automation roles</strong>, and <strong>collaborative experimental and software based projects</strong>. Whether you are a Principal Investigator building a laboratory, an industry team developing scalable photonic hardware, or seeking expertise in custom optical setups, cleanroom fiber processing, and atomic systems, I would love to discuss how I can contribute to your goals.
+        <div class="card">
+            <h1>Work & Collaboration Opportunities</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 10px;">
+                I am open to research roles, experimental hardware engineering positions, and collaborative quantum technology projects.
             </p>
 
-            <form id="contact-form" class="contact-form" action="https://formsubmit.co/sushreeswateeprajnyabehera@gmail.com" method="POST">
-                <input type="hidden" name="_captcha" value="false">
-                
-                <div class="form-group">
-                    <label for="name">Your Name / Organization</label>
-                    <input type="text" id="name" name="Name" placeholder="e.g. Dr. Jane Doe / Quantum Labs Inc." required>
-                </div>
+            <h3 style="color: var(--primary); margin-top: 25px;">Core Technical Expertise:</h3>
+            <ul>
+                <li><strong>Quantum Photonics & Integrated Optics:</strong> Design & cleanroom microfabrication of 4H-SiC waveguides, cantilevers, and evanescent couplers.</li>
+                <li><strong>Atomic Physics & Sensing:</strong> Optically pumped magnetometers (OPM), rubidium vapor cells, and magnetic field calibration via custom Helmholtz coils.</li>
+                <li><strong>Hardware & Instrumentation Control:</strong> Lock-in amplifiers, waveform generators, Moku:Go platforms, Python automation, and signal processing.</li>
+            </ul>
 
-                <div class="form-group">
-                    <label for="email">Your Email Address</label>
-                    <input type="email" id="email" name="Email" placeholder="e.g. jane.doe@institution.edu" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Message / Opportunity Details</label>
-                    <textarea id="message" name="Message" rows="5" placeholder="Share details about the role, project, or research opportunity..." required></textarea>
-                </div>
-
-                <button type="submit" id="submit-btn" class="btn-submit"> Send Message</button>
-            </form>
-
-            <div id="status-message" class="success-message">
-                Thank you for your message! I will be in touch with you within 24 hours.
-            </div>
+            <a href="mailto:your-email@domain.com" class="btn-contact">💼 Initiate Contact / Hire Request</a>
         </div>
     </div>
 
@@ -238,39 +163,41 @@
     </footer>
 
     <script>
-        const form = document.getElementById('contact-form');
-        const statusMessage = document.getElementById('status-message');
-        const submitBtn = document.getElementById('submit-btn');
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        const spacing = 36, arrowLength = 10;
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Sending...';
+        function resizeCanvas() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+        window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
-            const data = new FormData(form);
-            
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
-                });
+        function drawVector(x, y, angle, distance) {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(angle);
+            const maxRadius = 320, influence = Math.max(0, 1 - distance / maxRadius);
+            const currentLength = arrowLength + (influence * 6);
+            const r = Math.round(13 - (8 * influence)), g = Math.round(148 + (2 * influence)), b = Math.round(136 - (33 * influence));
+            const alpha = 0.20 + (influence * 0.75);
+            const colorStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            ctx.strokeStyle = colorStyle; ctx.fillStyle = colorStyle; ctx.lineWidth = 1.1 + (influence * 0.9);
+            ctx.beginPath(); ctx.moveTo(-currentLength / 2, 0); ctx.lineTo(currentLength / 2, 0); ctx.stroke();
+            const headSize = 3 + (influence * 2);
+            ctx.beginPath(); ctx.moveTo(currentLength / 2, 0); ctx.lineTo(currentLength / 2 - headSize, -headSize / 1.5); ctx.lineTo(currentLength / 2 - headSize, headSize / 1.5); ctx.closePath(); ctx.fill();
+            ctx.restore();
+        }
 
-                if (response.ok) {
-                    form.style.display = 'none';
-                    statusMessage.style.display = 'block';
-                } else {
-                    alert('There was an issue sending your message. Please try again.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = '🚀 Send Proposal / Message';
+        function render() {
+            ctx.clearRect(0, 0, width, height);
+            for (let x = spacing / 2; x < width; x += spacing) {
+                for (let y = spacing / 2; y < height; y += spacing) {
+                    const dx = mouse.x - x, dy = mouse.y - y;
+                    drawVector(x, y, Math.atan2(dy, dx), Math.sqrt(dx * dx + dy * dy));
                 }
-            } catch (error) {
-                alert('Connection error. Please try again later.');
-                submitBtn.disabled = false;
-                submitBtn.innerText = '🚀 Send Proposal / Message';
             }
-        });
+            requestAnimationFrame(render);
+        }
+        render();
     </script>
-
 </body>
 </html>
