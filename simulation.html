@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation | Sushree Swateeprajnya Behera</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #059669;
+            --accent-hover: #047857;
+            --text-dark: #1e293b;
+            --text-muted: #475569;
+            --bg-body: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.92);
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #vectorCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid var(--border-color);
+            z-index: 1000;
+            padding: 12px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn-hire {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: background 0.2s;
+        }
+
+        .btn-hire:hover {
+            background-color: var(--accent-hover) !important;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(4px);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .sim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 850px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-panel {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .sim-panel h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .action-banner {
+            background: #1e293b;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-exit {
+            background: #ef4444;
+            color: #ffffff;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="vectorCanvas"></canvas>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="simulation.html" class="active">Simulation</a>
+                <a href="resume.html">Resume</a>
+                <a href="research.html">Research</a>
+                <a href="contact.html">Contact</a>
+                <a href="hire.html" class="btn-hire">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="sim-header">
+                <div>
+                    <h1>Evanescent Light Coupling Simulation</h1>
+                    <p style="margin:0; color: var(--text-muted);">Gaussian single-photon pulse guided along 4H-SiC cantilever waveguide into SiO₂ fiber.</p>
+                </div>
+                <div class="action-banner">
+                    <span>✨ Click to emit a Gaussian photon!</span>
+                    <a href="index.html" class="btn-exit">Exit</a>
+                </div>
+            </div>
+
+            <div class="sim-grid">
+                <div class="sim-panel">
+                    <h3>Side Profile View (2D)</h3>
+                    <!-- Insert your 2D simulation canvas/interactive script elements here -->
+                </div>
+
+                <div class="sim-panel">
+                    <h3>3D Top / Isometric View</h3>
+                    <!-- Insert your Mode Field / Isometric simulation canvas elements here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('vectorCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        const spacing = 36, arrowLength = 10;
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+        function resizeCanvas() { 
+            width = canvas.width = window.innerWidth; 
+            height = canvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', resizeCanvas); 
+        resizeCanvas();
+        window.addEventListener('mousemove', (e) => { 
+            mouse.x = e.clientX; 
+            mouse.y = e.clientY; 
+        });
+
+        function drawVector(x, y, angle, distance) {
+            ctx.save(); 
+            ctx.translate(x, y); 
+            ctx.rotate(angle);
+            const maxRadius = 320;
+            const influence = Math.max(0, 1 - distance / maxRadius);
+            const currentLength = arrowLength + (influence * 6);
+            const r = Math.round(13 - (8 * influence));
+            const g = Math.round(148 + (2 * influence));
+            const b = Math.round(136 - (33 * influence));
+            const alpha = 0.20 + (influence * 0.75);
+            const colorStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            
+            ctx.strokeStyle = colorStyle; 
+            ctx.fillStyle = colorStyle; 
+            ctx.lineWidth = 1.1 + (influence * 0.9);
+            
+            ctx.beginPath(); 
+            ctx.moveTo(-currentLength / 2, 0); 
+            ctx.lineTo(currentLength / 2, 0); 
+            ctx.stroke();
+            
+            const headSize = 3 + (influence * 2);
+            ctx.beginPath(); 
+            ctx.moveTo(currentLength / 2, 0); 
+            ctx.lineTo(currentLength / 2 - headSize, -headSize / 1.5); 
+            ctx.lineTo(currentLength / 2 - headSize, headSize / 1.5); 
+            ctx.closePath(); 
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, width, height);
+            for (let x = spacing / 2; x < width; x += spacing) {
+                for (let y = spacing / 2; y < height; y += spacing) {
+                    const dx = mouse.x - x;
+                    const dy = mouse.y - y;
+                    drawVector(x, y, Math.atan2(dy, dx), Math.sqrt(dx * dx + dy * dy));
+                }
+            }
+            requestAnimationFrame(render);
+        }
+        render();
+    </script>
+</body>
+</html>
