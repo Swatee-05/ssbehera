@@ -7,8 +7,8 @@
     <style>
         :root {
             --primary: #0f172a;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
+            --accent: #059669;
+            --accent-hover: #047857;
             --text-dark: #1e293b;
             --text-muted: #475569;
             --bg-body: #ffffff;
@@ -29,7 +29,7 @@
             min-height: 100vh;
         }
 
-        /* Interactive Vector Field Canvas Background */
+        /* Fullscreen Canvas for Vector Field */
         #vectorCanvas {
             position: fixed;
             top: 0;
@@ -37,7 +37,7 @@
             width: 100vw;
             height: 100vh;
             z-index: 0;
-            pointer-events: none; /* Allows user to click buttons and text over the canvas */
+            pointer-events: none;
         }
 
         nav {
@@ -88,7 +88,7 @@
         }
 
         .btn-hire {
-            background-color: var(--accent);
+            background-color: #2563eb;
             color: #ffffff !important;
             padding: 6px 14px;
             border-radius: 6px;
@@ -97,7 +97,7 @@
         }
 
         .btn-hire:hover {
-            background-color: var(--accent-hover) !important;
+            background-color: #1d4ed8 !important;
         }
 
         .container {
@@ -111,7 +111,7 @@
         header.hero {
             padding: 30px 25px;
             border: 1px solid var(--border-color);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: var(--bg-card);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
@@ -127,7 +127,7 @@
 
         .subtitle {
             font-size: 1.25rem;
-            color: var(--accent);
+            color: #2563eb;
             margin-top: 5px;
             font-weight: 600;
         }
@@ -136,10 +136,34 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 25px;
-            margin-top: 20px;
+            padding: 28px 25px;
+            margin-top: 25px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             backdrop-filter: blur(4px);
+        }
+
+        .sim-card {
+            text-align: center;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-play {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: #2563eb;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-play:hover {
+            background: #1d4ed8;
         }
 
         footer {
@@ -157,7 +181,7 @@
 </head>
 <body>
 
-    <!-- Vector Field Background Canvas -->
+    <!-- Vector Field Background -->
     <canvas id="vectorCanvas"></canvas>
 
     <nav>
@@ -165,7 +189,6 @@
             <a href="index.html" class="nav-logo">Sushree Swateeprajnya Behera</a>
             <div class="nav-links">
                 <a href="index.html" class="active">Home</a>
-                <a href="game.html">Simulation</a>
                 <a href="resume.html">Resume</a>
                 <a href="research.html">Research</a>
                 <a href="contact.html">Contact</a>
@@ -175,6 +198,7 @@
     </nav>
 
     <div class="container">
+        <!-- Hero Section -->
         <header class="hero">
             <h1>Sushree Swateeprajnya Behera</h1>
             <div class="subtitle">Experimental Quantum Hardware Researcher</div>
@@ -183,6 +207,16 @@
             </p>
         </header>
 
+        <!-- Integrated Simulation Section -->
+        <div class="card sim-card">
+            <h2 style="margin-top: 0; color: var(--primary); font-size: 1.8rem;">Evanescent Light Coupling Simulation</h2>
+            <p style="color: var(--text-muted); max-width: 650px; margin: 10px auto 0 auto;">
+                Gaussian single-photon pulse generated from a star color center, guided along the 4H-SiC cantilever waveguide, and evanescently coupled into the SiO₂ fiber.
+            </p>
+            <a href="game.html" class="btn-play">🎮 Launch Simulation</a>
+        </div>
+
+        <!-- Research Focus Section -->
         <div class="card">
             <h2 style="margin-top: 0; color: var(--primary);">Research Focus</h2>
             <p>My work centers around developing scalable experimental hardware for quantum technologies. Explore the dedicated sections above to view my full curriculum vitae, custom optical setup implementations, cleanroom fabrication workflows, and peer-reviewed publications.</p>
@@ -193,15 +227,15 @@
         <p>© Sushree Swateeprajnya Behera | Quantum Hardware Researcher | Hosted on GitHub Pages</p>
     </footer>
 
+    <!-- Deep Green to Faint Teal Vector Field Script -->
     <script>
         const canvas = document.getElementById('vectorCanvas');
         const ctx = canvas.getContext('2d');
 
         let width, height;
-        const spacing = 35; // Grid spacing for vectors
-        const arrowLength = 10; // Length of individual vector arrows
+        const spacing = 36;
+        const arrowLength = 10;
 
-        // Default mouse position at center screen
         let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
         function resizeCanvas() {
@@ -222,24 +256,30 @@
             ctx.translate(x, y);
             ctx.rotate(angle);
 
-            // Proximity highlight: Arrows closer to the cursor glow blue and grow slightly longer
-            const maxRadius = 300;
+            const maxRadius = 320;
             const influence = Math.max(0, 1 - distance / maxRadius);
             
             const currentLength = arrowLength + (influence * 6);
-            const opacity = 0.15 + (influence * 0.65);
 
-            ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
-            ctx.fillStyle = `rgba(37, 99, 235, ${opacity})`;
-            ctx.lineWidth = 1.2 + (influence * 0.8);
+            // Interpolate from faint teal-green (distant) to deep green (near cursor)
+            const r = Math.round(13 - (8 * influence));    // 13 -> 5
+            const g = Math.round(148 + (2 * influence));   // 148 -> 150
+            const b = Math.round(136 - (33 * influence));  // 136 -> 103
+            const alpha = 0.20 + (influence * 0.75);       // 0.20 -> 0.95
 
-            // Draw line
+            const colorStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+
+            ctx.strokeStyle = colorStyle;
+            ctx.fillStyle = colorStyle;
+            ctx.lineWidth = 1.1 + (influence * 0.9);
+
+            // Shaft
             ctx.beginPath();
             ctx.moveTo(-currentLength / 2, 0);
             ctx.lineTo(currentLength / 2, 0);
             ctx.stroke();
 
-            // Draw arrow head
+            // Arrow Tip
             const headSize = 3 + (influence * 2);
             ctx.beginPath();
             ctx.moveTo(currentLength / 2, 0);
