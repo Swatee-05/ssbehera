@@ -14,6 +14,7 @@
             --bg-body: #ffffff;
             --bg-card: rgba(255, 255, 255, 0.92);
             --border-color: #cbd5e1;
+            --danger: #e11d48;
         }
 
         * { box-sizing: border-box; }
@@ -108,7 +109,7 @@
             margin-bottom: 8px;
         }
 
-        /* --- Quantum Router Game & Table Styles --- */
+        /* --- Quantum Games Common Styles --- */
         .game-header {
             display: flex;
             justify-content: space-between;
@@ -136,14 +137,14 @@
         .game-canvas-container {
             position: relative;
             width: 100%;
-            height: 340px;
+            height: 320px;
             background: #090d16;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--border-color);
         }
 
-        #gameCanvas {
+        .game-canvas {
             width: 100%;
             height: 100%;
             display: block;
@@ -155,7 +156,7 @@
             justify-content: space-between;
             align-items: center;
             margin-top: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             gap: 10px;
         }
 
@@ -177,7 +178,7 @@
         .divider {
             height: 1px;
             background-color: var(--border-color);
-            margin: 30px 0;
+            margin: 35px 0;
         }
 
         /* Combination Table */
@@ -258,9 +259,10 @@
             </p>
         </div>
 
-        <!-- UNIFIED QUANTUM GAME AND DESCRIPTION CARD -->
+        <!-- UNIFIED QUANTUM INTERACTIVE CARD -->
         <div class="card">
-            <span class="tag" style="background: #dcfce7; color: #166534;">INTERACTIVE DEMO</span>
+            <!-- GAME 1 SECTION -->
+            <span class="tag" style="background: #dcfce7; color: #166534;">INTERACTIVE DEMO 1</span>
             
             <div class="game-header">
                 <h2>Quantum Entanglement Router</h2>
@@ -271,29 +273,48 @@
             </div>
             
             <div class="game-canvas-container">
-                <canvas id="gameCanvas"></canvas>
+                <canvas id="gameCanvas" class="game-canvas"></canvas>
             </div>
 
             <div class="game-controls">
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
                     Click intermediate repeater nodes to match photon bases (<strong>+</strong> or <strong>x</strong>) before decoherence hits 0%.
                 </p>
-                <button class="btn-game" id="restartGameBtn">Reset Network</button>
+                <button class="btn-game" id="restartGameBtn">Reset Router</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- GAME 2 SECTION -->
+            <span class="tag" style="background: #ffe4e6; color: #9f1239;">INTERACTIVE DEMO 2</span>
+            
+            <div class="game-header">
+                <h2>BB84 QKD Eavesdropper Defense</h2>
+                <div class="game-metrics">
+                    <div class="metric-badge">Secure Bits: <span id="qkdSecureBits" style="color: var(--accent);">0</span></div>
+                    <div class="metric-badge">QBER Error: <span id="qkdQber" style="color: var(--danger);">0%</span></div>
+                </div>
+            </div>
+            
+            <div class="game-canvas-container">
+                <canvas id="qkdCanvas" class="game-canvas"></canvas>
+            </div>
+
+            <div class="game-controls">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                    Click Eve's red eavesdropping probes along the fiber to disarm them before they alter photon states and push QBER over 25%!
+                </p>
+                <button class="btn-game" id="restartQkdBtn">Reset Defense</button>
             </div>
 
             <div class="divider"></div>
 
             <h2>How to Play & Quantum Principles</h2>
             <p>
-                This interactive demo simulates a <strong>Quantum Repeater Network</strong> implementing a Quantum Key Distribution (QKD) protocol based on <strong>BB84</strong>.
+                These interactive demos simulate real quantum key distribution protocols (such as <strong>BB84</strong>) and quantum networking mechanisms:
             </p>
 
-            <h3>Core Objective</h3>
-            <p>
-                Route single photons emitted from <strong>Alice</strong> (left) across intermediate quantum repeater nodes to <strong>Bob</strong> (right). Successfully transmitted photons establish shared secret keys. Maximize key generation before environmental <strong>Decoherence</strong> drains state fidelity to 0%.
-            </p>
-
-            <h3>Basis Combination Table</h3>
+            <h3>1. Basis Combination Table (Quantum Router)</h3>
             <table class="quantum-table">
                 <thead>
                     <tr>
@@ -331,20 +352,20 @@
                 </tbody>
             </table>
 
-            <h3>Applications: What Can You Do After Quantum Keys Are Generated?</h3>
+            <h3>2. Quantum Bit Error Rate (QBER) & Eavesdroppers</h3>
             <p>
-                Once Alice and Bob share a synchronized stream of quantum-generated key bits, they gain access to security capabilities impossible with classical mathematics alone:
+                In the <strong>BB84 Defense</strong> game, Eve attempts to intercept photons using a randomly chosen basis. According to quantum collapse principles, when Eve measures in the wrong basis, she alters the photon state with a $50\%$ probability. This introduces detectable errors in the key stream, driving up the <strong>Quantum Bit Error Rate (QBER)</strong>.
             </p>
-            <ul>
-                <li><strong>Information-Theoretic Security (One-Time Pad):</strong> By combining the generated key with plaintext using XOR encryption equal to message length, data transmissions achieve mathematically unhackable secrecy guaranteed by physics laws.</li>
-                <li><strong>Eavesdropping Detection:</strong> Any interception attempt by an adversary (Eve) alters the photon's quantum state, increasing the Quantum Bit Error Rate (QBER). Alice and Bob instantly detect eavesdroppers and discard compromised key streams.</li>
-                <li><strong>Post-Quantum Infrastructure Protection:</strong> These keys protect critical infrastructure—financial networks, power grids, and defense communications—against future quantum computer decryption attacks (e.g., Shor's algorithm).</li>
-            </ul>
+            <p>
+                If the QBER exceeds the threshold of <strong>25%</strong>, Alice and Bob abort the protocol, recognizing that the channel is no longer secure.
+            </p>
 
-            <h3>Photon Generation Mechanism</h3>
-            <p>
-                Photons are generated pseudo-randomly using JavaScript's browser RNG engine (<em>Xorshift128+</em>). Each photon is randomly assigned a path (Upper vs. Lower branch) and a polarization state (<code>+</code> or <code>x</code>). Physical quantum networks utilize <strong>Quantum Random Number Generators (QRNGs)</strong> driven by physical quantum phase noise.
-            </p>
+            <h3>Applications: What Can You Do After Quantum Keys Are Generated?</h3>
+            <ul>
+                <li><strong>Information-Theoretic Security (One-Time Pad):</strong> Combining generated keys with plaintext using XOR encryption yields mathematically unbreakable communication.</li>
+                <li><strong>Instant Tamper Detection:</strong> Eavesdropping attempts inevitably introduce quantum error noise, giving Alice and Bob immediate notification of intrusions.</li>
+                <li><strong>Post-Quantum Infrastructure Protection:</strong> Protects critical power grids, financial transactions, and military networks against future quantum supercomputers.</li>
+            </ul>
         </div>
     </div>
 
@@ -391,7 +412,7 @@
         render();
     </script>
 
-    <!-- Quantum Router Game Engine Script -->
+    <!-- Game 1 Engine: Quantum Router -->
     <script>
         (function() {
             const gCanvas = document.getElementById('gameCanvas');
@@ -465,7 +486,7 @@
                 nodes.forEach(node => {
                     if (!node.fixed) {
                         const dist = Math.hypot(node.x - clickX, node.y - clickY);
-                        if (dist < 28) { // Expanded click radius for easier interaction
+                        if (dist < 28) {
                             node.basis = node.basis === '+' ? 'x' : '+';
                         }
                     }
@@ -492,7 +513,6 @@
                     }
                 }
 
-                // Update Photons
                 for (let i = photons.length - 1; i >= 0; i--) {
                     const p = photons[i];
                     const targetNode = p.route[p.targetIdx];
@@ -502,16 +522,13 @@
                     const dist = Math.hypot(dx, dy);
 
                     if (dist < p.speed) {
-                        // Reached node
                         if (targetNode.basis !== p.basis && !targetNode.fixed) {
-                            // Mismatched basis collapses photon
                             photons.splice(i, 1);
                             continue;
                         }
 
                         p.targetIdx++;
                         if (p.targetIdx >= p.route.length) {
-                            // Reached Bob!
                             keysGenerated++;
                             keyCountEl.textContent = keysGenerated;
                             photons.splice(i, 1);
@@ -530,7 +547,6 @@
             function drawGame() {
                 gCtx.clearRect(0, 0, gWidth, gHeight);
 
-                // Draw Network Channels
                 const drawLink = (n1, n2) => {
                     gCtx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
                     gCtx.lineWidth = 2;
@@ -546,7 +562,6 @@
                 drawLink(nodes[1], nodes[3]); drawLink(nodes[2], nodes[4]);
                 drawLink(nodes[3], nodes[5]); drawLink(nodes[4], nodes[5]);
 
-                // Draw Nodes
                 nodes.forEach(node => {
                     gCtx.beginPath();
                     gCtx.arc(node.x, node.y, 24, 0, Math.PI * 2);
@@ -556,15 +571,13 @@
                     gCtx.lineWidth = 2.5;
                     gCtx.stroke();
 
-                    // Bold/Larger Text for Nodes
                     gCtx.fillStyle = '#ffffff';
                     gCtx.font = node.fixed ? 'bold 13px sans-serif' : '900 22px sans-serif';
                     gCtx.textAlign = 'center';
                     gCtx.textBaseline = 'middle';
-                    gCtx.fillText(node.label || node.basis, node.x, node.y + (node.fixed ? 0 : -1));
+                    gCtx.fillText(node.label || node.basis, node.x, node.y - 1);
                 });
 
-                // Draw Photons
                 photons.forEach(p => {
                     gCtx.beginPath();
                     gCtx.arc(p.x, p.y, 10, 0, Math.PI * 2);
@@ -574,7 +587,6 @@
                     gCtx.fill();
                     gCtx.shadowBlur = 0;
 
-                    // Bold/Larger Text for Photons
                     gCtx.fillStyle = '#ffffff';
                     gCtx.font = 'bold 14px sans-serif';
                     gCtx.textAlign = 'center';
@@ -582,7 +594,6 @@
                     gCtx.fillText(p.basis, p.x, p.y - 1);
                 });
 
-                // Game Over Overlay
                 if (gameOver) {
                     gCtx.fillStyle = 'rgba(9, 13, 22, 0.88)';
                     gCtx.fillRect(0, 0, gWidth, gHeight);
@@ -603,6 +614,222 @@
             setTimeout(() => {
                 fitGameCanvas();
                 requestAnimationFrame(updateGame);
+            }, 100);
+        })();
+    </script>
+
+    <!-- Game 2 Engine: BB84 QKD Eavesdropper Defense -->
+    <script>
+        (function() {
+            const canvas = document.getElementById('qkdCanvas');
+            const ctx = canvas.getContext('2d');
+            const bitsEl = document.getElementById('qkdSecureBits');
+            const qberEl = document.getElementById('qkdQber');
+            const restartBtn = document.getElementById('restartQkdBtn');
+
+            let width, height;
+            let secureBits = 0;
+            let totalBits = 0;
+            let corruptedBits = 0;
+            let gameOver = false;
+
+            let eveProbes = [];
+            let qPhotons = [];
+            let lastProbeTime = 0;
+            let lastPhotonTime = 0;
+
+            function fitCanvas() {
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                width = rect.width;
+                height = rect.height;
+                initGame();
+            }
+
+            function initGame() {
+                secureBits = 0;
+                totalBits = 0;
+                corruptedBits = 0;
+                gameOver = false;
+                eveProbes = [];
+                qPhotons = [];
+
+                bitsEl.textContent = '0';
+                qberEl.textContent = '0%';
+            }
+
+            function spawnEveProbe() {
+                if (gameOver || eveProbes.length >= 3) return;
+                const probeX = width * 0.25 + Math.random() * (width * 0.5);
+                eveProbes.push({
+                    x: probeX,
+                    y: height / 2,
+                    radius: 20,
+                    basis: Math.random() > 0.5 ? '+' : 'x'
+                });
+            }
+
+            function spawnQPhoton() {
+                if (gameOver) return;
+                qPhotons.push({
+                    x: 60,
+                    y: height / 2,
+                    basis: Math.random() > 0.5 ? '+' : 'x',
+                    speed: 2.2,
+                    intercepted: false
+                });
+            }
+
+            canvas.addEventListener('click', (e) => {
+                if (gameOver) return;
+                const rect = canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                for (let i = eveProbes.length - 1; i >= 0; i--) {
+                    const probe = eveProbes[i];
+                    const dist = Math.hypot(probe.x - clickX, probe.y - clickY);
+                    if (dist < probe.radius + 10) {
+                        eveProbes.splice(i, 1); // Disarm probe
+                    }
+                }
+            });
+
+            restartBtn.addEventListener('click', initGame);
+
+            function update(timestamp) {
+                if (!lastProbeTime) lastProbeTime = timestamp;
+                if (!lastPhotonTime) lastPhotonTime = timestamp;
+
+                if (!gameOver) {
+                    if (timestamp - lastProbeTime > 2200) {
+                        spawnEveProbe();
+                        lastProbeTime = timestamp;
+                    }
+                    if (timestamp - lastPhotonTime > 1200) {
+                        spawnQPhoton();
+                        lastPhotonTime = timestamp;
+                    }
+                }
+
+                // Update Photons
+                for (let i = qPhotons.length - 1; i >= 0; i--) {
+                    const p = qPhotons[i];
+                    p.x += p.speed;
+
+                    // Check probe collisions
+                    eveProbes.forEach(probe => {
+                        if (!p.intercepted && Math.abs(p.x - probe.x) < 10) {
+                            p.intercepted = true;
+                            if (p.basis !== probe.basis) {
+                                // Probe collapse alters basis 50% of time
+                                if (Math.random() > 0.5) {
+                                    p.basis = probe.basis;
+                                    p.corrupted = true;
+                                }
+                            }
+                        }
+                    });
+
+                    // Reach Bob
+                    if (p.x >= width - 60) {
+                        totalBits++;
+                        if (p.corrupted) {
+                            corruptedBits++;
+                        } else {
+                            secureBits++;
+                        }
+
+                        const currentQber = Math.round((corruptedBits / totalBits) * 100);
+                        bitsEl.textContent = secureBits;
+                        qberEl.textContent = currentQber + '%';
+
+                        if (currentQber >= 25 && totalBits >= 5) {
+                            gameOver = true;
+                        }
+
+                        qPhotons.splice(i, 1);
+                    }
+                }
+
+                draw();
+                requestAnimationFrame(update);
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Fiber Line
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(60, height / 2);
+                ctx.lineTo(width - 60, height / 2);
+                ctx.stroke();
+
+                // Terminals (Alice and Bob)
+                ctx.fillStyle = '#059669';
+                ctx.beginPath(); ctx.arc(60, height / 2, 22, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(width - 60, height / 2, 22, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Alice', 60, height / 2);
+                ctx.fillText('Bob', width - 60, height / 2);
+
+                // Eve Probes
+                eveProbes.forEach(probe => {
+                    ctx.fillStyle = 'rgba(225, 29, 72, 0.25)';
+                    ctx.beginPath(); ctx.arc(probe.x, probe.y, probe.radius + 8, 0, Math.PI * 2); ctx.fill();
+
+                    ctx.fillStyle = '#e11d48';
+                    ctx.beginPath(); ctx.arc(probe.x, probe.y, probe.radius, 0, Math.PI * 2); ctx.fill();
+                    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '900 18px sans-serif';
+                    ctx.fillText('Eve ' + probe.basis, probe.x, probe.y - 1);
+                });
+
+                // Photons
+                qPhotons.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 9, 0, Math.PI * 2);
+                    ctx.fillStyle = p.corrupted ? '#f59e0b' : (p.basis === '+' ? '#38bdf8' : '#f43f5e');
+                    ctx.shadowColor = ctx.fillStyle;
+                    ctx.shadowBlur = 10;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 12px sans-serif';
+                    ctx.fillText(p.basis, p.x, p.y - 1);
+                });
+
+                // Game Over Overlay
+                if (gameOver) {
+                    ctx.fillStyle = 'rgba(9, 13, 22, 0.88)';
+                    ctx.fillRect(0, 0, width, height);
+
+                    ctx.fillStyle = '#e11d48';
+                    ctx.font = 'bold 22px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('QBER Exceeded 25%! Channel Aborted', width / 2, height / 2 - 15);
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '15px sans-serif';
+                    ctx.fillText(`Eve compromised key security. Total Secure Bits Secured: ${secureBits}`, width / 2, height / 2 + 18);
+                }
+            }
+
+            window.addEventListener('resize', fitCanvas);
+            setTimeout(() => {
+                fitCanvas();
+                requestAnimationFrame(update);
             }, 100);
         })();
     </script>
