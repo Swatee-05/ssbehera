@@ -491,6 +491,122 @@
                 <li><strong>Deterministic Spin-Photon Interfaces:</strong> Strong cavity coupling enables single photons to swap quantum states deterministically with electron spins in SiC or diamond substrates.</li>
             </ul>
         </div>
+
+        <!-- GAME 3 CARD -->
+        <div class="card">
+            <span class="tag" style="background: #fae8ff; color: #86198f;">INTERACTIVE DEMO 3</span>
+            
+            <div class="game-header">
+                <h2>Photoaddressable Silicon Nitride ($\text{Si}_3\text{N}_4$) Quantum Router</h2>
+                <div class="game-metrics">
+                    <div class="metric-badge">Laser Wavelength ($\lambda$): <span id="g3Wavelength" style="color: var(--accent);">1550 nm</span></div>
+                    <div class="metric-badge">Routing Efficiency: <span id="g3Efficiency" style="color: var(--accent);">0%</span></div>
+                    <div class="metric-badge">Output Port: <span id="g3Port" style="color: #86198f;">Port A (0)</span></div>
+                </div>
+            </div>
+            
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas3" class="game-canvas"></canvas>
+            </div>
+
+            <div class="game-controls">
+                <div class="slider-group">
+                    <label for="wavelengthSlider">Pump Wavelength ($\lambda$):</label>
+                    <input type="range" id="wavelengthSlider" min="1530" max="1570" value="1550" step="0.5" style="cursor: pointer;">
+                </div>
+                <div class="slider-group">
+                    <label for="heaterSlider">Microheater Power ($P_{\text{thermal}}$):</label>
+                    <input type="range" id="heaterSlider" min="0" max="100" value="0" style="cursor: pointer;">
+                </div>
+                <button class="btn-game" id="restartGameBtn3">Reset Router</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2>How to Play & Interactive Controls Breakdown</h2>
+            <p>
+                This interactive demo simulates an integrated <strong>Silicon Nitride ($\text{Si}_3\text{N}_4$) Photonic Integrated Circuit (PIC)</strong> featuring a reconfigurable Mach-Zehnder Interferometer (MZI) optical switch with thermo-optic phase shifters and photoaddressable tuning spots.
+            </p>
+
+            <h3>Core Objective</h3>
+            <p>
+                Route single-photon state vectors cleanly from Input Waveguide Port $I_1$ to either <strong>Output Port A</strong> or <strong>Output Port B</strong> by manipulating thermal phase shifts and laser-assisted optical phase addressing:
+            </p>
+            <ul>
+                <li><strong>Click Thermal Phase Shifter Heaters ($\phi_1, \phi_2$):</strong> Click directly on the metallic microheater pads situated over the waveguide arms to toggle thermal refractive index shifts ($\Delta n_{\text{eff}}$).</li>
+                <li><strong>Click Optical Addressing Spot ($P_{\text{optical}}$):</strong> Click the photoaddressable ring resonator / defect site on the chip to trigger photo-induced carrier dispersion or optical phase shifts.</li>
+                <li><strong>Adjust Slider Controls:</strong> Tune the telecom pump laser wavelength ($\lambda = 1530\text{ nm} - 1570\text{ nm}$) or microheater thermal bias to achieve destructive interference at the unwanted port and 100% transmission at the target output.</li>
+            </ul>
+
+            <h3>MZI Switching & Phase Control Matrix</h3>
+            <table class="quantum-table">
+                <thead>
+                    <tr>
+                        <th>Phase Difference ($\Delta \Phi = \phi_1 - \phi_2$)</th>
+                        <th>Interference State</th>
+                        <th>Primary Output Destination</th>
+                        <th>Routing Efficiency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$\Delta \Phi = 0$ (In-Phase)</td>
+                        <td>Constructive at Port A / Destructive at Port B</td>
+                        <td><strong>Output Port A</strong> (Bar State)</td>
+                        <td>$\sim 98.5\%$</td>
+                    </tr>
+                    <tr>
+                        <td>$\Delta \Phi = \pi / 2$ ($90^\circ$ Shift)</td>
+                        <td>Balanced 50:50 Beam Splitter Output</td>
+                        <td><strong>Dual Beam Split</strong> (Port A & B)</td>
+                        <td>$50\% / 50\%$</td>
+                    </tr>
+                    <tr>
+                        <td>$\Delta \Phi = \pi$ ($180^\circ$ Shift)</td>
+                        <td>Destructive at Port A / Constructive at Port B</td>
+                        <td><strong>Output Port B</strong> (Cross State)</td>
+                        <td>$\sim 99.2\%$</td>
+                    </tr>
+                    <tr>
+                        <td>$\Delta \Phi = \text{Off-Resonance}$</td>
+                        <td>High Scattering & Phase Mismatch</td>
+                        <td><strong>Cross-Talk Distortion</strong></td>
+                        <td>$< 15\%$</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Physics Breakdown: Integrated Photonic Switching in Ultra-Low-Loss $\text{Si}_3\text{N}_4$</h3>
+            <p>
+                Silicon Nitride ($\text{Si}_3\text{N}_4$) is a premier material platform for quantum photonics due to its wide bandgap ($\sim 5\text{ eV}$), zero two-photon absorption at telecom wavelengths ($1550\text{ nm}$), and ultra-low propagation loss ($< 0.1\text{ dB/cm}$).
+            </p>
+
+            <p>
+                The optical transfer function of the $2 \times 2$ integrated Mach-Zehnder Interferometer (MZI) routing matrix is governed by the unitary transformation matrix $U_{\text{MZI}}$:
+            </p>
+
+            <div class="math-block">
+                $$U_{\text{MZI}} = \frac{1}{2} \begin{bmatrix} 1 & i \\ i & 1 \end{bmatrix} \begin{bmatrix} e^{i\phi_1} & 0 \\ 0 & e^{i\phi_2} \end{bmatrix} \begin{bmatrix} 1 & i \\ i & 1 \end{bmatrix} = i e^{i\frac{\phi_1+\phi_2}{2}} \begin{bmatrix} \sin\left(\frac{\Delta\Phi}{2}\right) & \cos\left(\frac{\Delta\Phi}{2}\right) \\ \cos\left(\frac{\Delta\Phi}{2}\right) & -\sin\left(\frac{\Delta\Phi}{2}\right) \end{bmatrix}$$
+            </div>
+
+            <p>
+                Where the relative phase difference $\Delta \Phi = \phi_1 - \phi_2$ combines thermo-optic phase tuning and photo-addressable optical index modulation:
+            </p>
+
+            <div class="math-block">
+                $$\Delta \Phi = \frac{2\pi}{\lambda} \cdot L \cdot \left( \frac{dn}{dT} \Delta T + \frac{dn}{dI} I_{\text{laser}} \right)$$
+            </div>
+
+            <p>
+                Here $dn/dT \approx 2.5 \times 10^{-5}\text{ K}^{-1}$ is the thermo-optic coefficient of $\text{Si}_3\text{N}_4$, $\Delta T$ is the microheater temperature differential, and $I_{\text{laser}}$ represents the photoaddressable optical pump intensity.
+            </p>
+
+            <h3>Quantum Computing & Photonic Network Applications</h3>
+            <ul>
+                <li><strong>Reconfigurable Linear Optical Quantum Computing (LOQC):</strong> Interconnected arrays of $\text{Si}_3\text{N}_4$ MZIs enable programmable unitary matrix transformations required for Photonic Quantum Information Processing and Gaussian Boson Sampling.</li>
+                <li><strong>Photoaddressable All-Optical Switches:</strong> Non-contact optical tuning via targeted laser excitation enables rapid phase calibration without thermal crosstalk or bulky electrical wiring overhead.</li>
+            </ul>
+        </div>
     </div>
 
     <footer>
@@ -952,6 +1068,238 @@
                     }
                 }
                 gCtx.stroke();
+            }
+
+            window.addEventListener('resize', fitCanvas);
+            setTimeout(() => {
+                fitCanvas();
+                requestAnimationFrame(update);
+            }, 100);
+        })();
+    </script>
+
+    <!-- Game 3 Engine (Photoaddressable Silicon Nitride Quantum Router) -->
+    <script>
+        (function() {
+            const gCanvas = document.getElementById('gameCanvas3');
+            const gCtx = gCanvas.getContext('2d');
+            const wavelengthEl = document.getElementById('g3Wavelength');
+            const efficiencyEl = document.getElementById('g3Efficiency');
+            const portEl = document.getElementById('g3Port');
+            const wavelengthSlider = document.getElementById('wavelengthSlider');
+            const heaterSlider = document.getElementById('heaterSlider');
+            const restartBtn = document.getElementById('restartGameBtn3');
+
+            let gWidth, gHeight;
+            let wavePhase = 0;
+            let heaterActive = false;
+            let photoSpotActive = false;
+
+            let heaterBox = { x: 0, y: 0, w: 70, h: 26 };
+            let photoSpotBox = { x: 0, y: 0, r: 22 };
+
+            function fitCanvas() {
+                const rect = gCanvas.getBoundingClientRect();
+                gCanvas.width = rect.width;
+                gCanvas.height = rect.height;
+                gWidth = rect.width;
+                gHeight = rect.height;
+                initGame();
+            }
+
+            function initGame() {
+                wavelengthSlider.value = 1550;
+                heaterSlider.value = 0;
+                heaterActive = false;
+                photoSpotActive = false;
+            }
+
+            gCanvas.addEventListener('click', (e) => {
+                const rect = gCanvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+
+                if (clickX >= heaterBox.x && clickX <= heaterBox.x + heaterBox.w &&
+                    clickY >= heaterBox.y && clickY <= heaterBox.y + heaterBox.h) {
+                    heaterActive = !heaterActive;
+                    if (heaterActive && parseInt(heaterSlider.value) === 0) {
+                        heaterSlider.value = 50;
+                    }
+                }
+
+                if (Math.hypot(clickX - photoSpotBox.x, clickY - photoSpotBox.y) < photoSpotBox.r + 10) {
+                    photoSpotActive = !photoSpotActive;
+                }
+            });
+
+            restartBtn.addEventListener('click', initGame);
+
+            function update() {
+                wavePhase += 0.15;
+                const wl = parseFloat(wavelengthSlider.value);
+                const thermalPower = parseInt(heaterSlider.value, 10);
+                wavelengthEl.textContent = wl.toFixed(1) + ' nm';
+
+                let deltaPhi = ((wl - 1550) / 20) * Math.PI;
+                if (heaterActive) deltaPhi += (thermalPower / 100) * Math.PI;
+                if (photoSpotActive) deltaPhi += Math.PI * 0.5;
+
+                deltaPhi = Math.abs(deltaPhi % (2 * Math.PI));
+
+                const portAEfficiency = Math.max(0, Math.cos(deltaPhi / 2) ** 2);
+                const portBEfficiency = Math.max(0, Math.sin(deltaPhi / 2) ** 2);
+
+                if (portAEfficiency >= portBEfficiency) {
+                    const eff = Math.round(portAEfficiency * 100);
+                    efficiencyEl.textContent = eff + '%';
+                    portEl.textContent = 'Port A (Bar)';
+                    portEl.style.color = '#059669';
+                } else {
+                    const eff = Math.round(portBEfficiency * 100);
+                    efficiencyEl.textContent = eff + '%';
+                    portEl.textContent = 'Port B (Cross)';
+                    portEl.style.color = '#86198f';
+                }
+
+                draw(deltaPhi, portAEfficiency, portBEfficiency);
+                requestAnimationFrame(update);
+            }
+
+            function draw(deltaPhi, effA, effB) {
+                gCtx.clearRect(0, 0, gWidth, gHeight);
+
+                gCtx.fillStyle = '#0f172a';
+                gCtx.fillRect(0, 0, gWidth, gHeight);
+
+                gCtx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+                gCtx.lineWidth = 1;
+                for (let x = 0; x < gWidth; x += 30) {
+                    gCtx.beginPath(); gCtx.moveTo(x, 0); gCtx.lineTo(x, gHeight); gCtx.stroke();
+                }
+                for (let y = 0; y < gHeight; y += 30) {
+                    gCtx.beginPath(); gCtx.moveTo(0, y); gCtx.lineTo(gWidth, y); gCtx.stroke();
+                }
+
+                const cy = gHeight / 2;
+                const inX = 60;
+                const mziStart = 160;
+                const mziEnd = gWidth - 160;
+                const outX = gWidth - 60;
+                const topY = cy - 50;
+                const botY = cy + 50;
+
+                heaterBox = { x: (mziStart + mziEnd) / 2 - 35, y: topY - 22, w: 70, h: 18 };
+                photoSpotBox = { x: (mziStart + mziEnd) / 2, y: botY + 12, r: 16 };
+
+                gCtx.strokeStyle = '#334155';
+                gCtx.lineWidth = 8;
+                gCtx.lineCap = 'round';
+
+                gCtx.beginPath();
+                gCtx.moveTo(inX, cy);
+                gCtx.lineTo(mziStart, cy);
+                gCtx.lineTo(mziStart + 40, topY);
+                gCtx.lineTo(mziEnd - 40, topY);
+                gCtx.lineTo(mziEnd, cy);
+                gCtx.lineTo(outX, cy - 40);
+                gCtx.stroke();
+
+                gCtx.beginPath();
+                gCtx.moveTo(mziStart, cy);
+                gCtx.lineTo(mziStart + 40, botY);
+                gCtx.lineTo(mziEnd - 40, botY);
+                gCtx.lineTo(mziEnd, cy);
+                gCtx.lineTo(outX, cy + 40);
+                gCtx.stroke();
+
+                gCtx.strokeStyle = '#38bdf8';
+                gCtx.lineWidth = 3;
+                gCtx.shadowColor = '#38bdf8';
+                gCtx.shadowBlur = 8;
+
+                gCtx.beginPath();
+                gCtx.moveTo(inX, cy);
+                gCtx.lineTo(mziStart, cy);
+                gCtx.stroke();
+
+                const waveLen = mziEnd - 40 - (mziStart + 40);
+                
+                gCtx.strokeStyle = `rgba(56, 189, 248, ${0.4 + effA * 0.6})`;
+                gCtx.beginPath();
+                gCtx.moveTo(mziStart, cy);
+                gCtx.lineTo(mziStart + 40, topY);
+                for (let x = 0; x <= waveLen; x += 3) {
+                    const wave = Math.sin((x / 20) - wavePhase) * 4;
+                    gCtx.lineTo(mziStart + 40 + x, topY + wave);
+                }
+                gCtx.lineTo(mziEnd, cy);
+                gCtx.stroke();
+
+                gCtx.strokeStyle = `rgba(168, 85, 247, ${0.4 + effB * 0.6})`;
+                gCtx.beginPath();
+                gCtx.moveTo(mziStart, cy);
+                gCtx.lineTo(mziStart + 40, botY);
+                for (let x = 0; x <= waveLen; x += 3) {
+                    const wave = Math.sin((x / 20) - wavePhase + deltaPhi) * 4;
+                    gCtx.lineTo(mziStart + 40 + x, botY + wave);
+                }
+                gCtx.lineTo(mziEnd, cy);
+                gCtx.stroke();
+
+                gCtx.strokeStyle = `rgba(16, 185, 129, ${effA})`;
+                gCtx.lineWidth = 2 + effA * 3;
+                gCtx.shadowColor = '#10b981';
+                gCtx.shadowBlur = effA * 12;
+                gCtx.beginPath();
+                gCtx.moveTo(mziEnd, cy);
+                gCtx.lineTo(outX, cy - 40);
+                gCtx.stroke();
+
+                gCtx.strokeStyle = `rgba(217, 70, 239, ${effB})`;
+                gCtx.lineWidth = 2 + effB * 3;
+                gCtx.shadowColor = '#d946ef';
+                gCtx.shadowBlur = effB * 12;
+                gCtx.beginPath();
+                gCtx.moveTo(mziEnd, cy);
+                gCtx.lineTo(outX, cy + 40);
+                gCtx.stroke();
+                gCtx.shadowBlur = 0;
+
+                gCtx.fillStyle = heaterActive ? '#f97316' : '#64748b';
+                gCtx.strokeStyle = '#fdba74';
+                gCtx.lineWidth = 2;
+                gCtx.fillRect(heaterBox.x, heaterBox.y, heaterBox.w, heaterBox.h);
+                gCtx.strokeRect(heaterBox.x, heaterBox.y, heaterBox.w, heaterBox.h);
+
+                gCtx.fillStyle = '#ffffff';
+                gCtx.font = 'bold 10px sans-serif';
+                gCtx.textAlign = 'center';
+                gCtx.fillText(heaterActive ? 'HEATER: ON' : 'HEATER (Click)', heaterBox.x + heaterBox.w / 2, heaterBox.y + 12);
+
+                gCtx.beginPath();
+                gCtx.arc(photoSpotBox.x, photoSpotBox.y, photoSpotBox.r, 0, Math.PI * 2);
+                gCtx.fillStyle = photoSpotActive ? 'rgba(236, 72, 153, 0.85)' : 'rgba(71, 85, 105, 0.85)';
+                gCtx.shadowColor = '#ec4899';
+                gCtx.shadowBlur = photoSpotActive ? 16 : 0;
+                gCtx.fill();
+                gCtx.strokeStyle = '#f472b6';
+                gCtx.stroke();
+                gCtx.shadowBlur = 0;
+
+                gCtx.fillStyle = '#ffffff';
+                gCtx.font = 'bold 9px sans-serif';
+                gCtx.fillText(photoSpotActive ? 'LASER ON' : 'SPOT (Click)', photoSpotBox.x, photoSpotBox.y + 3);
+
+                gCtx.fillStyle = '#94a3b8';
+                gCtx.font = 'bold 11px sans-serif';
+                gCtx.textAlign = 'right';
+                gCtx.fillText('Input (I1)', inX - 8, cy + 4);
+
+                gCtx.textAlign = 'left';
+                gCtx.fillStyle = '#10b981';
+                gCtx.fillText('Port A (Bar)', outX + 8, cy - 40);
+                gCtx.fillStyle = '#d946ef';
+                gCtx.fillText('Port B (Cross)', outX + 8, cy + 40);
             }
 
             window.addEventListener('resize', fitCanvas);
