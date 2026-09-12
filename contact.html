@@ -127,6 +127,13 @@
             padding: 24px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             backdrop-filter: blur(4px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(5, 150, 105, 0.15);
+            border-color: var(--accent);
         }
 
         .contact-card h3 {
@@ -185,7 +192,7 @@
 
     <div class="container">
         <h1>Contact Information</h1>
-        <p>Feel free to reach out via email, professional networking platforms, or academic networks.</p>
+        <p>Feel free to reach out via email, phone, or professional networks.</p>
 
         <div class="contact-grid">
             <div class="contact-card">
@@ -199,8 +206,23 @@
             </div>
 
             <div class="contact-card">
+                <h3>📞 Phone</h3>
+                <p><a href="tel:+352661158039">+352 661158039</a></p>
+            </div>
+
+            <div class="contact-card">
                 <h3>💼 LinkedIn</h3>
-                <p><a href="https://linkedin.com" target="_blank">Connect on LinkedIn</a></p>
+                <p><a href="https://www.linkedin.com/in/sushree-swateeprajnya-behera-b9a624140/" target="_blank">View LinkedIn Profile</a></p>
+            </div>
+
+            <div class="contact-card">
+                <h3>🐱 GitHub</h3>
+                <p><a href="https://github.com/Swatee-05" target="_blank">github.com/Swatee-05</a></p>
+            </div>
+
+            <div class="contact-card">
+                <h3>🌐 Portfolio Website</h3>
+                <p><a href="https://swatee05.github.io/ssbehera/" target="_blank">swatee05.github.io/ssbehera</a></p>
             </div>
 
             <div class="contact-card">
