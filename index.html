@@ -115,9 +115,9 @@
             padding: 40px 20px;
         }
 
-        /* --- Hero Section & Academic Profile Layout --- */
+        /* --- Hero Section & Profile Layout --- */
         header.hero {
-            padding: 32px 28px;
+            padding: 34px 28px;
             border: 1px solid var(--border-color);
             margin-bottom: 25px;
             background: var(--bg-card);
@@ -181,7 +181,7 @@
             font-weight: 700;
             color: var(--primary);
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 2px;
@@ -221,9 +221,23 @@
             flex: 1;
         }
 
+        .welcome-badge {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
         .hero-content .subtitle {
             font-size: 1.25rem;
-            color: var(--accent);
+            color: var(--primary);
             margin: 0 0 14px 0;
             font-weight: 700;
             line-height: 1.35;
@@ -231,10 +245,87 @@
         }
 
         .hero-description {
-            font-size: 0.98rem;
+            font-size: 0.97rem;
             color: var(--text-dark);
-            margin: 0 0 20px 0;
+            margin: 0 0 16px 0;
             line-height: 1.72;
+        }
+
+        /* Value / Impact Card */
+        .value-box {
+            background: rgba(248, 250, 252, 0.85);
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid var(--accent);
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin: 18px 0;
+        }
+
+        .value-box h4 {
+            margin: 0 0 6px 0;
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .value-box ul {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+        }
+
+        .value-box li {
+            margin-bottom: 4px;
+        }
+
+        .value-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .btn-action {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            font-size: 0.92rem;
+            transition: background 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background-color: var(--accent-hover) !important;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary) !important;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            font-size: 0.92rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background-color: #f8fafc;
         }
 
         /* Responsive on tablets/smartphones */
@@ -248,11 +339,14 @@
                 width: 100%;
                 max-width: 320px;
             }
-            .profile-meta {
+            .profile-meta, .value-box {
                 text-align: left;
             }
             .hero-content {
                 text-align: left;
+            }
+            .hero-actions {
+                justify-content: flex-start;
             }
         }
 
@@ -330,21 +424,6 @@
             color: var(--primary);
         }
 
-        .btn-action {
-            background-color: var(--accent);
-            color: #ffffff !important;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: 600 !important;
-            transition: background 0.2s;
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .btn-action:hover {
-            background-color: var(--accent-hover) !important;
-        }
-
         footer {
             position: relative;
             z-index: 10;
@@ -376,7 +455,7 @@
     </nav>
 
     <div class="container">
-        <!-- Hero Section with Left Academic Card & Detailed Bio -->
+        <!-- Hero Section with Left Profile & Detailed Overview -->
         <header class="hero">
             <div class="hero-layout">
                 <!-- Left Column: Headshot, Identifiers & Academic Credentials -->
@@ -399,7 +478,7 @@
                         </div>
                     </div>
 
-                    <!-- Scholarly & Open Code Profiles -->
+                    <!-- Scholarly & Code Profiles -->
                     <div class="profile-links">
                         <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Scholar</a>
                         <span>•</span>
@@ -411,12 +490,36 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Headline & Humanized Bio -->
+                <!-- Right Column: Welcome, Narrative & Value Delivered -->
                 <div class="hero-content">
+                    <span class="welcome-badge">Experimental Quantum Research Portfolio</span>
                     <div class="subtitle">Experimental Quantum Hardware &amp; Photonic Systems Researcher</div>
+                    
                     <p class="hero-description">
-                        I specialize in translating fundamental quantum optics into stable, scalable hardware platforms. With 4+ years of cross-institutional research across Europe and India (LIST, Universität des Saarlandes, IISc, IISER), my work focuses on solid-state spin-photon interfaces (4H-SiC color centers), warm-vapor atomic magnetometers (OPMs), and non-classical light sources. I design and commission automated optical testbeds from scratch by integrating multi-axis sub-micron alignment, cryogenic fiber-to-chip packaging, and modular Python/MATLAB instrument automation for high-stability experimental environments.
+                        Welcome to my research repository. I specialize in translating fundamental quantum optical phenomena into stable, reproducible laboratory platforms. Over 4+ years across European and Indian research teams (LIST, Universität des Saarlandes, IISc, IISER), my work has focused on solid-state color center integration (4H-SiC), atomic vapor magnetometry (OPMs), and non-classical light generation.
                     </p>
+
+                    <!-- Professional Value / How Research Groups Benefit -->
+                    <div class="value-box">
+                        <h4>What I Bring to Research Teams &amp; Hardware Labs</h4>
+                        <ul>
+                            <li><strong>Zero-to-One Testbed Commissioning:</strong> Designing and assembling custom optical testbeds from scratch, including sub-micron fiber-to-chip positioning and cleanroom device packaging.</li>
+                            <li><strong>End-to-End Automation:</strong> Developing Python and MATLAB instrument drivers to synchronize multi-channel lasers, TCSPC timing cards, and RF controllers into automated data pipelines.</li>
+                            <li><strong>Bridging Theory &amp; Hardware:</strong> Formulating mathematical physical models (Jaynes-Cummings, NMOR) and translating them directly into low-noise measurement setups.</li>
+                        </ul>
+                    </div>
+
+                    <div class="hero-actions">
+                        <a href="hire.html" class="btn-action">Let's Connect</a>
+                        <a href="assets/CV_Behera.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                            <span>Academic CV (PDF)</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </header>
