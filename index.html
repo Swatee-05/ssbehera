@@ -192,31 +192,6 @@
             margin: 0;
         }
 
-        .profile-links {
-            margin-top: 12px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px 10px;
-            justify-content: center;
-            font-size: 0.8rem;
-        }
-
-        .profile-links a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.15s;
-        }
-
-        .profile-links a:hover {
-            color: var(--accent-hover);
-            text-decoration: underline;
-        }
-
-        .profile-links span {
-            color: #cbd5e1;
-        }
-
         .hero-content {
             flex: 1;
         }
@@ -258,7 +233,7 @@
             border-left: 3px solid var(--accent);
             border-radius: 6px;
             padding: 12px 14px;
-            margin: 18px 0;
+            margin-top: 18px;
         }
 
         .value-box h4 {
@@ -284,50 +259,6 @@
             margin-bottom: 0;
         }
 
-        .hero-actions {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 18px;
-        }
-
-        .btn-action {
-            background-color: var(--accent);
-            color: #ffffff !important;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: 600 !important;
-            font-size: 0.92rem;
-            transition: background 0.2s;
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .btn-action:hover {
-            background-color: var(--accent-hover) !important;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--primary) !important;
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600 !important;
-            font-size: 0.92rem;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            background-color: #f8fafc;
-        }
-
         /* Responsive on tablets/smartphones */
         @media (max-width: 820px) {
             .hero-layout {
@@ -344,9 +275,6 @@
             }
             .hero-content {
                 text-align: left;
-            }
-            .hero-actions {
-                justify-content: flex-start;
             }
         }
 
@@ -424,6 +352,22 @@
             color: var(--primary);
         }
 
+        .btn-action {
+            background-color: var(--accent);
+            color: #ffffff !important;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            font-size: 0.92rem;
+            transition: background 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background-color: var(--accent-hover) !important;
+        }
+
         footer {
             position: relative;
             z-index: 10;
@@ -477,17 +421,6 @@
                             <p class="meta-value">4+ years experimental quantum optics &amp; hardware</p>
                         </div>
                     </div>
-
-                    <!-- Scholarly & Code Profiles -->
-                    <div class="profile-links">
-                        <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Scholar</a>
-                        <span>•</span>
-                        <a href="https://orcid.org" target="_blank" rel="noopener noreferrer">ORCID</a>
-                        <span>•</span>
-                        <a href="https://github.com/swatee-05" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        <span>•</span>
-                        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                    </div>
                 </div>
 
                 <!-- Right Column: Welcome, Narrative & Value Delivered -->
@@ -507,18 +440,6 @@
                             <li><strong>End-to-End Automation:</strong> Developing Python and MATLAB instrument drivers to synchronize multi-channel lasers, TCSPC timing cards, and RF controllers into automated data pipelines.</li>
                             <li><strong>Bridging Theory &amp; Hardware:</strong> Formulating mathematical physical models (Jaynes-Cummings, NMOR) and translating them directly into low-noise measurement setups.</li>
                         </ul>
-                    </div>
-
-                    <div class="hero-actions">
-                        <a href="hire.html" class="btn-action">Let's Connect</a>
-                        <a href="assets/CV_Behera.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-                            <span>Academic CV (PDF)</span>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                        </a>
                     </div>
                 </div>
             </div>
