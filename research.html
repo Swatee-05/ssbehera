@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research & Publications | Sushree Swateeprajnya Behera</title>
 
+    <!-- Tab Favicon -->
+    <link rel="icon" type="image/jpeg" href="Behera_Photo_2026.jpeg">
+
     <!-- MathJax 3 CDN for rendering LaTeX math equations -->
     <script>
       MathJax = {
         tex: {
           inlineMath: [['$', '$'], ['\\(', '\\)']],
-          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          displayMath: [['$$', '$$'], ['[', ']']]
         },
         svg: { fontCache: 'global' }
       };
@@ -79,15 +82,18 @@
         .nav-links a { color: var(--text-dark); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
         .nav-links a:hover, .nav-links a.active { color: var(--accent); font-weight: 600; }
 
-        .btn-hire {
+        .btn-connect {
             background-color: var(--accent);
             color: #ffffff !important;
             padding: 6px 14px;
             border-radius: 6px;
             font-weight: 600 !important;
-            transition: background 0.2s;
+            font-size: 0.9rem !important;
+            transition: background-color 0.2s;
+            display: inline-block;
+            text-decoration: none;
         }
-        .btn-hire:hover { background-color: var(--accent-hover) !important; }
+        .btn-connect:hover { background-color: var(--accent-hover) !important; }
 
         .container {
             position: relative;
@@ -263,7 +269,7 @@
                 <a href="resume.html">Resume</a>
                 <a href="research.html" class="active">Research</a>
                 <a href="contact.html">Contact</a>
-                <a href="hire.html" class="btn-hire">Hire Me</a>
+                <a href="hire.html" class="btn-connect">Let's Connect</a>
             </div>
         </div>
     </nav>
@@ -277,7 +283,7 @@
         </div>
 
         <div class="card">
-            <span class="tag">CLEANROOM FABRICATION & PHOTONICS</span>
+            <span class="tag">CLEANROOM FABRICATION &amp; PHOTONICS</span>
             <h2>Integrated 4H-SiC Quantum Photonic Devices</h2>
             <p>
                 Focusing on the design, cleanroom fabrication, and optical coupling of sub-micron scale 4H-Silicon Carbide waveguides and suspended cantilever structures. Utilizing electron beam lithography (EBL) and dry plasma etching (ICP-RIE) to integrate color center emitters with optical fibers.
@@ -285,7 +291,7 @@
         </div>
 
         <div class="card">
-            <span class="tag">ATOMIC SENSING & MAGNETOMETRY</span>
+            <span class="tag">ATOMIC SENSING &amp; MAGNETOMETRY</span>
             <h2>Optically Pumped Rubidium (Rb) Magnetometers</h2>
             <p>
                 Implementation of warm atomic vapor magnetometry platforms using nonlinear magneto-optical rotation (NMOR). Developing digital lock-in amplifier signal processing algorithms in Python and custom hardware interfaces for sub-picotesla magnetic field sensing.
@@ -317,7 +323,7 @@
 
             <div class="divider"></div>
 
-            <h2>How to Play & Quantum Principles</h2>
+            <h2>How to Play &amp; Quantum Principles</h2>
             <p>
                 This interactive demo simulates a <strong>Quantum Repeater Network</strong> implementing a Quantum Key Distribution (QKD) protocol based on <strong>BB84</strong>.
             </p>
@@ -399,7 +405,7 @@
 
             <div class="divider"></div>
 
-            <h2>How to Play & Physics Principles</h2>
+            <h2>How to Play &amp; Physics Principles</h2>
             <p>
                 This interactive simulator models an open-access <strong>Fabry–Pérot Cavity Quantum Electrodynamics (CQED) System</strong> coupled to a single quantum emitter (e.g., a Silicon-Vacancy color center in SiC or a trapped atom).
             </p>
@@ -418,7 +424,7 @@
                 <li><strong>Achieve Strong Coupling:</strong> When transmission efficiency reaches $\ge 85\%$, the cavity enters the <strong>Strong Coupling Regime</strong>, triggering coherent vacuum Rabi oscillations.</li>
             </ul>
 
-            <h3>Optical Resonance & Finesse Parameter Table</h3>
+            <h3>Optical Resonance &amp; Finesse Parameter Table</h3>
             <table class="quantum-table">
                 <thead>
                     <tr>
@@ -450,7 +456,7 @@
                 </tbody>
             </table>
 
-            <h3>Physics Breakdown: Jaynes-Cummings Dynamics & Vacuum Rabi Splitting</h3>
+            <h3>Physics Breakdown: Jaynes-Cummings Dynamics &amp; Vacuum Rabi Splitting</h3>
             <p>
                 The interaction between the single quantized cavity field mode and the two-level quantum emitter is modeled by the fundamental <strong>Jaynes-Cummings Hamiltonian</strong>:
             </p>
@@ -467,7 +473,7 @@
                 $$g = \frac{\mu}{\hbar} \sqrt{\frac{\hbar \omega_c}{2 \varepsilon_0 V_{\text{mode}}}}$$
             </div>
 
-            <h3>Key Regime Thresholds & Physics Definitions</h3>
+            <h3>Key Regime Thresholds &amp; Physics Definitions</h3>
             <ul>
                 <li><strong>Mode Volume Minimization ($V_{\text{mode}}$):</strong> Minimizing cavity mode volume $V_{\text{mode}}$ maximizes local vacuum electric field amplitude, boosting photon-emitter interaction efficiency.</li>
                 <li><strong>The Purcell Effect (Weak Coupling):</strong> When the emitter is resonant with the cavity mode but cavity field dissipation ($\kappa$) or atomic dephasing ($\gamma$) dominates ($g < \kappa, \gamma$), spontaneous emission into the mode is accelerated by the <strong>Purcell Factor</strong>:
@@ -523,7 +529,7 @@
 
             <div class="divider"></div>
 
-            <h2>How to Play & Interactive Controls Breakdown</h2>
+            <h2>How to Play &amp; Interactive Controls Breakdown</h2>
             <p>
                 This interactive demo simulates an integrated <strong>Silicon Nitride ($\text{Si}_3\text{N}_4$) Photonic Integrated Circuit (PIC)</strong> featuring a reconfigurable Mach-Zehnder Interferometer (MZI) optical switch with thermo-optic phase shifters and photoaddressable tuning spots.
             </p>
@@ -538,7 +544,7 @@
                 <li><strong>Adjust Slider Controls:</strong> Tune the telecom pump laser wavelength ($\lambda = 1530\text{ nm} - 1570\text{ nm}$) or microheater thermal bias to achieve destructive interference at the unwanted port and 100% transmission at the target output.</li>
             </ul>
 
-            <h3>MZI Switching & Phase Control Matrix</h3>
+            <h3>MZI Switching &amp; Phase Control Matrix</h3>
             <table class="quantum-table">
                 <thead>
                     <tr>
@@ -558,7 +564,7 @@
                     <tr>
                         <td>$\Delta \Phi = \pi / 2$ ($90^\circ$ Shift)</td>
                         <td>Balanced 50:50 Beam Splitter Output</td>
-                        <td><strong>Dual Beam Split</strong> (Port A & B)</td>
+                        <td><strong>Dual Beam Split</strong> (Port A &amp; B)</td>
                         <td>$50\% / 50\%$</td>
                     </tr>
                     <tr>
@@ -569,7 +575,7 @@
                     </tr>
                     <tr>
                         <td>$\Delta \Phi = \text{Off-Resonance}$</td>
-                        <td>High Scattering & Phase Mismatch</td>
+                        <td>High Scattering &amp; Phase Mismatch</td>
                         <td><strong>Cross-Talk Distortion</strong></td>
                         <td>$< 15\%$</td>
                     </tr>
@@ -601,7 +607,7 @@
                 Here $dn/dT \approx 2.5 \times 10^{-5}\text{ K}^{-1}$ is the thermo-optic coefficient of $\text{Si}_3\text{N}_4$, $\Delta T$ is the microheater temperature differential, and $I_{\text{laser}}$ represents the photoaddressable optical pump intensity.
             </p>
 
-            <h3>Quantum Computing & Photonic Network Applications</h3>
+            <h3>Quantum Computing &amp; Photonic Network Applications</h3>
             <ul>
                 <li><strong>Reconfigurable Linear Optical Quantum Computing (LOQC):</strong> Interconnected arrays of $\text{Si}_3\text{N}_4$ MZIs enable programmable unitary matrix transformations required for Photonic Quantum Information Processing and Gaussian Boson Sampling.</li>
                 <li><strong>Photoaddressable All-Optical Switches:</strong> Non-contact optical tuning via targeted laser excitation enables rapid phase calibration without thermal crosstalk or bulky electrical wiring overhead.</li>
