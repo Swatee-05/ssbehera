@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulation | Sushree Swateeprajnya Behera</title>
+
+    <!-- Tab Favicon -->
+    <link rel="icon" type="image/jpeg" href="Behera_Photo_2026.jpeg">
+
     <style>
         :root {
             --primary: #0f172a;
@@ -97,16 +101,19 @@
             font-weight: 600;
         }
 
-        .btn-hire {
+        .btn-connect {
             background-color: var(--accent);
             color: #ffffff !important;
             padding: 6px 14px;
             border-radius: 6px;
             font-weight: 600 !important;
-            transition: background 0.2s;
+            font-size: 0.9rem !important;
+            transition: background-color 0.2s;
+            display: inline-block;
+            text-decoration: none;
         }
 
-        .btn-hire:hover {
+        .btn-connect:hover {
             background-color: var(--accent-hover) !important;
         }
 
@@ -194,7 +201,7 @@
                 <a href="resume.html">Resume</a>
                 <a href="research.html">Research</a>
                 <a href="contact.html">Contact</a>
-                <a href="hire.html" class="btn-hire">Hire Me</a>
+                <a href="hire.html" class="btn-connect">Let's Connect</a>
             </div>
         </div>
     </nav>
@@ -206,7 +213,7 @@
 
     <!-- Top Right GIF -->
     <div class="gif-container">
-        <div class="gif-label">Evanascent Coupling</div>
+        <div class="gif-label">Evanescent Coupling</div>
         <img src="coupling_right_to_left.gif" alt="Coupling Right to Left Animation">
     </div>
 
@@ -318,8 +325,8 @@
                     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
                     grad.addColorStop(0.0, 'rgba(255, 255, 255, 1.0)');  
                     grad.addColorStop(0.35, 'rgba(254, 240, 138, 0.95)'); 
-                    grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');    
-                    grad.addColorStop(1.0, 'rgba(220, 38, 38, 0.0)');    
+                    grad.addColorStop(0.7, 'rgba(239, 68, 68, 0.7)');     
+                    grad.addColorStop(1.0, 'rgba(220, 38, 38, 0.0)');     
 
                     ctx.fillStyle = grad;
                     ctx.shadowColor = '#ef4444';
